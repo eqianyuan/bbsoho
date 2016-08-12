@@ -1,0 +1,26 @@
+package cn.eqianyuan.controller.convert;
+
+import cn.eqianyuan.bean.po.SupplierSidePO;
+import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
+
+/**
+ * 供应商DTO转化VO对象处理类
+ * Created by jason on 2016-08-11.
+ */
+@Component
+public class SupplierConvert {
+
+    /**
+     * 将供应商对象DTO转为VO对象
+     *
+     * @param supplierSidePO
+     * @return
+     */
+    public SupplierSideVOByLogin supplierLogin(SupplierSidePO supplierSidePO) {
+        SupplierSideVOByLogin supplierSideVOByLogin = new SupplierSideVOByLogin();
+        BeanUtils.copyProperties(supplierSidePO, supplierSideVOByLogin);
+        return supplierSideVOByLogin;
+    }
+}

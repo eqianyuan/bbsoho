@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.ISupplierSideDao">
+    <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.SupplierSidePO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+        <result column="sex" property="sex" jdbcType="INTEGER"/>
+        <result column="province_id" property="provinceId" jdbcType="VARCHAR"/>
+        <result column="city_id" property="cityId" jdbcType="VARCHAR"/>
+        <result column="county_id" property="countyId" jdbcType="VARCHAR"/>
+        <result column="mobile_number" property="mobileNumber" jdbcType="BIGINT"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="login_password" property="loginPassword" jdbcType="VARCHAR"/>
+        <result column="signature" property="signature" jdbcType="VARCHAR"/>
+        <result column="integral" property="integral" jdbcType="BIGINT"/>
+        <result column="balance" property="balance" jdbcType="DOUBLE"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+        <result column="real_name" property="realName" jdbcType="VARCHAR"/>
+        <result column="id_number" property="idNumber" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, nick_name, sex, province_id, city_id, county_id, mobile_number, email, login_password, 
+    signature, integral, balance, status, create_time, real_name, id_number
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from supplier_side
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from supplier_side
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.eqianyuan.bean.po.SupplierSidePO">
+    insert into supplier_side (id, nick_name, sex, 
+      province_id, city_id, county_id, 
+      mobile_number, email, login_password, 
+      signature, integral, balance, 
+      status, create_time, real_name, 
+      id_number)
+    values (#{id,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{provinceId,jdbcType=VARCHAR}, #{cityId,jdbcType=VARCHAR}, #{countyId,jdbcType=VARCHAR}, 
+      #{mobileNumber,jdbcType=BIGINT}, #{email,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR}, 
+      #{signature,jdbcType=VARCHAR}, #{integral,jdbcType=BIGINT}, #{balance,jdbcType=DOUBLE}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=INTEGER}, #{realName,jdbcType=VARCHAR}, 
+      #{idNumber,jdbcType=BIGINT})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.SupplierSidePO">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into supplier_side
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="nickName != null">
+                nick_name,
+            </if>
+            <if test="sex != null">
+                sex,
+            </if>
+            <if test="provinceId != null">
+                province_id,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="countyId != null">
+                county_id,
+            </if>
+            <if test="mobileNumber != null">
+                mobile_number,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="loginPassword != null">
+                login_password,
+            </if>
+            <if test="signature != null">
+                signature,
+            </if>
+            <if test="integral != null">
+                integral,
+            </if>
+            <if test="balance != null">
+                balance,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="realName != null">
+                real_name,
+            </if>
+            <if test="idNumber != null">
+                id_number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="provinceId != null">
+                #{provinceId,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="countyId != null">
+                #{countyId,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileNumber != null">
+                #{mobileNumber,jdbcType=BIGINT},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="signature != null">
+                #{signature,jdbcType=VARCHAR},
+            </if>
+            <if test="integral != null">
+                #{integral,jdbcType=BIGINT},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DOUBLE},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idNumber != null">
+                #{idNumber,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.SupplierSidePO">
+        update supplier_side
+        <set>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=INTEGER},
+            </if>
+            <if test="provinceId != null">
+                province_id = #{provinceId,jdbcType=VARCHAR},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="countyId != null">
+                county_id = #{countyId,jdbcType=VARCHAR},
+            </if>
+            <if test="mobileNumber != null">
+                mobile_number = #{mobileNumber,jdbcType=BIGINT},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="loginPassword != null">
+                login_password = #{loginPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="signature != null">
+                signature = #{signature,jdbcType=VARCHAR},
+            </if>
+            <if test="integral != null">
+                integral = #{integral,jdbcType=BIGINT},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DOUBLE},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=INTEGER},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idNumber != null">
+                id_number = #{idNumber,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.SupplierSidePO">
+    update supplier_side
+    set nick_name = #{nickName,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      province_id = #{provinceId,jdbcType=VARCHAR},
+      city_id = #{cityId,jdbcType=VARCHAR},
+      county_id = #{countyId,jdbcType=VARCHAR},
+      mobile_number = #{mobileNumber,jdbcType=BIGINT},
+      email = #{email,jdbcType=VARCHAR},
+      login_password = #{loginPassword,jdbcType=VARCHAR},
+      signature = #{signature,jdbcType=VARCHAR},
+      integral = #{integral,jdbcType=BIGINT},
+      balance = #{balance,jdbcType=DOUBLE},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER},
+      real_name = #{realName,jdbcType=VARCHAR},
+      id_number = #{idNumber,jdbcType=BIGINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectCountByMobile" resultType="java.lang.Integer" parameterType="java.lang.Long">
+    select
+    count(1)
+    from supplier_side
+    where mobile_number = #{mobile_number}
+  </select>
+    <select id="selectByLogin" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from supplier_side
+        where mobile_number = #{mobile_number}
+        and
+        login_password = #{login_password}
+    </select>
+</mapper>
