@@ -35,4 +35,23 @@ public class ClientConf {
             return String.valueOf(this.key);
         }
     }
+
+    /**
+     * 利用枚举定义yaml配置文件中邮箱配置的key
+     */
+    public enum MAIL {
+        MAIL("mail"), HOST("host"), ACCOUNT_NUMBER("account_number"), ACCOUNT_NAME("account_name"),
+        AUTHORIZATION_CODE("authorization_code"),SUBJECT("subject"), CONTENT("content"), ADDRESS("address");
+
+        private String key;
+
+        MAIL(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.key);
+        }
+    }
 }

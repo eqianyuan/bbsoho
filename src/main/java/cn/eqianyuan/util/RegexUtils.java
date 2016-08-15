@@ -97,4 +97,15 @@ public class RegexUtils {
         return pattern.matcher(val).matches();
     }
 
+    /**
+     * 是否为邮箱号码
+     *
+     * @param val
+     * @return
+     */
+    public static boolean isEmail(String val) {
+        Pattern pattern = Pattern.compile("(\\w)+(\\.\\w+)*@(\\w)+((\\.\\w+)+)");
+        return pattern.matcher(val).matches();
+    }
+
 }

@@ -16,6 +16,10 @@ public enum SystemConf {
      */
     POOL_BY_THREAD_SIZE(Executors.newFixedThreadPool(10 * Runtime.getRuntime().availableProcessors())),
     /**
+     * 平台字符集
+     */
+    PLATFORM_CHARSET("UTF-8"),
+    /**
      * 会员注册页面验证码session key
      */
     USER_REGISTER_VERIFY_CODE_BY_PAGE("userRegisterVerifyCodeByPage"),
