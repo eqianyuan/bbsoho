@@ -40,4 +40,13 @@ public interface IDemandSideDao {
      * @return
      */
     DemandSidePO selectByActivation(@Param("email") String email, @Param("activation_code") String activationCode);
+
+    /**
+     * 根据登录信息查询数据对象
+     *
+     * @param email
+     * @param loginPassword
+     * @return
+     */
+    DemandSidePO selectByLogin(@Param("email") String email, @Param("login_password") String loginPassword);
 }

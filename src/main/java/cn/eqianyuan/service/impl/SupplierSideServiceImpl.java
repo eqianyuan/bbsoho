@@ -302,4 +302,11 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         SessionUtil.setAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString(), supplierSideVOByLogin);
         return supplierSideVOByLogin;
     }
+
+    /**
+     * 供应商用户登出
+     */
+    public void supplierLogout() {
+        SessionUtil.removeAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString());
+    }
 }

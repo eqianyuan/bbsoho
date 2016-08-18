@@ -104,4 +104,16 @@ public class SupplierController extends BaseController {
         supplierSideService.supplierLogin(mobileNumber, loginPassword);
         return new ServerResponse();
     }
+
+    /**
+     * 会员（供应商）用户登出
+     *
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse supplierLogout() throws EqianyuanException {
+        supplierSideService.supplierLogout();
+        return new ServerResponse();
+    }
 }

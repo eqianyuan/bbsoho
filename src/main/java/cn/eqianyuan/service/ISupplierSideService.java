@@ -36,4 +36,9 @@ public interface ISupplierSideService {
      * @throws EqianyuanException
      */
     SupplierSideVOByLogin supplierLogin(String mobileNumber, String loginPassword) throws EqianyuanException;
+
+    /**
+     * 供应商用户登出
+     */
+    void supplierLogout();
 }

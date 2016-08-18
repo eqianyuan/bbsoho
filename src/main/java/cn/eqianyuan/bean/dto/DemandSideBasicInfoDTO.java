@@ -1,6 +1,9 @@
-package cn.eqianyuan.bean.po;
+package cn.eqianyuan.bean.dto;
 
-public class DemandSidePO {
+/**
+ * 需求商账户基本信息
+ */
+public class DemandSideBasicInfoDTO {
     private String id;
 
     private String companyName;
@@ -25,19 +28,7 @@ public class DemandSidePO {
 
     private Long mobileNumber;
 
-    private String email;
-
-    private String loginPassword;
-
     private String logo;
-
-    private Integer createTime;
-
-    private String discribe;
-
-    private Integer activationStatus;
-
-    private String activationCode;
 
     private Integer enterpriseNature;
 
@@ -139,60 +130,12 @@ public class DemandSidePO {
         this.mobileNumber = mobileNumber;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
-    }
-
-    public String getLoginPassword() {
-        return loginPassword;
-    }
-
-    public void setLoginPassword(String loginPassword) {
-        this.loginPassword = loginPassword == null ? null : loginPassword.trim();
-    }
-
     public String getLogo() {
         return logo;
     }
 
     public void setLogo(String logo) {
         this.logo = logo == null ? null : logo.trim();
-    }
-
-    public Integer getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Integer createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getDiscribe() {
-        return discribe;
-    }
-
-    public void setDiscribe(String discribe) {
-        this.discribe = discribe == null ? null : discribe.trim();
-    }
-
-    public Integer getActivationStatus() {
-        return activationStatus;
-    }
-
-    public void setActivationStatus(Integer activationStatus) {
-        this.activationStatus = activationStatus;
-    }
-
-    public String getActivationCode() {
-        return activationCode;
-    }
-
-    public void setActivationCode(String activationCode) {
-        this.activationCode = activationCode;
     }
 
     public Integer getEnterpriseNature() {

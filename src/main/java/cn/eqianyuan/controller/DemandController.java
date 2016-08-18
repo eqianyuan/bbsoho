@@ -1,6 +1,9 @@
 package cn.eqianyuan.controller;
 
 import cn.eqianyuan.bean.ServerResponse;
+import cn.eqianyuan.bean.dto.DemandSideBasicInfoDTO;
+import cn.eqianyuan.bean.vo.DemandSideVOByBasicInfo;
+import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.service.IDemandSideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +64,102 @@ public class DemandController extends BaseController {
     @ResponseBody
     public ServerResponse sendActivationMail(String email) throws EqianyuanException {
         demandSideService.sendActivationMail(email);
+        return new ServerResponse();
+    }
+
+    /**
+     * 会员（需求商）用户登录
+     *
+     * @param email         邮箱号码
+     * @param loginPassword 登录密码
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse demandLogin(String email, String loginPassword) throws EqianyuanException {
+        DemandSideVOByLogin demandSideVOByLogin = demandSideService.demandLogin(email, loginPassword);
+        return new ServerResponse.ResponseBuilder().data(demandSideVOByLogin).build();
+    }
+
+    /**
+     * 会员（需求商）用户登出
+     *
+     * @return
+     */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse demandLogout() throws EqianyuanException {
+        demandSideService.demandLogout();
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求商基本信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/basicInformation", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse basicInformation() throws EqianyuanException {
+        DemandSideVOByBasicInfo demandSideVOByBasicInfo = demandSideService.getBasicInformation();
+        return new ServerResponse.ResponseBuilder().data(demandSideVOByBasicInfo).build();
+    }
+
+    /**
+     * 需求商基本信息编辑
+     *
+     * @param demandSideBasicInfoDTO
+     * @return
+     */
+    @RequestMapping(value = "/basicInformation", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServerResponse basicInformationEdit(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException {
+        demandSideService.modifyBasicInformation(demandSideBasicInfoDTO);
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求发布
+     *
+     * @return
+     */
+    @RequestMapping(value = "/data", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse demandPublish(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
+        System.out.println(demandSideBasicInfoDTO);
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求变更
+     *
+     * @return
+     */
+    @RequestMapping(value = "/data", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServerResponse demandChange(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求删除
+     *
+     * @return
+     */
+    @RequestMapping(value = "/data", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ServerResponse demandDelete(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求详情
+     *
+     * @return
+     */
+    @RequestMapping(value = "/data", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse demandInfo(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
         return new ServerResponse();
     }
 

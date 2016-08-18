@@ -34,7 +34,19 @@ public enum SystemConf {
     /**
      * 供应商会员用户登录对象 session key
      */
-    SUPPLIER_USER_BY_LOGIN("supplierUserByLogin");
+    SUPPLIER_USER_BY_LOGIN("supplierUserByLogin"),
+    /**
+     * 需求商会员用户登录对象 session key
+     */
+    DEMAND_USER_BY_LOGIN("demandUserByLogin"),
+    /**
+     * 需求商会员用户登录页面位置
+     */
+    DEMAND_USER_LOGIN_PAGE("/demand/login.jsp"),
+    /**
+     * 需求商会员用户账号未激活提醒页面位置
+     */
+    DEMAND_USER_UN_ACTIVATION_PAGE("/demand/unActivation.jsp");
 
     private Object value;
 

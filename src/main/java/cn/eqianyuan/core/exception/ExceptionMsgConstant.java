@@ -25,6 +25,8 @@ public class ExceptionMsgConstant {
     public static final String VALIDATA_CODE_BY_SMS_IS_EMPTY = "1001008";
     //注册激活邮件发送失败
     public static final String REGISTRATION_ACTIVATION_EMAIL_SEND_ERROR = "1001009";
+    //获取字符串字节错误
+    public static final String SYSTEM_GET_BYTE_FAIL = "1001010";
 /********** 系统级异常配置 **********/
 
 /********** 客户端系统异常配置 **********/
@@ -61,5 +63,15 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_USER_ACCOUNT_ACTIVATION_FAIL = "2002009";
     //会员（需求商）账号不存在
     public static final String DEMAND_USER_ACCOUNT_IS_NOT_EXISTS = "2002010";
+    //会员（需求商）用户登录，账号或密码错误
+    public static final String DEMAND_USER_LOGIN_BY_ACCOUNT_ERROR = "2001006";
+    //会员（需求商）用户基本信息，企业名称为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_NAME_IS_EMPTY = "2002011";
+    //会员（需求商）用户基本信息，企业性质为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ENTERPRISE_NATURE_IS_EMPTY = "2002012";
+    //会员（需求商）用户基本信息，企业规模为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ENTERPRISE_SCALE_IS_EMPTY = "2002013";
+    //会员（需求商）用户基本信息，企业名称太长
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_NAME_TO_LONG = "2002014";
 /********** 客户端系统异常配置 **********/
 }

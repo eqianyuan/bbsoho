@@ -1,17 +1,29 @@
 package cn.eqianyuan.service.impl;
 
+import cn.eqianyuan.bean.dto.DemandSideBasicInfoDTO;
+import cn.eqianyuan.bean.po.DataDictionaryPO;
 import cn.eqianyuan.bean.po.DemandSidePO;
+import cn.eqianyuan.bean.vo.DemandSideVOByBasicInfo;
+import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
+import cn.eqianyuan.controller.convert.DemandConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.dao.IDemandSideDao;
+import cn.eqianyuan.listener.InitialData;
 import cn.eqianyuan.service.IDemandSideService;
 import cn.eqianyuan.util.*;
 import cn.eqianyuan.util.yamlMapper.ClientConf;
+import cn.eqianyuan.util.yamlMapper.DataDictionaryConf;
+import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Created by jason on 2016-08-12.
@@ -24,8 +36,13 @@ public class DemandSideServiceImpl implements IDemandSideService {
     @Autowired
     private IDemandSideDao demandSideDao;
 
+    @Autowired
+    private DemandConvert demandConvert;
+
     //账号激活-已激活状态
     private static final int ACTIVATION_STATUS_BY_ACTIVATED = 1;
+    //企业名称DB许可字节长度
+    private static final int COMPANY_NAME_MAX_BYTES_BY_DB = 192;
 
     /**
      * 添加需求商用户
@@ -251,4 +268,207 @@ public class DemandSideServiceImpl implements IDemandSideService {
         //发送账号激活邮件
         EmailUtils.sendEmail(email, subject, message);
     }
+
+    /**
+     * 需求商用户登录
+     *
+     * @param email
+     * @param loginPassword
+     * @return
+     * @throws EqianyuanException
+     */
+    public DemandSideVOByLogin demandLogin(String email, String loginPassword) throws EqianyuanException {
+        //检查需求商用户输入邮箱是否为空
+        if (StringUtils.isEmpty(email)) {
+            logger.warn("demand login fail , because user input email , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_REGISTER_BY_EMAIL_IS_EMPTY);
+        }
+
+        //检查需求商用户输入登录密码是否为空
+        if (StringUtils.isEmpty(loginPassword)) {
+            logger.warn("demand login fail , because user input login password , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_REGISTER_BY_LOGIN_PASSWORD_IS_EMPTY);
+        }
+
+        //密码MD5加密处理
+        String encryptionPwd = Md5Util.MD5By32(StringUtils.lowerCase(loginPassword));
+        //根据手机号码及加密密码查询供应商用户信息
+        DemandSidePO demandSidePO = demandSideDao.selectByLogin(email, encryptionPwd);
+        if (ObjectUtils.isEmpty(demandSidePO) ||
+                ObjectUtils.isEmpty(demandSidePO.getId())) {
+            logger.warn("demand login fail , email [" + email +
+                    "] , loginPassword [" + loginPassword + "] , encryptionPwd [" + encryptionPwd + "]");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_LOGIN_BY_ACCOUNT_ERROR);
+        }
+
+        //将PO转为VO
+        DemandSideVOByLogin demandSideVOByLogin = demandConvert.demandLogin(demandSidePO);
+        //将登录VO写入session
+        SessionUtil.setAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString(), demandSideVOByLogin);
+        return demandSideVOByLogin;
+    }
+
+    /**
+     * 需求商用户登出
+     */
+    public void demandLogout() {
+        SessionUtil.removeAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+    }
+
+    /**
+     * 账号是否已激活
+     *
+     * @param activationStatus 激活状态
+     * @return
+     */
+    public boolean isActivation(Integer activationStatus) {
+        if (activationStatus == ACTIVATION_STATUS_BY_ACTIVATED) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 获取需求商基本信息
+     *
+     * @return
+     * @throws EqianyuanException
+     */
+    public DemandSideVOByBasicInfo getBasicInformation() throws EqianyuanException {
+        //获取session用户
+        DemandSideVOByLogin demandSideVOByLogin = (DemandSideVOByLogin) SessionUtil.getAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+
+        //获取用户邮箱，并且根据邮箱号获取需求商基本信息
+        DemandSidePO demandSidePO = demandSideDao.selectByEmail(demandSideVOByLogin.getEmail());
+        //将PO转为VO
+        DemandSideVOByBasicInfo demandSideBasicInfoVO = demandConvert.getBasicInformation(demandSidePO);
+        return demandSideBasicInfoVO;
+    }
+
+    /**
+     * 需求商基本信息编辑
+     *
+     * @param demandSideBasicInfoDTO
+     * @throws EqianyuanException
+     */
+    public void modifyBasicInformation(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException {
+        //检查需求商用户输入企业名称是否为空
+        if (StringUtils.isEmpty(demandSideBasicInfoDTO.getCompanyName())) {
+            logger.warn("modifyBasicInformation fail , because user input company name , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_NAME_IS_EMPTY);
+        }
+
+        //检查需求商用户输入企业性质是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getEnterpriseNature())) {
+            logger.warn("modifyBasicInformation fail , because user input enterprise nature , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ENTERPRISE_NATURE_IS_EMPTY);
+        }
+
+        //检查需求商用户输入企业规模是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getEnterpriseScale())) {
+            logger.warn("modifyBasicInformation fail , because user input enterprise scale , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ENTERPRISE_SCALE_IS_EMPTY);
+        }
+
+        //检查企业名称内容长度是否超出DB许可长度
+        try {
+            if (demandSideBasicInfoDTO.getCompanyName().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > COMPANY_NAME_MAX_BYTES_BY_DB) {
+                logger.info("modifyBasicInformation fail , because company name [" + demandSideBasicInfoDTO.getCompanyName() + "] bytes greater than"
+                        + COMPANY_NAME_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_NAME_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("modifyBasicInformation fail , because company name [" + demandSideBasicInfoDTO.getCompanyName() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        List<DataDictionaryPO> dataDictionaryPOs;
+
+        /**
+         * 检查企业性质正确性
+         */
+        {
+            //从数据字典缓存中获取企业性质集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.ENTERPRISE_NATURE.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.ENTERPRISE_NATURE.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //企业性质是否存在字典数据中
+            boolean natureInDictionary = false;
+
+            //检查企业性质是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(demandSideBasicInfoDTO.getEnterpriseNature()))) {
+                    natureInDictionary = true;
+                    break;
+                }
+            }
+
+            //当企业性质值不存在字典数据中时，抛出错误信息
+            if (!natureInDictionary) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.ENTERPRISE_NATURE.toString() + "] , " +
+                        "enterprise nature [" + demandSideBasicInfoDTO.getEnterpriseNature() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        /**
+         * 检查企业规模正确性
+         */
+        {
+            //从数据字典缓存中获取企业规模集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.ENTERPRISE_SCALE.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.ENTERPRISE_SCALE.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //企业规模是否存在字典数据中
+            boolean scaleDictionary = false;
+
+            //检查企业规模是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(demandSideBasicInfoDTO.getEnterpriseScale()))) {
+                    scaleDictionary = true;
+                    break;
+                }
+            }
+
+            //当企业规模值不存在字典数据中时，抛出错误信息
+            if (!scaleDictionary) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.ENTERPRISE_SCALE.toString() + "] , " +
+                        "enterprise nature [" + demandSideBasicInfoDTO.getEnterpriseScale() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        //检查需求商用户输入联系电话是否为空
+        //检查需求商用户输入企业归属地是否为空
+        //检查需求商用户输入企业地址是否为空
+
+        //获取session用户
+        DemandSideVOByLogin demandSideVOByLogin = (DemandSideVOByLogin) SessionUtil.getAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+        //获取用户邮箱，并且根据邮箱号获取需求商基本信息
+        DemandSidePO demandSidePO = demandSideDao.selectByEmail(demandSideVOByLogin.getEmail());
+        demandSidePO.setCompanyName(demandSideBasicInfoDTO.getCompanyName());
+        demandSidePO.setEnterpriseNature(demandSideBasicInfoDTO.getEnterpriseNature());
+        demandSidePO.setEnterpriseScale(demandSideBasicInfoDTO.getEnterpriseScale());
+
+        //持久化基本信息
+        demandSideDao.updateByPrimaryKeySelective(demandSidePO);
+    }
+
+    /**
+     * 需求发布
+     *
+     * @param demandSideBasicInfoDTO
+     * @throws EqianyuanException
+     */
+    public void demandPublish(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException {
+
+    }
+
 }

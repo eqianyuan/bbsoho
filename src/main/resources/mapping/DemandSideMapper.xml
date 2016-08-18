@@ -21,11 +21,14 @@
         <result column="discribe" property="discribe" jdbcType="VARCHAR"/>
         <result column="activation_status" property="activationStatus" jdbcType="INTEGER"/>
         <result column="activation_code" property="activationCode" jdbcType="VARCHAR"/>
+        <result column="enterprise_nature" property="enterpriseNature" jdbcType="INTEGER"/>
+        <result column="enterprise_scale" property="enterpriseScale" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, company_name, province_id, city_id, county_id, address, contact, respectful_name, 
     phone_area_code, telephone_number, extension_number, mobile_number, email, login_password, 
-    logo, create_time, discribe, activation_status, activation_code
+    logo, create_time, discribe, activation_status, activation_code, enterprise_nature,
+    enterprise_scale
   </sql>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
@@ -223,6 +226,12 @@
             <if test="activationStatus != null">
                 activation_status = #{activationStatus,jdbcType=INTEGER},
             </if>
+            <if test="enterpriseNature != null" >
+                enterprise_nature = #{enterpriseNature,jdbcType=INTEGER},
+            </if>
+            <if test="enterpriseScale != null" >
+                enterprise_scale = #{enterpriseScale,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=VARCHAR}
     </update>
@@ -258,11 +267,19 @@
         from demand_side
         where email = #{email}
     </select>
-    <select id="selectByActivation"  resultMap="BaseResultMap">
+    <select id="selectByActivation" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from demand_side
         where email = #{email}
         and activation_code = #{activation_code}
+    </select>
+    <select id="selectByLogin" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from demand_side
+        where email = #{email}
+        and
+        login_password = #{login_password}
     </select>
 </mapper>
