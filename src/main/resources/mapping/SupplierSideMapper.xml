@@ -237,4 +237,10 @@
         and
         login_password = #{login_password}
     </select>
+    <select id="selectByMobile" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from supplier_side
+        where mobile_number = #{mobile_number}
+    </select>
 </mapper>

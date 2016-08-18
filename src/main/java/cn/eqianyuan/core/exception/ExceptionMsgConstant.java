@@ -42,6 +42,12 @@ public class ExceptionMsgConstant {
     public static final String SUPPLIER_USER_REGISTER_BY_MOBILE_IS_ALREADY_REGISTER = "2001005";
     //会员（供应商）用户登录，账号或密码错误
     public static final String SUPPLIER_USER_LOGIN_BY_ACCOUNT_ERROR = "2001006";
+    //会员（供应商）用户基本信息，真实姓名为空
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_REAL_NAME_IS_EMPTY = "2001007";
+    //会员（供应商）用户基本信息，性别为空
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_SEX_IS_EMPTY = "2001008";
+    //会员（供应商）用户基本信息，真实姓名太长
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_REAL_NAME_TO_LONG = "2001009";
 
     //会员（需求商）用户注册，邮箱为空
     public static final String DEMAND_USER_REGISTER_BY_EMAIL_IS_EMPTY = "2002001";

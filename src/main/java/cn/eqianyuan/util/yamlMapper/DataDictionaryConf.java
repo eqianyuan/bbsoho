@@ -6,6 +6,10 @@ package cn.eqianyuan.util.yamlMapper;
  */
 public enum DataDictionaryConf {
     /**
+     * 性别
+     */
+    SEX("sex"),
+    /**
      * 激活状态
      */
     ACTIVATION_STATUS("activation_status"),

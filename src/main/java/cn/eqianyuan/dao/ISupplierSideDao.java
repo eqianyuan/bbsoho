@@ -33,4 +33,12 @@ public interface ISupplierSideDao {
      * @return
      */
     SupplierSidePO selectByLogin(@Param("mobile_number") String mobileNumber, @Param("login_password") String loginPassword);
+
+    /**
+     * 根据手机号码查询用户信息
+     *
+     * @param mobileNumber
+     * @return
+     */
+    SupplierSidePO selectByMobile(@Param("mobile_number") String mobileNumber);
 }

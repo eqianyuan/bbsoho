@@ -1,14 +1,20 @@
 package cn.eqianyuan.service.impl;
 
+import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideDTO;
+import cn.eqianyuan.bean.po.DataDictionaryPO;
 import cn.eqianyuan.bean.po.SupplierSidePO;
+import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.controller.convert.SupplierConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.dao.ISupplierSideDao;
+import cn.eqianyuan.listener.InitialData;
 import cn.eqianyuan.service.ISupplierSideService;
 import cn.eqianyuan.util.*;
+import cn.eqianyuan.util.yamlMapper.ClientConf;
+import cn.eqianyuan.util.yamlMapper.DataDictionaryConf;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -17,7 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +41,9 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
 
     @Autowired
     private SupplierConvert supplierConvert;
+
+    //真实姓名DB许可字节长度
+    private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;
 
     /**
      * 添加供应商用户信息
@@ -227,24 +238,24 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
                 }
             }
 
-//        //获取消息内容模板
-//        String message = YamlForMapHandleUtil.getValueBykey(ClientConf.getMap(), ClientConf.SMS.SMS.toString(), ClientConf.SMS.BatchSend2_message.toString());
-//        //检查消息模板内容是否为空
-//        if (StringUtils.isEmpty(message)) {
-//            logger.warn("supplier sendSMSVerificationCodeByRegister fail ,because BatchSend2_message not exists the client-conf.yaml");
-//            throw new EqianyuanException(ExceptionMsgConstant.GET_CONFIGURATION_ERROR);
-//        }
-//
+            //获取消息内容模板
+            String message = YamlForMapHandleUtil.getValueBykey(ClientConf.getMap(), ClientConf.SMS.SMS.toString(), ClientConf.SMS.BatchSend2_message.toString());
+            //检查消息模板内容是否为空
+            if (StringUtils.isEmpty(message)) {
+                logger.warn("supplier sendSMSVerificationCodeByRegister fail ,because BatchSend2_message not exists the client-conf.yaml");
+                throw new EqianyuanException(ExceptionMsgConstant.GET_CONFIGURATION_ERROR);
+            }
+
             //获取数字验证码
             String verifyCode = VerifyCodeUtils.random(verifyCodeLength, VerifyCodeUtils.SEEDS_BY_NUMBER);
-//
-//        //替换消息模板内容
-//        message = StringTemplateReplaceUtil.getStr(message, "\\?", verifyCode);
-//
+
+            //替换消息模板内容
+            message = StringTemplateReplaceUtil.getStr(message, "\\?", verifyCode);
+
             //将验证码内容写入session
             SessionUtil.setAttribute(SystemConf.USER_REGISTER_VERIFY_CODE_BY_SMS.toString(), verifyCode);
-//        //发送短信
-//        SMSUtils.batchSend2(mobile, message);
+            //发送短信
+            SMSUtils.batchSend2(mobile, message);
 
             //当前手机及发送情况
             Map<String, String> sendInfo = new HashMap<String, String>();
@@ -308,5 +319,97 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
      */
     public void supplierLogout() {
         SessionUtil.removeAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString());
+    }
+
+    /**
+     * 获取供应商基本信息
+     *
+     * @return
+     * @throws EqianyuanException
+     */
+    public SupplierSideVOByBasicInfo getBasicInformation() throws EqianyuanException {
+        //获取session用户
+        SupplierSideVOByLogin supplierSideVOByLogin = (SupplierSideVOByLogin) SessionUtil.getAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString());
+
+        //获取用户手机号码，并且根据手机号码获取供应商基本信息
+        SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(String.valueOf(supplierSideVOByLogin.getMobileNumber()));
+        //将PO转为VO
+        SupplierSideVOByBasicInfo supplierSideVOByBasicInfo = supplierConvert.getBasicInformation(supplierSidePO);
+        return supplierSideVOByBasicInfo;
+    }
+
+    /**
+     * 供应商基本信息编辑
+     *
+     * @param supplierSideBasicInfoDTO
+     * @throws EqianyuanException
+     */
+    public void modifyBasicInformation(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO) throws EqianyuanException {
+        //检查供应商用户输入真实姓名是否为空
+        if (StringUtils.isEmpty(supplierSideBasicInfoDTO.getRealName())) {
+            logger.warn("modifyBasicInformation fail , because user input real name , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_REAL_NAME_IS_EMPTY);
+        }
+
+        //检查需求商用户输入性别是否为空
+        if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getSex())) {
+            logger.warn("modifyBasicInformation fail , because user input sex , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_SEX_IS_EMPTY);
+        }
+
+        //检查真实姓名内容长度是否超出DB许可长度
+        try {
+            if (supplierSideBasicInfoDTO.getRealName().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > REAL_NAME_MAX_BYTES_BY_DB) {
+                logger.info("modifyBasicInformation fail , because real name [" + supplierSideBasicInfoDTO.getRealName() + "] bytes greater than"
+                        + REAL_NAME_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_REAL_NAME_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("modifyBasicInformation fail , because real name [" + supplierSideBasicInfoDTO.getRealName() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        List<DataDictionaryPO> dataDictionaryPOs;
+
+        /**
+         * 检查性别正确性
+         */
+        {
+            //从数据字典缓存中获取性别集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.SEX.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.SEX.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //性别是否存在字典数据中
+            boolean sexInDictionary = false;
+
+            //检查性别是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideBasicInfoDTO.getSex()))) {
+                    sexInDictionary = true;
+                    break;
+                }
+            }
+
+            //当企业性质值不存在字典数据中时，抛出错误信息
+            if (!sexInDictionary) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.SEX.toString() + "] " +
+                        " [" + supplierSideBasicInfoDTO.getSex() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        //获取session用户
+        SupplierSideVOByLogin supplierSideVOByLogin = (SupplierSideVOByLogin) SessionUtil.getAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString());
+        //获取用户手机号码，并且根据手机号码获取供应商基本信息
+        SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(String.valueOf(supplierSideVOByLogin.getMobileNumber()));
+        supplierSidePO.setRealName(supplierSideBasicInfoDTO.getRealName());
+        supplierSidePO.setSex(supplierSideBasicInfoDTO.getSex());
+
+        //持久化基本信息
+        supplierSideDao.updateByPrimaryKeySelective(supplierSidePO);
     }
 }

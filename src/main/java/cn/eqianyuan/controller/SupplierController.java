@@ -1,9 +1,9 @@
 package cn.eqianyuan.controller;
 
 import cn.eqianyuan.bean.ServerResponse;
+import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideDTO;
-import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
-import cn.eqianyuan.controller.convert.SupplierConvert;
+import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.service.ISupplierSideService;
@@ -114,6 +114,31 @@ public class SupplierController extends BaseController {
     @ResponseBody
     public ServerResponse supplierLogout() throws EqianyuanException {
         supplierSideService.supplierLogout();
+        return new ServerResponse();
+    }
+
+    /**
+     * 供应商商基本信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/basicInformation", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse basicInformation() throws EqianyuanException {
+        SupplierSideVOByBasicInfo supplierSideVOByBasicInfo = supplierSideService.getBasicInformation();
+        return new ServerResponse.ResponseBuilder().data(supplierSideVOByBasicInfo).build();
+    }
+
+    /**
+     * 供应商基本信息编辑
+     *
+     * @param supplierSideBasicInfoDTO
+     * @return
+     */
+    @RequestMapping(value = "/basicInformation", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServerResponse basicInformationEdit(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO) throws EqianyuanException {
+        supplierSideService.modifyBasicInformation(supplierSideBasicInfoDTO);
         return new ServerResponse();
     }
 }

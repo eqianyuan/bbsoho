@@ -1,6 +1,8 @@
 package cn.eqianyuan.service;
 
+import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideDTO;
+import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.core.exception.EqianyuanException;
 
@@ -41,4 +43,20 @@ public interface ISupplierSideService {
      * 供应商用户登出
      */
     void supplierLogout();
+
+    /**
+     * 获取供应商基本信息
+     *
+     * @return
+     * @throws EqianyuanException
+     */
+    SupplierSideVOByBasicInfo getBasicInformation() throws EqianyuanException;
+
+    /**
+     * 供应商基本信息编辑
+     *
+     * @param supplierSideBasicInfoDTO
+     * @throws EqianyuanException
+     */
+    void modifyBasicInformation(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO) throws EqianyuanException;
 }

@@ -49,4 +49,23 @@
             <bean class="cn.eqianyuan.interceptor.DemandInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 拦截请求 -->
+            <mvc:mapping path="/supplier/**"/>
+            <!-- 排除拦截 -->
+            <!-- 获取注册页面验证码 -->
+            <mvc:exclude-mapping path="/supplier/verifyCodeByPage"/>
+            <!-- 发送手机短信验证码 -->
+            <mvc:exclude-mapping path="/supplier/sendSMSVerificationCodeByRegister"/>
+            <!-- 注册 -->
+            <mvc:exclude-mapping path="/supplier/register"/>
+            <!-- 登录 -->
+            <mvc:exclude-mapping path="/supplier/login"/>
+            <!-- 登出 -->
+            <mvc:exclude-mapping path="/supplier/logout"/>
+            <bean class="cn.eqianyuan.interceptor.SupplierInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

@@ -46,7 +46,11 @@ public enum SystemConf {
     /**
      * 需求商会员用户账号未激活提醒页面位置
      */
-    DEMAND_USER_UN_ACTIVATION_PAGE("/demand/unActivation.jsp");
+    DEMAND_USER_UN_ACTIVATION_PAGE("/demand/unActivation.jsp"),
+    /**
+     * 供应商会员用户登录页面位置
+     */
+    SUPPLIER_USER_LOGIN_PAGE("/supplier/login.jsp");
 
     private Object value;
 
