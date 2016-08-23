@@ -5,6 +5,8 @@ public class SupplierSideVOByBasicInfo {
 
     private String nickName;
 
+    private String headPortrait;
+
     private Integer sex;
 
     private String provinceId;
@@ -47,6 +49,14 @@ public class SupplierSideVOByBasicInfo {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getHeadPortrait() {
+        return headPortrait;
+    }
+
+    public void setHeadPortrait(String headPortrait) {
+        this.headPortrait = headPortrait;
     }
 
     public Integer getSex() {

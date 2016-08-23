@@ -1,0 +1,18 @@
+*{ margin: 0; padding: 0;}
+html,body{  font-family: '微软雅黑'; font-size: 12px; color: #333; background-color: #FFF; }
+ul,ol,li{ list-style: none; }
+ul,ol,li,h1,h2,h3,h4,h5,p,dl,dt,dd{ margin: 0; }
+label{ font-weight: normal; }
+
+a:focus{ outline: none; }
+
+.container{ width: 1030px; margin: 0 auto; padding: 0;}
+.row{ margin-left: 0; margin-right: 0; }
+
+.placeholder{ color: #999 ;}
+
+.fl{ float: left;}
+.fr{ float: right;}
+.ttc{ text-align: center; }
+.ttr{ text-align: right; }
+.ttl{ text-align: left; }

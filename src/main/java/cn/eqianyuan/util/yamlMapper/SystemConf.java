@@ -48,6 +48,10 @@ public enum SystemConf {
      */
     DEMAND_USER_UN_ACTIVATION_PAGE("/demand/unActivation.jsp"),
     /**
+     * 需求商会员用户账号基本信息未完善提醒页面位置
+     */
+    DEMAND_USER_UN_INTEGRITY_PAGE("/demand/unIntegrity.jsp"),
+    /**
      * 供应商会员用户登录页面位置
      */
     SUPPLIER_USER_LOGIN_PAGE("/supplier/login.jsp");

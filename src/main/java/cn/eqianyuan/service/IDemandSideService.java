@@ -61,6 +61,14 @@ public interface IDemandSideService {
     boolean isActivation(Integer activationStatus);
 
     /**
+     * 需求商账户基本信息是否已经完善
+     *
+     * @param email
+     * @return
+     */
+    boolean isIntegrity(String email) throws EqianyuanException;
+
+    /**
      * 获取需求商基本信息
      *
      * @return

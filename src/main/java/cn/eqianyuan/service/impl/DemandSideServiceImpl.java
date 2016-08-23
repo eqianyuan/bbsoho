@@ -329,6 +329,27 @@ public class DemandSideServiceImpl implements IDemandSideService {
     }
 
     /**
+     * 需求商账户基本信息是否完善
+     *
+     * @param email
+     * @return
+     */
+    public boolean isIntegrity(String email) throws EqianyuanException {
+        //检查需求商用户输入邮箱是否为空
+        if (StringUtils.isEmpty(email)) {
+            logger.warn("demand isIntegrity fail , because email , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_REGISTER_BY_EMAIL_IS_EMPTY);
+        }
+
+        DemandSidePO demandSidePO = demandSideDao.selectByEmail(email);
+        //检查需求商账户信息中基本资料必填项是否有值，有值则认定为资料已经完善
+        if (StringUtils.isEmpty(demandSidePO.getCompanyName())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 获取需求商基本信息
      *
      * @return

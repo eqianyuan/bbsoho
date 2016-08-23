@@ -7,6 +7,8 @@ public class SupplierSideVOByLogin {
     //手机号码
     private Long mobileNumber;
 
+    //头像
+    private String headPortrait;
 
     public String getNickName() {
         return nickName;
@@ -22,5 +24,13 @@ public class SupplierSideVOByLogin {
 
     public void setMobileNumber(Long mobileNumber) {
         this.mobileNumber = mobileNumber;
+    }
+
+    public String getHeadPortrait() {
+        return headPortrait;
+    }
+
+    public void setHeadPortrait(String headPortrait) {
+        this.headPortrait = headPortrait;
     }
 }
