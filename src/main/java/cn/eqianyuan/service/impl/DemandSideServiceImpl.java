@@ -137,9 +137,17 @@ public class DemandSideServiceImpl implements IDemandSideService {
         String activationCode = VerifyCodeUtils.random(6, VerifyCodeUtils.SEEDS_BY_CHARACTER);
         //MD5加密激活码
         String encryptionActivationCode = Md5Util.MD5By32(activationCode);
+        //获取当前系统月份英文描述
+        String monthEN = CalendarUtil.getCurrentMonthEN();
+        //截取月份英文描述首字母
+        String firstCharacter = StringUtils.substring(monthEN, 0, 1);
+        //将首字母转为大写
+        String firstCharacterUpper = StringUtils.upperCase(firstCharacter);
 
         //创建PO对象并设置内容
         DemandSidePO demandSidePO = new DemandSidePO();
+        //注册期，给与默认用户名，用户名生成规则：当月月份英文大写首字母+当前系统秒数时间
+        demandSidePO.setCompanyName(firstCharacterUpper + systemSeconds);
         demandSidePO.setEmail(email);
         demandSidePO.setLoginPassword(encryptionPwd);
         demandSidePO.setCreateTime(systemSeconds);
@@ -212,6 +220,13 @@ public class DemandSideServiceImpl implements IDemandSideService {
         demandSidePo.setActivationStatus(ACTIVATION_STATUS_BY_ACTIVATED);
         //激活账号
         demandSideDao.updateByPrimaryKeySelective(demandSidePo);
+
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
+        if (!ObjectUtils.isEmpty(demandSideVOByLogin) && !StringUtils.isEmpty(demandSideVOByLogin.getEmail())) {
+            demandSideVOByLogin.setActivationStatus(ACTIVATION_STATUS_BY_ACTIVATED);
+            //将登录VO写入session
+            SessionUtil.setAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString(), demandSideVOByLogin);
+        }
     }
 
     /**
@@ -322,7 +337,8 @@ public class DemandSideServiceImpl implements IDemandSideService {
      * @return
      */
     public boolean isActivation(Integer activationStatus) {
-        if (activationStatus == ACTIVATION_STATUS_BY_ACTIVATED) {
+        if (!ObjectUtils.isEmpty(activationStatus) &&
+                activationStatus == ACTIVATION_STATUS_BY_ACTIVATED) {
             return true;
         }
         return false;
@@ -357,7 +373,7 @@ public class DemandSideServiceImpl implements IDemandSideService {
      */
     public DemandSideVOByBasicInfo getBasicInformation() throws EqianyuanException {
         //获取session用户
-        DemandSideVOByLogin demandSideVOByLogin = (DemandSideVOByLogin) SessionUtil.getAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
 
         //获取用户邮箱，并且根据邮箱号获取需求商基本信息
         DemandSidePO demandSidePO = demandSideDao.selectByEmail(demandSideVOByLogin.getEmail());
@@ -471,7 +487,7 @@ public class DemandSideServiceImpl implements IDemandSideService {
         //检查需求商用户输入企业地址是否为空
 
         //获取session用户
-        DemandSideVOByLogin demandSideVOByLogin = (DemandSideVOByLogin) SessionUtil.getAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
         //获取用户邮箱，并且根据邮箱号获取需求商基本信息
         DemandSidePO demandSidePO = demandSideDao.selectByEmail(demandSideVOByLogin.getEmail());
         demandSidePO.setCompanyName(demandSideBasicInfoDTO.getCompanyName());

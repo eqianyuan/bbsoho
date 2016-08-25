@@ -9,10 +9,7 @@
     <meta name="renderer" content="webkit">
     <meta charset="utf-8">
     <title>首页 - 百百SOHO</title>
-    <link rel="stylesheet" type="text/css" href="css/common.css" />
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" type="text/css" href="css/ie8.css" />
-    <![endif]-->
+    <c:import url="common_inport.jsp"/>
 </head>
 <body class="pt97">
 <!-- header -->
@@ -207,18 +204,5 @@
     </div>
 </div>
 <!-- /footer -->
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/jquery.validate.min.js"></script>
-<script type="text/javascript" src="js/jquery.validate.method.js"></script>
-<script type="text/javascript" src="js/jquery.form.min.js"></script>
-<script type="text/javascript" src="js/jquery.extends.1.0.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/package/index.js"></script>
-<!--[if lt IE 9]>
-<script type="text/javascript" src="js/bootstrap/html5shiv.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/respond.min.js"></script>
-<![endif]-->
 </body>
 </html>

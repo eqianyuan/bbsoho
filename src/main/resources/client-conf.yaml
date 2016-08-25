@@ -20,5 +20,5 @@ mail:
   authorization_code: jason123
   subject: 邮件主题
   content: 您好 {?} ：<br><br>为了保障您帐号的安全性，请点击下面的链接激活邮箱：<br><br><a href="{?}" target="_blank">{?}</a><br><br>如果链接无法点击，请完整拷贝到浏览器地址栏里直接访问。<br><br>邮件服务器自动发送邮件请勿回信。<br><span style="border-bottom:1px dashed ;" t="5" times="">{?}</span>
-  address: http://localhost/demand/account_activation
+  address: http://localhost/demandSide/account_activation
 

@@ -3,6 +3,8 @@ package cn.eqianyuan.bean.vo;
 public class DemandSideVOByLogin {
     private String companyName;
 
+    private String logo;
+
     private String email;
 
     private Integer activationStatus;
@@ -13,6 +15,14 @@ public class DemandSideVOByLogin {
 
     public void setCompanyName(String companyName) {
         this.companyName = companyName;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getEmail() {

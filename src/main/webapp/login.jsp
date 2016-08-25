@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,12 +9,16 @@
     <meta name="renderer" content="webkit">
     <meta charset="utf-8">
     <title>登录 - 百百SOHO</title>
-    <link rel="stylesheet" type="text/css" href="css/common.css" />
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" type="text/css" href="css/ie8.css" />
-    <![endif]-->
+    <c:import url="common_inport.jsp"/>
 </head>
 <body>
+<c:choose>
+    <c:when test="${!empty supplierUserByLogin || !empty demandUserByLogin}">
+        <script>
+            window.location.href = "index.jsp";
+        </script>
+    </c:when>
+</c:choose>
 <!-- header -->
 <div class="header">
     <div class="container">
@@ -117,19 +123,6 @@
     </div>
 </div>
 <!-- /footer -->
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/jquery.validate.min.js"></script>
-<script type="text/javascript" src="js/jquery.validate.method.js"></script>
-<script type="text/javascript" src="js/jquery.form.min.js"></script>
-<script type="text/javascript" src="js/jquery.extends.1.0.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/package/login.js"></script>
-<!--[if lt IE 9]>
-<script type="text/javascript" src="js/bootstrap/html5shiv.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/respond.min.js"></script>
-<![endif]-->
 </body>
 <script>
     $(function () {
@@ -139,7 +132,7 @@
         $("button[name='supplierSubmit']").click(function(){
             $.ajax({
                 type: "GET",
-                url: "/supplier/login",
+                url: "/supplierSide/login",
                 data: {
                     mobileNumber: $("input[name='mobile']").val(),
                     loginPassword: $("#supplier-area input[name='loginPassword']").val()

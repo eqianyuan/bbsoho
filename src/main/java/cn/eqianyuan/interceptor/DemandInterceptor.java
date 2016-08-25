@@ -3,6 +3,7 @@ package cn.eqianyuan.interceptor;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.service.IDemandSideService;
 import cn.eqianyuan.util.SessionUtil;
+import cn.eqianyuan.util.UserUtils;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
@@ -24,7 +25,7 @@ public class DemandInterceptor implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         //检查是否有登录
-        DemandSideVOByLogin demandSideVOByLogin = (DemandSideVOByLogin) SessionUtil.getAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
         if (ObjectUtils.isEmpty(demandSideVOByLogin)) {
             return interceptorByUnLogin(httpServletRequest, httpServletResponse);
         }
@@ -53,7 +54,7 @@ public class DemandInterceptor implements HandlerInterceptor {
      * @return
      */
     private boolean interceptorByUnLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.sendRedirect("http://" + request.getServerName() + ":" + request.getServerPort() + SystemConf.DEMAND_USER_LOGIN_PAGE.toString());
+        response.sendRedirect("http://" + request.getServerName() + ":" + request.getServerPort() + SystemConf.USER_LOGIN_PAGE.toString());
         return false;
     }
 

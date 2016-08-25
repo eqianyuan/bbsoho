@@ -3,6 +3,7 @@ package cn.eqianyuan.interceptor;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.service.IDemandSideService;
 import cn.eqianyuan.util.SessionUtil;
+import cn.eqianyuan.util.UserUtils;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -22,7 +23,7 @@ public class DemandPublishInterceptor implements HandlerInterceptor {
     private IDemandSideService demandSideService;
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        DemandSideVOByLogin demandSideVOByLogin = (DemandSideVOByLogin) SessionUtil.getAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString());
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
 
         //检查需求商信息资料是否完善
         if (!demandSideService.isIntegrity(demandSideVOByLogin.getEmail())) {

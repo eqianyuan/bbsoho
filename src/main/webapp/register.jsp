@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,10 +8,7 @@
     <meta name="renderer" content="webkit">
     <meta charset="utf-8">
     <title>注册 - 百百SOHO</title>
-    <link rel="stylesheet" type="text/css" href="css/common.css"/>
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" type="text/css" href="css/ie8.css"/>
-    <![endif]-->
+    <%@ include file="common_inport.jsp"%>
 </head>
 <body>
 <!-- header -->
@@ -37,20 +35,20 @@
         <div class="lr-box">
             <!-- nav-tabs -->
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#personal-area" data-toggle="tab">个人注册</a></li>
-                <li><a href="#company-area" data-toggle="tab">企业注册</a></li>
+                <li class="active"><a href="#supplier-area" data-toggle="tab">个人注册</a></li>
+                <li><a href="#demand-area" data-toggle="tab">企业注册</a></li>
                 <li><a href="login.jsp">登录</a></li>
             </ul>
             <!-- /nav-tabs -->
             <!-- tab-content -->
             <div class="tab-content">
-                <div class="tab-pane fade in active" id="personal-area">
+                <div class="tab-pane fade in active" id="supplier-area">
                     <form action="javascript:;" method="post" class="forms personal-form">
                         <p class="ipt-txt"><input type="text" name="mobile" placeholder="手机号"/></p>
                         <p class="ipt-txt">
                             <input type="text" name="imgVerifyCode" value="" class="wd190" placeholder="图片验证码"/>
                             <a href="javascript:;" class="imgCode"><img id="verifyCodeImage"
-                                                                        src="supplier/verifyCodeByPage"
+                                                                        src="supplierSide/verifyCodeByPage"
                                                                         title="点击重新获取验证码"/></a>
                         </p>
                         <p class="ipt-txt">
@@ -62,23 +60,23 @@
                         <div class="error reg-error"></div>
                         <p class="ipt-txt">
                             <input type="checkbox" name="clause" checked disabled/>
-                            <label for="clause">同意使用条款</label>
+                            <label >同意使用条款</label>
                         </p>
                         <button type="button" name="supplierSubmit" class="ipt-submit">注册</button>
                     </form>
                 </div>
-                <div class="tab-pane fade" id="company-area">
-                    <form action="#" method="post" class="forms company-form">
-                        <p class="ipt-txt"><input type="text" name="telPhone" value="" placeholder="邮箱号码"/></p>
+                <div class="tab-pane fade" id="demand-area">
+                    <form action="javascript:;" method="post" class="forms company-form">
+                        <p class="ipt-txt"><input type="text" name="email" value="" placeholder="邮箱号码"/></p>
                         <p class="ipt-txt"><input type="password" name="loginPassword" value="" placeholder="密码"/></p>
-                        <p class="ipt-txt"><input type="password" name="userPwd" value="" placeholder="确认密码"/></p>
+                        <p class="ipt-txt"><input type="password" name="confirmPassword" value="" placeholder="确认密码"/></p>
                         <p class="ipt-txt"><input type="text" name="inviteCode" value="" placeholder="邀请码选填"/></p>
                         <div class="error reg-error"></div>
                         <p class="ipt-txt">
-                            <input type="checkbox" name="clause" value="" id="clause"/>
-                            <label for="clause">同意使用条款</label>
+                            <input type="checkbox" name="clause" checked disabled/>
+                            <label >同意使用条款</label>
                         </p>
-                        <button type="submit" name="submit" class="ipt-submit">注册</button>
+                        <button type="submit" name="demandSubmit" class="ipt-submit">注册</button>
                     </form>
                 </div>
             </div>
@@ -130,19 +128,7 @@
     </div>
 </div>
 <!-- /footer -->
-<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/jquery.placeholder.min.js"></script>
-<script type="text/javascript" src="js/jquery.validate.min.js"></script>
-<script type="text/javascript" src="js/jquery.validate.method.js"></script>
-<script type="text/javascript" src="js/jquery.form.min.js"></script>
-<script type="text/javascript" src="js/jquery.extends.1.0.js"></script>
-<script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/package/register.js"></script>
-<!--[if lt IE 9]>
-<script type="text/javascript" src="js/bootstrap/html5shiv.min.js"></script>
-<script type="text/javascript" src="js/bootstrap/respond.min.js"></script>
-<![endif]-->
+
 <script>
     $(function () {
         //个人注册，点击验证码图片更换图片
@@ -164,7 +150,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/supplier/sendSMSVerificationCodeByRegister",
+                url: "/supplierSide/sendSMSVerificationCodeByRegister",
                 data: {
                     mobile: $("input[name='mobile']").val(),
                     verifyCodeByPage: $("input[name='imgVerifyCode']").val()
@@ -172,8 +158,9 @@
                 success: function (resp) {
                     if (resp.code == "200") {
                         getSMSVeerifyCode();
+                    }else{
+                        alert(resp.message);
                     }
-                    //错误提示
                 }
             });
         });
@@ -201,19 +188,44 @@
         $("button[name='supplierSubmit']").click(function(){
             $.ajax({
                 type: "POST",
-                url: "/supplier/register",
+                url: "/supplierSide/register",
                 data: {
                     mobileNumber: $("input[name='mobile']").val(),
                     verifyCodeBySMS: $("input[name='smsVerifyCode']").val(),
-                    loginPassword: $("input[name='loginPassword']").val()
+                    loginPassword: $("#supplier-area input[name='loginPassword']").val()
                 },
                 success: function (resp) {
                     if (resp.code == "200") {
                         window.location.href = "/login.jsp";
+                    }else{
+                        alert(resp.message);
                     }
                 }
             });
         });
+
+        /**
+         * 企业注册按钮点击提交事件
+         */
+        $("button[name='demandSubmit']").click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/demandSide/register",
+                data: {
+                    email: $("input[name='email']").val(),
+                    loginPassword: $("#demand-area input[name='loginPassword']").val(),
+                    confirmPassword: $("#demand-area input[name='confirmPassword']").val()
+                },
+                success: function (resp) {
+                    if (resp.code == "200") {
+                        window.location.href = "/login.jsp";
+                    }else{
+                        alert(resp.message);
+                    }
+                }
+            });
+        });
+
     })
 </script>
 </body>

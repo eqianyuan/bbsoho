@@ -329,7 +329,7 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
      */
     public SupplierSideVOByBasicInfo getBasicInformation() throws EqianyuanException {
         //获取session用户
-        SupplierSideVOByLogin supplierSideVOByLogin = (SupplierSideVOByLogin) SessionUtil.getAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString());
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
 
         //获取用户手机号码，并且根据手机号码获取供应商基本信息
         SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(String.valueOf(supplierSideVOByLogin.getMobileNumber()));
@@ -403,7 +403,7 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         }
 
         //获取session用户
-        SupplierSideVOByLogin supplierSideVOByLogin = (SupplierSideVOByLogin) SessionUtil.getAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString());
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
         //获取用户手机号码，并且根据手机号码获取供应商基本信息
         SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(String.valueOf(supplierSideVOByLogin.getMobileNumber()));
         supplierSidePO.setRealName(supplierSideBasicInfoDTO.getRealName());

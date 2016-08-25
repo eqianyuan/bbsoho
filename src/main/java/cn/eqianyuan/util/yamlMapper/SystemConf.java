@@ -40,21 +40,21 @@ public enum SystemConf {
      */
     DEMAND_USER_BY_LOGIN("demandUserByLogin"),
     /**
-     * 需求商会员用户登录页面位置
+     * 会员用户登录页面位置
      */
-    DEMAND_USER_LOGIN_PAGE("/demand/login.jsp"),
+    USER_LOGIN_PAGE("/login.jsp"),
     /**
      * 需求商会员用户账号未激活提醒页面位置
      */
-    DEMAND_USER_UN_ACTIVATION_PAGE("/demand/unActivation.jsp"),
+    DEMAND_USER_UN_ACTIVATION_PAGE("/demandSide/unActivation.jsp"),
+    /**
+     * 需求商会员用户账号激活成功提醒页面位置
+     */
+    DEMAND_USER_ACTIVATION_SUCCESS_PAGE("/login"),
     /**
      * 需求商会员用户账号基本信息未完善提醒页面位置
      */
-    DEMAND_USER_UN_INTEGRITY_PAGE("/demand/unIntegrity.jsp"),
-    /**
-     * 供应商会员用户登录页面位置
-     */
-    SUPPLIER_USER_LOGIN_PAGE("/supplier/login.jsp");
+    DEMAND_USER_UN_INTEGRITY_PAGE("/demandSide/unIntegrity.jsp");
 
     private Object value;
 

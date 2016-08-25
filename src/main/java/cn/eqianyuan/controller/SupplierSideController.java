@@ -26,8 +26,8 @@ import java.io.IOException;
  * Created by jason on 2016-08-10.
  */
 @Controller
-@RequestMapping("/supplier")
-public class SupplierController extends BaseController {
+@RequestMapping("/supplierSide")
+public class SupplierSideController extends BaseController {
 
     @Autowired
     private ISupplierSideService supplierSideService;

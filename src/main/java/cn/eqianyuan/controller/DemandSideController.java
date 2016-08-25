@@ -5,12 +5,19 @@ import cn.eqianyuan.bean.dto.DemandSideBasicInfoDTO;
 import cn.eqianyuan.bean.vo.DemandSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.core.exception.EqianyuanException;
+import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.service.IDemandSideService;
+import cn.eqianyuan.util.UserUtils;
+import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 需求方会员控制器
@@ -47,10 +54,9 @@ public class DemandSideController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/account_activation", method = RequestMethod.GET)
-    @ResponseBody
-    public ServerResponse accountActivation(String email, String activationCode) throws EqianyuanException {
+    public String accountActivation(String email, String activationCode) throws EqianyuanException {
         demandSideService.accountActivation(email, activationCode);
-        return new ServerResponse();
+        return SystemConf.DEMAND_USER_ACTIVATION_SUCCESS_PAGE.toString();
     }
 
     /**
@@ -91,6 +97,15 @@ public class DemandSideController extends BaseController {
         demandSideService.demandLogout();
         return new ServerResponse();
     }
+
+    /**
+     * 会员（需求商）账号是否已经激活
+     *
+     * @return
+     */
+    @RequestMapping(value = "/isActivation", method = RequestMethod.GET)
+    @ResponseBody
+    public void isActivation(HttpServletRequest request, HttpServletResponse response) {}
 
     /**
      * 需求商基本信息
