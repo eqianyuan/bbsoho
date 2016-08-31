@@ -1,5 +1,6 @@
 package cn.eqianyuan.util.yamlMapper;
 
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -54,7 +55,11 @@ public enum SystemConf {
     /**
      * 需求商会员用户账号基本信息未完善提醒页面位置
      */
-    DEMAND_USER_UN_INTEGRITY_PAGE("/demandSide/unIntegrity.jsp");
+    DEMAND_USER_UN_INTEGRITY_PAGE("/demandSide/personalCenter.jsp?tabWidget=basicInformation"),
+    /**
+     * 需求商会员LOGO图片存放路径
+     */
+    DEMAND_USER_LOGO_FILE_UPLOAD_PATH(File.separator + "images" + File.separator + "demand" + File.separator + "logo");;
 
     private Object value;
 

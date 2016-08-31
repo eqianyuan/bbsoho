@@ -17,11 +17,11 @@ public class DemandSidePO {
 
     private Integer respectfulName;
 
-    private Integer phoneAreaCode;
+    private String phoneAreaCode;
 
     private Integer telephoneNumber;
 
-    private Integer extensionNumber;
+    private String extensionNumber;
 
     private Long mobileNumber;
 
@@ -107,11 +107,11 @@ public class DemandSidePO {
         this.respectfulName = respectfulName;
     }
 
-    public Integer getPhoneAreaCode() {
+    public String getPhoneAreaCode() {
         return phoneAreaCode;
     }
 
-    public void setPhoneAreaCode(Integer phoneAreaCode) {
+    public void setPhoneAreaCode(String phoneAreaCode) {
         this.phoneAreaCode = phoneAreaCode;
     }
 
@@ -123,11 +123,11 @@ public class DemandSidePO {
         this.telephoneNumber = telephoneNumber;
     }
 
-    public Integer getExtensionNumber() {
+    public String getExtensionNumber() {
         return extensionNumber;
     }
 
-    public void setExtensionNumber(Integer extensionNumber) {
+    public void setExtensionNumber(String extensionNumber) {
         this.extensionNumber = extensionNumber;
     }
 

@@ -14,10 +14,15 @@
                     <c:when test="${!empty supplierUserByLogin}">
                         <li>
                             <dl class="head">
-                                <dt><a href="personal.html"><img src="${supplierUserByLogin.headPortrait}" alt="head"/><span></span></a></dt>
+                                <dt><a href="javascript:;"><img src="${empty supplierUserByLogin.headPortrait ? 'images/head.png' : supplierUserByLogin.headPortrait}" alt="head" /><span></span></a></dt>
                                 <dd>
-                                    <a href="personal.html">${supplierUserByLogin.nickName}</a>
-                                    <a href="javascript:;" class="exit supplierLogout">退出</a>
+                                    <a href="javascript:;">${supplierUserByLogin.nickName}</a>
+                                    <ul class="top-menu">
+                                        <li><a href="javascript:;">我的${empty supplierUserByLogin.headPortrait}工作</a></li>
+                                        <li><a href="javascript:;">个人信息</a></li>
+                                        <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
+                                        <li><a href="javascript:;" class="exit supplierLogout">退出</a></li>
+                                    </ul>
                                 </dd>
                             </dl>
                         </li>
@@ -25,13 +30,19 @@
                     <c:when test="${!empty demandUserByLogin}">
                         <li>
                             <dl class="head">
-                                <dt><a href="personal.html"><img src="${demandUserByLogin.logo}" alt="head"/><span></span></a></dt>
+                                <dt><a href="javascript:;"><img src="${empty demandUserByLogin.logo ? 'images/head.png' : demandUserByLogin.logo}" alt="head" /><span></span></a></dt>
                                 <dd>
-                                    <a href="personal.html">${demandUserByLogin.companyName}</a>
-                                    <a href="javascript:;" class="exit demandLogout">退出</a>
+                                    <a href="javascript:;">${demandUserByLogin.companyName}</a>
+                                    <ul class="top-menu">
+                                        <li><a href="javascript:;">我的需求</a></li>
+                                        <li><a href="demandSide/personalCenter.jsp?tabWidget=basicInformation">企业信息</a></li>
+                                        <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
+                                        <li><a href="javascript:;" class="exit demandLogout">退出</a></li>
+                                    </ul>
                                 </dd>
                             </dl>
                         </li>
+
                         <script>
                             if(${demandUserByLogin.activationStatus} == 2 && ("" == "${param.isEnter}")){
                                 $.ajax({
@@ -54,10 +65,10 @@
             </ul>
             <ul class="nav">
                 <li class="active"><a href="index.jsp">首页</a></li>
-                <li><a href="search_job.html">找工作</a></li>
-                <li><a href="talents_list.html">招人才</a></li>
-                <li><a href="help.html">新手帮助</a></li>
-                <li><a href="complain.html">投诉建议</a></li>
+                <li><a href="javascript:;">找工作</a></li>
+                <li><a href="javascript:;">招人才</a></li>
+                <li><a href="javascript:;">新手帮助</a></li>
+                <li><a href="javascript:;">投诉建议</a></li>
             </ul>
             <div class="clearfix"></div>
         </div>

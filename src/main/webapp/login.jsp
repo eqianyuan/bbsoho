@@ -54,11 +54,11 @@
                     <form action="#" method="post" class="forms login-from">
                         <p class="ipt-txt"><input type="text" name="mobile" placeholder="手机号码" /></p>
                         <p class="ipt-txt"><input type="password" name="loginPassword" placeholder="密码" /></p>
-                        <p class="ipt-txt ttr"><a href="resetLR.html" class="link-forget">忘记密码</a></p>
+                        <%--<p class="ipt-txt ttr"><a href="resetLR.html" class="link-forget">忘记密码</a></p>--%>
                         <div class="error"></div>
                         <div class="btn-area">
                             <button type="button" name="supplierSubmit" class="ipt-submit">登录</button>
-                            <a href="javascript:;">其它登录方式</a>
+                            <%--<a href="javascript:;">其它登录方式</a>--%>
                         </div>
                     </form>
                 </div>
@@ -66,11 +66,11 @@
                     <form action="#" method="post" class="forms login-from">
                         <p class="ipt-txt"><input type="text" name="email" placeholder="邮箱号码" /></p>
                         <p class="ipt-txt"><input type="password" name="loginPassword" placeholder="密码" /></p>
-                        <p class="ipt-txt ttr"><a href="resetLR.html" class="link-forget">忘记密码</a></p>
+                        <%--<p class="ipt-txt ttr"><a href="resetLR.html" class="link-forget">忘记密码</a></p>--%>
                         <div class="error"></div>
                         <div class="btn-area">
                             <button type="button" name="demandSubmit" class="ipt-submit">登录</button>
-                            <a href="javascript:;">其它登录方式</a>
+                            <%--<a href="javascript:;">其它登录方式</a>--%>
                         </div>
                     </form>
                 </div>
@@ -82,91 +82,50 @@
 </div>
 <!-- /lr-wrapper -->
 <!-- footer -->
-<div class="footer">
-    <div class="container">
-        <!-- f-left -->
-        <div class="f-left">
-            <div class="bottom-link">
-                <a href="javascript:;">新手引导</a>
-                <a href="javascript:;">安全条款</a>
-                <a href="javascript:;">服务协议</a>
-                <a href="javascript:;">加入我们</a>
-                <a href="javascript:;">投资合作</a>
-            </div>
-            <div class="copy-right">
-                ©百百Soho.com  南京驿乾元信息技术有限公司  京ICP证110507号  京ICP备10046444号
-            </div>
-            <div class="f-link">
-                <a href="javascript:;"><img src="images/link_01.png" alt="1" /></a>
-                <a href="javascript:;"><img src="images/link_02.png" alt="2" /></a>
-            </div>
-        </div>
-        <!-- /f-left -->
-        <!-- f-right -->
-        <div class="f-right">
-            <div class="bottom-table">
-                <div class="cell">
-                    <div class="QR-code">
-                        <img src="images/code.png" alt="二维码" />
-                    </div>
-                </div>
-                <div class="cell">
-                    <h2>客服热线：025-84242551</h2>
-                    <p>周一至周六 9:00-20:30</p>
-                    <p>（仅收市话费）</p>
-                    <p class="email">投诉邮箱：Liuchao2016617@163.com</p>
-                </div>
-            </div>
-        </div>
-        <!-- /f-right -->
-        <div class="clearfix"></div>
-    </div>
-</div>
+<c:import url="footer.jsp"/>
 <!-- /footer -->
 </body>
 <script>
-    $(function () {
-        /**
-         * 个人登录按钮点击提交事件
-         */
-        $("button[name='supplierSubmit']").click(function(){
-            $.ajax({
-                type: "GET",
-                url: "/supplierSide/login",
-                data: {
-                    mobileNumber: $("input[name='mobile']").val(),
-                    loginPassword: $("#supplier-area input[name='loginPassword']").val()
-                },
-                success: function (resp) {
-                    if (resp.code == "200") {
-                        window.location.href = "index.jsp";
-                    }else{
-                        alert(resp.message);
-                    }
+    /**
+     * 个人登录按钮点击提交事件
+     */
+    $("button[name='supplierSubmit']").click(function(){
+        $.ajax({
+            type: "GET",
+            url: "/supplierSide/login",
+            data: {
+                mobileNumber: $("input[name='mobile']").val(),
+                loginPassword: $("#supplier-area input[name='loginPassword']").val()
+            },
+            success: function (resp) {
+                if (resp.code == "200") {
+                    window.location.href = "index.jsp";
+                }else{
+                    alert(resp.message);
                 }
-            });
+            }
         });
+    });
 
-        /**
-         * 企业登录按钮点击提交事件
-         */
-        $("button[name='demandSubmit']").click(function(){
-            $.ajax({
-                type: "GET",
-                url: "/demandSide/login",
-                data: {
-                    email: $("input[name='email']").val(),
-                    loginPassword: $("#demand-area input[name='loginPassword']").val()
-                },
-                success: function (resp) {
-                    if (resp.code == "200") {
-                        window.location.href = "index.jsp";
-                    }else{
-                        alert(resp.message);
-                    }
+    /**
+     * 企业登录按钮点击提交事件
+     */
+    $("button[name='demandSubmit']").click(function(){
+        $.ajax({
+            type: "GET",
+            url: "/demandSide/login",
+            data: {
+                email: $("input[name='email']").val(),
+                loginPassword: $("#demand-area input[name='loginPassword']").val()
+            },
+            success: function (resp) {
+                if (resp.code == "200") {
+                    window.location.href = "index.jsp";
+                }else{
+                    alert(resp.message);
                 }
-            });
+            }
         });
-    })
+    });
 </script>
 </html>

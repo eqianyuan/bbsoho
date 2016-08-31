@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
@@ -43,6 +44,14 @@ public class DemandSideServiceImpl implements IDemandSideService {
     private static final int ACTIVATION_STATUS_BY_ACTIVATED = 1;
     //企业名称DB许可字节长度
     private static final int COMPANY_NAME_MAX_BYTES_BY_DB = 192;
+    //企业联系人DB许可字节长度
+    private static final int CONTACT_MAX_BYTES_BY_DB = 20;
+    //企业联系固话-区号DB许可字节长度
+    private static final int PHONE_AREA_CODE_MAX_BYTES_BY_DB = 20;
+    //企业联系固话-分机号DB许可字节长度
+    private static final int EXTENSION_NUMBER_CODE_MAX_BYTES_BY_DB = 20;
+    //企业详细地址DB许可字节长度
+    private static final int ADDRESS_MAX_BYTES_BY_DB = 100;
 
     /**
      * 添加需求商用户
@@ -359,7 +368,8 @@ public class DemandSideServiceImpl implements IDemandSideService {
 
         DemandSidePO demandSidePO = demandSideDao.selectByEmail(email);
         //检查需求商账户信息中基本资料必填项是否有值，有值则认定为资料已经完善
-        if (StringUtils.isEmpty(demandSidePO.getCompanyName())) {
+        if (StringUtils.isEmpty(demandSidePO.getContact())
+                && ObjectUtils.isEmpty(demandSidePO.getMobileNumber())) {
             return false;
         }
         return true;
@@ -407,6 +417,54 @@ public class DemandSideServiceImpl implements IDemandSideService {
             throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ENTERPRISE_SCALE_IS_EMPTY);
         }
 
+        //检查需求商用户输入联系人是否为空
+        if (StringUtils.isEmpty(demandSideBasicInfoDTO.getContact())) {
+            logger.warn("modifyBasicInformation fail , because user input contact , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_CONTACT_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联系人尊称是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getRespectfulName())) {
+            logger.warn("modifyBasicInformation fail , because user input respectful name , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_RESPECTFUL_NAME_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联电话-移动号码是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getMobileNumber())) {
+            logger.warn("modifyBasicInformation fail , because user input mobile number , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_MOBILE_NUMBER_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联系电话-移动号码是否正确
+        if (!RegexUtils.isMobile(String.valueOf(demandSideBasicInfoDTO.getMobileNumber()))) {
+            logger.warn("modifyBasicInformation fail , because user input mobile number is not right mobile number");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_MOBILE_NUMBER_IS_FAIL);
+        }
+
+        //检查需求商用户选择地区-省是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getProvinceId())) {
+            logger.warn("modifyBasicInformation fail , because user input province id , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PROVINCE_IS_FAIL);
+        }
+
+        //检查需求商用户选择地区-市是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getCityId())) {
+            logger.warn("modifyBasicInformation fail , because user input city id , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_CITY_IS_FAIL);
+        }
+
+        //检查需求商用户选择地区-区是否为空
+        if (ObjectUtils.isEmpty(demandSideBasicInfoDTO.getCountyId())) {
+            logger.warn("modifyBasicInformation fail , because user input county id , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_COUNTY_IS_FAIL);
+        }
+
+        //检查需求商用户输入公司详细地址是否为空
+        if (StringUtils.isEmpty(demandSideBasicInfoDTO.getAddress())) {
+            logger.warn("modifyBasicInformation fail , because user input address , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ADDRESS_IS_FAIL);
+        }
+
         //检查企业名称内容长度是否超出DB许可长度
         try {
             if (demandSideBasicInfoDTO.getCompanyName().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > COMPANY_NAME_MAX_BYTES_BY_DB) {
@@ -416,6 +474,32 @@ public class DemandSideServiceImpl implements IDemandSideService {
             }
         } catch (UnsupportedEncodingException e) {
             logger.info("modifyBasicInformation fail , because company name [" + demandSideBasicInfoDTO.getCompanyName() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        //检查企业联系人内容长度是否超出DB许可长度
+        try {
+            if (demandSideBasicInfoDTO.getContact().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > CONTACT_MAX_BYTES_BY_DB) {
+                logger.info("modifyBasicInformation fail , because contact [" + demandSideBasicInfoDTO.getContact() + "] bytes greater than"
+                        + CONTACT_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_CONTACT_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("modifyBasicInformation fail , because contact [" + demandSideBasicInfoDTO.getContact() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        //检查企业地址内容长度是否超出DB许可长度
+        try {
+            if (demandSideBasicInfoDTO.getAddress().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > ADDRESS_MAX_BYTES_BY_DB) {
+                logger.info("modifyBasicInformation fail , because address name [" + demandSideBasicInfoDTO.getAddress() + "] bytes greater than"
+                        + ADDRESS_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_ADDRESS_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("modifyBasicInformation fail , because address [" + demandSideBasicInfoDTO.getAddress() + "] getBytes("
                     + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
             throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
         }
@@ -482,20 +566,135 @@ public class DemandSideServiceImpl implements IDemandSideService {
             }
         }
 
-        //检查需求商用户输入联系电话是否为空
-        //检查需求商用户输入企业归属地是否为空
-        //检查需求商用户输入企业地址是否为空
+        /**
+         * 检查企业联系人尊称正确性
+         */
+        {
+            //从数据字典缓存中获取企业规模集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.RESPECTFUL_NAME.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.RESPECTFUL_NAME.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //用户尊称是否存在字典数据中
+            boolean respectfulNameDictionary = false;
+
+            //检查企业规模是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(demandSideBasicInfoDTO.getRespectfulName()))) {
+                    respectfulNameDictionary = true;
+                    break;
+                }
+            }
+
+            //当尊称值不存在字典数据中时，抛出错误信息
+            if (!respectfulNameDictionary) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.RESPECTFUL_NAME.toString() + "] , " +
+                        "enterprise nature [" + demandSideBasicInfoDTO.getRespectfulName() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
 
         //获取session用户
         DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
         //获取用户邮箱，并且根据邮箱号获取需求商基本信息
         DemandSidePO demandSidePO = demandSideDao.selectByEmail(demandSideVOByLogin.getEmail());
+
+        /**
+         * 检查联系电话-固话
+         */
+        {
+            //检查固话区号是否正确
+            if (!StringUtils.isEmpty(demandSideBasicInfoDTO.getPhoneAreaCode())) {
+                //检查需求商用户输入联系电话-固话号码-区号是否正确
+                if (!RegexUtils.isDigital(demandSideBasicInfoDTO.getPhoneAreaCode())) {
+                    logger.warn("modifyBasicInformation fail , because user input phone area code is not right number");
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_TO_LONG);
+                }
+
+                //检查企业联系电话-固话-区号内容长度是否超出DB许可长度
+                try {
+                    if (demandSideBasicInfoDTO.getPhoneAreaCode().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > PHONE_AREA_CODE_MAX_BYTES_BY_DB) {
+                        logger.info("modifyBasicInformation fail , because phone area code [" + demandSideBasicInfoDTO.getPhoneAreaCode() + "] bytes greater than"
+                                + PHONE_AREA_CODE_MAX_BYTES_BY_DB);
+                        throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_IS_FAIL);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    logger.info("modifyBasicInformation fail , because phone area code [" + demandSideBasicInfoDTO.getPhoneAreaCode() + "] getBytes("
+                            + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+                }
+
+                demandSidePO.setPhoneAreaCode(demandSideBasicInfoDTO.getPhoneAreaCode());
+            }
+
+            //检查固话号码是否正确
+            if (!ObjectUtils.isEmpty(demandSideBasicInfoDTO.getTelephoneNumber())) {
+                //检查需求商用户输入联系电话-固话号码是否正确
+                if (!RegexUtils.isDigital(String.valueOf(demandSideBasicInfoDTO.getTelephoneNumber()))) {
+                    logger.warn("modifyBasicInformation fail , because user input telephone number is not right number");
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_TELEPHONE_NUMBER_IS_FAIL);
+                }
+
+                demandSidePO.setTelephoneNumber(demandSideBasicInfoDTO.getTelephoneNumber());
+            }
+
+            //检查固话分机号是否正确
+            if (!StringUtils.isEmpty(demandSideBasicInfoDTO.getExtensionNumber())) {
+                //检查需求商用户输入联系电话-固话号码-分机号是否正确
+                if (!RegexUtils.isDigital(demandSideBasicInfoDTO.getExtensionNumber())) {
+                    logger.warn("modifyBasicInformation fail , because user input extension number is not right number");
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_EXTENSION_NUMBER_IS_FAIL);
+                }
+
+                //检查企业固话分机号内容长度是否超出DB许可长度
+                try {
+                    if (demandSideBasicInfoDTO.getExtensionNumber().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > EXTENSION_NUMBER_CODE_MAX_BYTES_BY_DB) {
+                        logger.info("modifyBasicInformation fail , because extension number [" + demandSideBasicInfoDTO.getExtensionNumber() + "] bytes greater than"
+                                + EXTENSION_NUMBER_CODE_MAX_BYTES_BY_DB);
+                        throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_EXTENSION_NUMBER_TO_LONG);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    logger.info("modifyBasicInformation fail , because extension number [" + demandSideBasicInfoDTO.getExtensionNumber() + "] getBytes("
+                            + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+                }
+
+                demandSidePO.setExtensionNumber(demandSideBasicInfoDTO.getExtensionNumber());
+            }
+        }
+
         demandSidePO.setCompanyName(demandSideBasicInfoDTO.getCompanyName());
         demandSidePO.setEnterpriseNature(demandSideBasicInfoDTO.getEnterpriseNature());
         demandSidePO.setEnterpriseScale(demandSideBasicInfoDTO.getEnterpriseScale());
+        demandSidePO.setContact(demandSideBasicInfoDTO.getContact());
+        demandSidePO.setRespectfulName(demandSideBasicInfoDTO.getRespectfulName());
+        demandSidePO.setMobileNumber(demandSideBasicInfoDTO.getMobileNumber());
+        demandSidePO.setProvinceId(demandSideBasicInfoDTO.getProvinceId());
+        demandSidePO.setCityId(demandSideBasicInfoDTO.getCityId());
+        demandSidePO.setCountyId(demandSideBasicInfoDTO.getCountyId());
+        demandSidePO.setAddress(demandSideBasicInfoDTO.getAddress());
+
+        if (!StringUtils.isEmpty(demandSideBasicInfoDTO.getLogo())) {
+            String logoSuffix = ".png";
+            String logoFileName = demandSideBasicInfoDTO.getCompanyName() + logoSuffix;
+            //获取logo数据，因为是canvas数据，所以需要截取掉前22个无用字符
+            String logo = demandSideBasicInfoDTO.getLogo().substring(22);
+            //logo写入文件
+            //canvas数据是base64加密数据，所以使用对应解密
+            byte[] logoBytes = Base64Utils.decode(logo);
+            FileUtilHandle.writeFile(logoBytes, logoFileName);
+            demandSidePO.setLogo(SystemConf.DEMAND_USER_LOGO_FILE_UPLOAD_PATH.toString() + File.separator + logoFileName);
+        }
 
         //持久化基本信息
         demandSideDao.updateByPrimaryKeySelective(demandSidePO);
+
+        //将PO转为VO
+        demandSideVOByLogin = demandConvert.demandLogin(demandSidePO);
+        //将会员（需求商）编辑后的新数据重新写入session
+        SessionUtil.setAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString(), demandSideVOByLogin);
     }
 
     /**

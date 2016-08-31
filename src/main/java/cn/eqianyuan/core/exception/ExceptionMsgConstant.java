@@ -27,6 +27,10 @@ public class ExceptionMsgConstant {
     public static final String REGISTRATION_ACTIVATION_EMAIL_SEND_ERROR = "1001009";
     //获取字符串字节错误
     public static final String SYSTEM_GET_BYTE_FAIL = "1001010";
+    //附件不存在
+    public static final String FILE_NO_EXISTS = "1001011";
+    //附件上传失败
+    public static final String FILE_UPDATE_ERROR = "1001012";
 /********** 系统级异常配置 **********/
 
 /********** 客户端系统异常配置 **********/
@@ -79,5 +83,35 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ENTERPRISE_SCALE_IS_EMPTY = "2002013";
     //会员（需求商）用户基本信息，企业名称太长
     public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_NAME_TO_LONG = "2002014";
+    //会员（需求商）用户基本信息，企业联系人为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_CONTACT_IS_EMPTY = "2002015";
+    //会员（需求商）用户基本信息，企业联系人尊称为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_RESPECTFUL_NAME_IS_EMPTY = "2002016";
+    //会员（需求商）用户基本信息，企业联系电话-移动号码不能为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_MOBILE_NUMBER_IS_EMPTY = "2002017";
+    //会员（需求商）用户基本信息，企业联系电话-移动号码不正确
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_MOBILE_NUMBER_IS_FAIL = "2002018";
+    //会员（需求商）用户基本信息，企业地区-省不能为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PROVINCE_IS_FAIL = "2002019";
+    //会员（需求商）用户基本信息，企业地区-市不能为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_CITY_IS_FAIL = "2002020";
+    //会员（需求商）用户基本信息，企业地区-区不能为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_COUNTY_IS_FAIL = "2002021";
+    //会员（需求商）用户基本信息，企业详细地址能为空
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_ADDRESS_IS_FAIL = "2002022";
+    //会员（需求商）用户基本信息，企业联系人太长
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_CONTACT_TO_LONG = "2002023";
+    //会员（需求商）用户基本信息，企业联系固话-区号不是数字
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_IS_FAIL = "2002024";
+    //会员（需求商）用户基本信息，企业联系固话-区号太长
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_TO_LONG = "2002025";
+    //会员（需求商）用户基本信息，企业联系固话号码不是数字
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_TELEPHONE_NUMBER_IS_FAIL = "2002026";
+    //会员（需求商）用户基本信息，企业联系固话-分机号不是数字
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_EXTENSION_NUMBER_IS_FAIL = "2002027";
+    //会员（需求商）用户基本信息，企业联系固话-分机号太长
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_EXTENSION_NUMBER_TO_LONG = "2002028";
+    //会员（需求商）用户基本信息，企业详细地址太长
+    public static final String DEMAND_USER_BASIC_INFORMATION_BY_ADDRESS_TO_LONG = "2002029";
 /********** 客户端系统异常配置 **********/
 }

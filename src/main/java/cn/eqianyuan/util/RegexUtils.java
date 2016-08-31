@@ -19,6 +19,10 @@ public class RegexUtils {
         return pattern.matcher(mobileNumber).matches();
     }
 
+    public static void main(String[] args) {
+        System.out.println(isDigital("0256523f44"));
+    }
+
     /**
      * 是否为纯正整数
      *

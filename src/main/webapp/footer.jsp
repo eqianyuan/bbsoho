@@ -11,7 +11,7 @@
                 <a href="javascript:;">投资合作</a>
             </div>
             <div class="copy-right">
-                ©百百Soho.com 南京驿乾元信息技术有限公司 京ICP证110507号 京ICP备10046444号
+                Copyright &copy;2016 bbsoho.eqianyuan.cn 南京驿乾元软件科技有限公司 苏ICP备16024301号
             </div>
             <div class="f-link">
                 <a href="javascript:;"><img src="images/link_01.png" alt="1"/></a>
@@ -31,7 +31,7 @@
                     <h2>客服热线：025-84242551</h2>
                     <p>周一至周六 9:00-20:30</p>
                     <p>（仅收市话费）</p>
-                    <p class="email">投诉邮箱：Liuchao2016617@163.com</p>
+                    <p class="email">投诉邮箱：nanjingyiqianyuan@163.com</p>
                 </div>
             </div>
         </div>

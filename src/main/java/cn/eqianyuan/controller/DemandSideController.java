@@ -5,9 +5,7 @@ import cn.eqianyuan.bean.dto.DemandSideBasicInfoDTO;
 import cn.eqianyuan.bean.vo.DemandSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.core.exception.EqianyuanException;
-import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.service.IDemandSideService;
-import cn.eqianyuan.util.UserUtils;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * 需求方会员控制器
@@ -105,7 +102,8 @@ public class DemandSideController extends BaseController {
      */
     @RequestMapping(value = "/isActivation", method = RequestMethod.GET)
     @ResponseBody
-    public void isActivation(HttpServletRequest request, HttpServletResponse response) {}
+    public void isActivation(HttpServletRequest request, HttpServletResponse response) {
+    }
 
     /**
      * 需求商基本信息
@@ -124,11 +122,13 @@ public class DemandSideController extends BaseController {
      *
      * @param demandSideBasicInfoDTO
      * @return
+     * @throws EqianyuanException
      */
     @RequestMapping(value = "/basicInformation", method = RequestMethod.PUT)
     @ResponseBody
     public ServerResponse basicInformationEdit(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException {
         demandSideService.modifyBasicInformation(demandSideBasicInfoDTO);
-        return new ServerResponse();
+        return new ServerResponse.ResponseBuilder().data(demandSideBasicInfoDTO.getLogo()).build();
     }
+
 }

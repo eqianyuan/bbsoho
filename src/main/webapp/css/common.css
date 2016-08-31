@@ -1,11 +1,12 @@
 @import "bootstrap.min.css";
+@import "jquery-ui.min.css";
 @import "base.css";
 
 body.pt97{ padding-top: 97px; }
 
 /*头部*/
 div.header{ width:100%; padding:45px 0; background-color: #FFF; }
-div.header.normal{ padding: 20px 0; border-bottom: 2px solid #7335b0; position: fixed; left:0; top: 0; z-index: 10000;  }
+div.header.normal{ padding: 20px 0; border-bottom: 2px solid #7335b0; position: fixed; left:0; top: 0; z-index: 1000;  }
 div.header .lr-logo{ width:325px; }
 div.header a.left-logo{ display: block; width:210px; float:left; }
 div.header .left-logo img{ width:100%; }
@@ -50,11 +51,23 @@ div.header dl.head dt a{ display:block; width:39px; height:39px; overflow: hidde
     border-radius: 30px;
 }
 div.header dl.head dt a img{ max-width: 95%; min-height: 100%; position: relative; z-index: 1; }
-div.header dl.head dt a span{ display: block; width: 100%; height: 100%; background: url('../../../../../static resource/website/images/bg_head.png') no-repeat center; position: absolute; top: 0; left: 0; z-index: 10; }
-div.header dl.head dd{ padding-right: 8px; background: url('../../../../../static resource/website/images/down.png') no-repeat right center; position: relative; }
+div.header dl.head dt a span{ display: block; width: 100%; height: 100%; background: url('../images/bg_head.png') no-repeat center; position: absolute; top: 0; left: 0; z-index: 10; }
+div.header dl.head dd{ padding-right: 8px; background: url('../images/down.png') no-repeat right center; position: relative; }
 div.header dl.head dd a.username{}
+/*
 div.header dl.head dd a.exit{ display:none; position:absolute; top:35px; right:0; z-index:100; text-align:center; white-space:nowrap; padding:3px 12px !important; margin:0; font-size:14px; border:1px solid #DDD !important; }
 div.header dl.head dd:hover a.exit{ display:inline-block; }
+*/
+
+div.header dl.head dd  ul.top-menu{ white-space:nowrap; background-color: #FFF; position:absolute; top:36px; left:0; border:1px solid #DDD; box-shadow:0px 0px 2px rgba(0, 0, 0, .1); display: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+div.header dl.head dd  ul.top-menu li{ width:100%; padding:5px 10px; border-bottom:1px solid #DDD;}
+div.header dl.head dd  ul.top-menu li:hover{ background-color: #cb63de; }
+div.header dl.head dd  ul.top-menu li a{ font-size:14px !important; color:#4c4c54 !important; }
+div.header dl.head dd:hover ul.top-menu{ display:block; }
 
     /*登录区域*/
 div.lr-wrapper{ width:100%; overflow:hidden; position:relative; }
@@ -85,7 +98,7 @@ form.forms a.telCode{ line-height:42px; text-align:center; font-size:14px; backg
 form.forms a.telCode:hover{  text-decoration: none; }
 
 form.forms label{ font-weight: normal; display: inline-block; vertical-align: middle; cursor: pointer; }
-form.forms input[type=checkbox]{ }
+form.forms input[type=checkbox]{ display: inline-block; width: auto;  }
 
 form.forms div.error{ width: 100%; height: 20px; overflow: hidden; color: #F00; margin-bottom: 10px; }
 form.forms div.error.reg-error{ display:inline-block; width:auto; position:absolute; right:15px; margin-bottom: 0; }
@@ -103,13 +116,13 @@ div.index-top form.search-form{ display:block; background-color:#FFF; width:100%
     -webkit-border-radius: 5px;
     border-radius: 5px;
 }
-div.index-top form.search-form input[type=text].ipt-txt{ width:100%; padding:20px 80px 20px 50px; outline:none; border:0; font-size:18px; background:url('../../../../../static resource/website/images/search.png') no-repeat 20px center; }
+div.index-top form.search-form input[type=text].ipt-txt{ width:100%; padding:20px 80px 20px 50px; outline:none; border:0; font-size:18px; background:url('../images/search.png') no-repeat 20px center; }
 div.index-top form.search-form button.ipt-submit{ display:inline-block; font-size: 18px; padding:5px 15px; border:1px solid #DDD; background-color:transparent;  position:absolute; top:16px; right:15px; }
 
 /**/
 div.pd30{ padding: 30px 0; }
 div.index-title{ width:395px; margin: 0 auto; line-height:24px; text-align:center; font-size:14px; color:#9199a0; }
-div.index-title h2{ font-size:30px; color:#4c4c54; margin-bottom:10px; padding:15px 0; background:url('../../../../../static resource/website/images/index/bottom_line.png') no-repeat bottom center; }
+div.index-title h2{ font-size:30px; color:#4c4c54; margin-bottom:10px; padding:15px 0; background:url('../images/index/bottom_line.png') no-repeat bottom center; }
 div.index-box{ }
 
 div.advantage{ width:790px; margin:0 auto; }
@@ -120,7 +133,7 @@ div.advantage dl dt img{ max-width:100%; }
 div.advantage dl dd{ width:100%; font-size:14px; color:#9199a0; }
 div.advantage dl dd h3{ padding:8px 0; font-size:16px; color:#4c4c54; }
 
-div.btn-start{ width:100%; height: 42px; margin: 30px 0 15px; background:url('../../../../../static resource/website/images/index/mid_line.png') repeat-x left center; }
+div.btn-start{ width:100%; height: 42px; margin: 30px 0 15px; background:url('../images/index/mid_line.png') repeat-x left center; }
 div.btn-start .inner{ width: 130px; padding: 0 15px; margin: 0 auto; background-color: #FFF; }
 div.btn-start button.ipt-button{ width: 100%; height: 42px; font-size: 16px; background-color: #465b88; color: #FFF; border: 0;
     -moz-border-radius: 3px;
@@ -172,9 +185,9 @@ dl.talents-order{ display:table; width:100%; margin: 50px 0 20px; font-size: 14p
 dl.talents-order dt, table.talents-list dl.order dd{ display:table-cell; padding:15px 6px; }
 dl.talents-order dt{ width:100px; text-align:right; }
 dl.talents-order dd{ padding-left: 0; padding-right: 0; }
-dl.talents-order dd a{ display: inline-block; font-weight: normal; padding-right: 12px; color: #9199a0; margin-right: 20px; background: url('../../../../../static resource/website/images/talents/hover.png') no-repeat right center; }
+dl.talents-order dd a{ display: inline-block; font-weight: normal; padding-right: 12px; color: #9199a0; margin-right: 20px; background: url('../images/talents/hover.png') no-repeat right center; }
 dl.talents-order dd a:hover, dl.talents-order dd a:focus, dl.talents-order dd a:active{ text-decoration: none; }
-dl.talents-order dd a.act{ color: #7335b0; background-image: url('../../../../../static resource/website/images/talents/act_hover.png'); }
+dl.talents-order dd a.act{ color: #7335b0; background-image: url('../images/talents/act_hover.png'); }
 dl.talents-order dd a:hover{ text-decoration: none; }
 
 /*talents-list*/
@@ -241,8 +254,14 @@ form.personal p.ipt-txt input, form.personal p.ipt-txt textarea, input, form.per
 form.personal p.ipt-txt textarea{ height: 80px; resize: none; }
 form.personal .red{ color: #F00; padding: 0 6px; }
 
+form.personal p.ipt-txt.wd100{ width: 100px; }
+form.personal p.ipt-txt.wd130{ width: 130px; }
 form.personal p.ipt-txt.wd200{ width: 200px; }
+form.personal p.ipt-txt.wd300{ width: 300px; }
 form.personal p.ipt-txt.wd415{ width: 403px; }
+
+form.personal p.ipt-txt.mr10{ margin-right: 10px; }
+
 
 form.personal button.ipt-submit{ padding: 15px 52px; color: #FFF; background-color: #7335b0; font-size: 14px; border: 0; display: block; margin: 50px auto;
     -moz-border-radius: 5px;
@@ -250,6 +269,11 @@ form.personal button.ipt-submit{ padding: 15px 52px; color: #FFF; background-col
     border-radius: 5px;
 }
 form.personal div.error{ width: 100%; height: 20px; overflow: hidden; color: #F00; margin-bottom: 10px; }
+
+form.personal input.workTime{ padding-left: 35px !important; background: url('../images/personal/time.png') no-repeat 10px center; }
+
+
+
 
 /*enterprise-top*/
 div.enterprise-top{ border-bottom:1px solid #DDD; padding:10px 0 30px; margin-bottom:30px; }
@@ -259,32 +283,392 @@ div.enterprise-top .right{ float:right; }
 
 div.enterprise-top .left dl{ display:block; float:left; }
 div.enterprise-top .left dl dt, div.enterprise-top .left dl dd{ float:left; }
-div.enterprise-top .left dl dt{ width:88p; height:88px; text-align:center; overflow:hidden; border:1px solid #DDD; }
-div.enterprise-top .left dl dt img{ width:100%; min-height:100%; }
+div.enterprise-top .left dl dt{ width:88px; height:88px; text-align:center; overflow:hidden; border:1px solid #DDD; }
+div.enterprise-top .left dl dt img, div.enterprise-top .left dl dt canvas{ width:100%; min-height:100%; }
 div.enterprise-top .left dl dd{ padding-left:15px; }
 div.enterprise-top .left h3{ font-size: 18px; color: #4c4c54; margin-bottom: 15px; }
 
 div.enterprise-top .radio-box{}
-div.enterprise-top p.ipt-radio{ display: inline-block; height: 16px; line-height: 14px; padding-left: 20px; background: url('../../../../../static resource/website/images/personal/radio_none.png') no-repeat left center; cursor: pointer; }
-div.enterprise-top p.ipt-radio input[type=radio]{ display: none;}
-div.enterprise-top p.ipt-radio.active{ background-image: url('../../../../../static resource/website/images/personal/radio.png'); }
+p.ipt-radio{ display: inline-block; height: 16px; line-height: 14px; padding-left: 20px; background: url('../images/personal/radio_none.png') no-repeat left center; cursor: pointer; }
+p.ipt-radio input[type=radio]{ display: none;}
+p.ipt-radio.active{ background-image: url('../images/personal/radio.png'); }
 
 div.enterprise-top .right dl{ display: table; font-size: 14px; margin-top: 30px; }
 div.enterprise-top .right dl dt, div.enterprise-top .right dl dd{ display: table-cell; }
 div.enterprise-top .right dl dt{ font-weight: normal; color: #9199a0; }
 div.enterprise-top .right dl dd{ color: #ffae1f; }
-div.enterprise-top .right dl dd p.star{ padding-left: 92px; background: url('../../../../../static resource/website/images/personal/start_00.png') no-repeat left center; }
+p.star{ padding-left: 92px; background: url('../images/personal/start_00.png') no-repeat left center; }
 
-div.enterprise-top .right dl dd p.star.star_01{ background-image: url('../../../../../static resource/website/images/personal/start_01.png');}
-div.enterprise-top .right dl dd p.star.star_02{ background-image: url('../../../../../static resource/website/images/personal/start_02.png');}
-div.enterprise-top .right dl dd p.star.star_03{ background-image: url('../../../../../static resource/website/images/personal/start_03.png');}
-div.enterprise-top .right dl dd p.star.star_04{ background-image: url('../../../../../static resource/website/images/personal/start_04.png');}
-div.enterprise-top .right dl dd p.star.star_05{ background-image: url('../../../../../static resource/website/images/personal/start_05.png');}
+p.star.star_01{ background-image: url('../images/personal/start_01.png');}
+p.star.star_02{ background-image: url('../images/personal/start_02.png');}
+p.star.star_03{ background-image: url('../images/personal/start_03.png');}
+p.star.star_04{ background-image: url('../images/personal/start_04.png');}
+p.star.star_05{ background-image: url('../images/personal/start_05.png');}
+
+/*工作详情页*/
+table.job-detail{ width:100%; }
+table.job-detail thead th{ border-bottom:1px solid #e0e4e9; text-align:right; padding:15px 0; }
+table.job-detail thead th:first-child{ text-align:left; }
+table.job-detail thead h3{ font-size:18px; color:#4c4c54; font-weight:normal; white-space:nowrap;  }
+table.job-detail thead a.bnt-apply{ color:#FFF; background-color:#7335b0; padding:8px 28px; font-size: 14px; font-weight: normal; cursor: pointer; }
+table.job-detail tbody th, table.job-detail tbody td{ vertical-align: top; padding:15px 5px 10px 15px; border-bottom:1px solid #f6f8fb; font-size:14px; }
+table.job-detail tbody th{ white-space:nowrap; font-weight:normal; text-align:right; color:#4c4c54; }
+table.job-detail tbody td{ color:#9199a0; }
+
+table.bd-line tr:last-child th, table.bd-line tr:last-child td{ border-bottom: 1px solid #e0e4e9; }
+table.mt30{ margin-top: 30px; }
+table.mb30{ margin-bottom: 30px; }
+
+/*系统消息*/
+div.systemMsg-box{ width:100%;}
+div.systemMsg-box .sb-title{ text-align:center; font-size:18px; }
+div.systemMsg-box ul.sb-list{ width:100%; line-height:42px; margin:20px 0; }
+div.systemMsg-box ul.sb-list li{ border-bottom:1px solid #DDD; }
+div.systemMsg-box .paging{ }
+
+/*企业需求*/
+div.company-demand table.project{ width:100%; color: #4c4c54; }
+div.company-demand table.project tbody tr:first-child th{ text-align:right; }
+div.company-demand table.project tbody tr th:first-child{ text-align:left; }
+
+div.company-demand table.project th[colspan="3"]{ border-bottom: 0; }
+div.company-demand table.project td.wd130{ width: 130px; }
+
+div.company-demand div.btn-box{ padding-top: 15px; }
+div.company-demand div.btn-box a.btn{ border: 1px solid #DDD; background-color: #f7f8f9; color: #4c4c54; }
+
+div.company-demand a.img{ display: inline-block; width: 85px; height: 85px; overflow: hidden; }
+div.company-demand a.img img{ width: 100%; }
+
+div.company-demand p{ color: #4c4c54; }
+div.company-demand .price{ font-size: 24px; color: #ffae1f; }
+div.company-demand .score{ display:inline-block; width: 100px; text-align:center; }
+div.company-demand p.star{ padding-left: 0; padding-top:16px; color: #ffae1f; background-position:top center; margin-top:10px; }
+div.company-demand a.tit{ color:#4c4c54; font-size:14px; }
+
+div.company-demand ul.nav-tabs{ width: 100%; }
+div.company-demand ul.nav-tabs li{ display: inline-block; }
+div.company-demand ul.nav-tabs li a{ padding: 15px 45px; border-bottom: 1px solid #dee2e7; }
+div.company-demand ul.nav-tabs li a:hover{  border-bottom: 1px solid #dee2e7; }
+
+
+form.relieveDeal{ width:100%;}
+form.relieveDeal h3{ text-align:center; font-size:18px; color:#4c4c54; }
+form.relieveDeal textarea.tta{ width:100%; height:100px; overflow-x:hidden; overflow-y:auto; border:1px solid #DDD; margin:20px 0 10px; padding:10px; resize:none; }
+form.relieveDeal .btn-box{ width:100%; text-align:center; }
+form.relieveDeal .btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; margin:0 1px; padding:8px 30px; }
+
+form.relieveDeal label.error{ color: #F00; padding-bottom: 10px; }
+
+/*需求管理*/
+div.close-apply-list{ position: relative; border-bottom:1px solid #e0e4e9; }
+div.close-apply-list table{ width:100%; font-size:14px; margin:10px 0; }
+div.close-apply-list td{ padding:15px; text-align:center; border-bottom:1px solid #f6f8fb; }
+div.close-apply-list a.btn-close-apply{ background-color:#7335b0; color:#FFF; padding:8px 20px; }
+
+div.close-apply-list a#btn-toggle-apply{ display: block; width: 27px; height: 33px; background: url('../images/personal/up.png') no-repeat left; position: absolute; right: 0; bottom: 15px; }
+div.close-apply-list a#btn-toggle-apply.showDown{ background-image: url('../images/personal/down.png'); }
+
+div.company-demand a.btn-editApply{ background-color: #7335b0; color: #FFF; font-size: 14px; font-weight: normal; padding: 8px 15px; float: right; }
+
+div.editApply-dialog{ max-height: 500px; *height:500px; overflow-x:hidden; overflow-y:auto; }
+form.editApply-form{ width: 100%; font-size:14px; }
+form.editApply-form th, form.editApply-form td{ padding:5px; vertical-align:top;}
+form.editApply-form th{ font-weight:normal; white-space:nowrap; line-height:38px; }
+
+form.editApply-form p.ipt-txt{ position: relative; }
+form.editApply-form p.ipt-txt.first-input input{ padding-right: 80px; }
+form.editApply-form p.ipt-txt.first-input a.del-stat{ display: inline-block; color: #333; height: 36px; margin: 1px; line-height: 36px; padding: 0 15px; background-color: #f7f8f9; position: absolute; top: 0; right: 0; z-index: 10; border-left: 1px solid #e9ecef;
+    -moz-border-top-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    border-top-right-radius: 5px;
+    -moz-border-bottom-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+form.editApply-form i.warn-star{ line-height: 38px; color: #ff0000; padding-left: 5px; }
+form.editApply-form button.ipt-submit{ padding: 10px 36px; margin: 30px auto 15px; }
+form.editApply-form button.add-state{ border: 1px solid #e9ecef; background-color: #f7f8f9; padding: 5px 15px; margin: 15px 0; }
+
+form.editApply-form div.error{ border: 1px solid #fc4c24; background: url('../images/personal/warn.png') no-repeat 10px center; height: 32px; padding-left: 28px; display: none;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+form.editApply-form div.error p{ margin-top: 5px; }
+
+form.editApply-form p.ipt-month{ width: 332px !important; }
+form.editApply-form p.ipt-month input{ width: 90%; }
+
+
+div.ipt-select{ width: 100%; position: relative; }
+div.ipt-select input{ width: 100%; padding-right: 30px; background: url('../images/personal/icon_down.png') no-repeat 98% center; }
+div.ipt-select .select-list{  min-width:100%; border:1px solid #e9ecef; position: absolute; top:38px; left:0; z-index:100; background-color:#FFF; display: none; }
+div.ipt-select ul{ max-height: 260px; overflow-x: hidden; overflow-y: auto; padding:10px 0;}
+div.ipt-select ul li[data-value]{ white-space:nowrap; padding:5px 60px 5px 15px; background:url('../images/personal/radio_none.png') no-repeat 92% center; cursor:pointer; }
+div.ipt-select ul li[data-value]:hover{ background-color: #F2F2F2; }
+div.ipt-select ul li.active[data-value]{ background-image: url('../images/personal/radio.png'); background-color: #F2F2F2; }
+div.ipt-select ul li:not([data-value]){ text-align: right; }
+
+div.ipt-select div.btn-box{ width: 100%; padding: 10px; text-align: right; }
+div.ipt-select a.ipt-select-okay{ border: 1px solid #DDD; background-color: #f7f8f9; padding: 2px 12px; display: inline-block;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+div.ipt-select a.ipt-select-okay:hover{ text-decoration: none; color: #333;}
+
+form.editApply-form p.ipt-txt.wd410{ width: 410px; }
+form.editApply-form p.ipt-txt.wd300{ width: 300px; }
+
+div.ipt-select.wd130{ width: 130px; }
+div.ipt-select.wd300{ width: 300px; }
+div.ipt-select.wd130 input{ background-position: 95% center; }
+
+div.ipt-select.mr10{ margin-right: 10px; }
+
+/*需求信息*/
+div.cd-list{}
+div.cd-list ul.nav-tabs{ width:100%; }
+div.cd-list ul.nav-tabs li{ display:inline-block; border-bottom:1px solid #dee2e7; border-top:1px solid #dee2e7; border-right:1px solid #dee2e7; padding:0px 30px; }
+div.cd-list ul.nav-tabs li:first-child{ border-left:1px solid #dee2e7; }
+div.cd-list ul.nav-tabs li a{ font-size: 16px; }
+div.cd-list ul.nav-tabs li.active{ border-bottom: 1px solid #FFF; bottom:-1px; border-top:2px solid #7335b0; }
+div.cd-list ul.nav-tabs li.active a{ border-bottom: 0; }
+
+div.cd-list .tab-content .tab-pane{ min-height:150px; border-top:0;  }
+
+div.cd-list dl.tit{ width:100%; display:table; }
+div.cd-list dl.tit dt, div.cd-list dl.tit dd{ display:table-cell; }
+div.cd-list dl.tit dt{ width:50px; white-space:nowrap;  padding-right:30px; }
+div.cd-list dl.tit dt h3{ font-size:18px; color:#4c4c54;}
+div.cd-list dl.tit dd{ font-size:14px; color:#9199a0; }
+
+div.cd-list dl.rDesc{ width:790px; display:table; }
+div.cd-list dl.rDesc dt, div.cd-list dl.tit dd{ display:table-cell; padding:5px; }
+div.cd-list dl.rDesc dt{ width:50px; font-size:14px; white-space:nowrap; font-weight:normal; color:#4c4c54;  }
+div.cd-list dl.rDesc dd{ font-size:14px; color:#9199a0; }
+
+div.cd-list dl.rDesc.wd390{ width: 390px; }
+
+div.cd-list div.btn-box{ width:210px; float:right;}
+div.cd-list div.btn-box a.btn{ display:inline-block; border:1px solid #DDD; font-size:14px; color:#9199a0; margin:0 5px; background-color:#f7f8f9; padding:5px 25px; }
+div.cd-list div.btn-box a.btn:hover{ background-color:#7335b0; color:#FFF; }
+
+div.cd-list div.bottom-btn-box{ width:100%; border-top:1px solid #dee2e7; margin-top:15px; padding:20px 0; text-align:center; }
+div.cd-list div.bottom-btn-box a.btn-apply{ display:inline-block; font-size:14px; background-color:#7335b0; color:#FFF; padding:10px 50px; }
+
+/*提交信息*/
+form.payInfo-form{ width:100%; }
+form.payInfo-form h3{ text-align:center; font-size:18px;}
+div.payInfoBox{ font-size:14px; border:1px solid #dee2e7; line-height: 24px;  margin:15px 0; padding:10px 15px; color:#9199a0; }
+div.payInfoBox .price{ color:#ffae1f; font-weight:bold; }
+div.payInfoBox .realityPay{ color:#fbd9a1; }
+form.payInfo-form div.btn-box{ text-align:right; }
+form.payInfo-form div.btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; }
+form.payInfo-form div.btn-box button.btn:first-child{ background-color:#e9ebec; }
+
+/*支付方式*/
+form.payType-form{ width:100%; }
+form.payType-form h3{ text-align:center; font-size:18px;}
+form.payType-form div.btn-box{ text-align:right; }
+form.payType-form div.btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; }
+form.payType-form div.btn-box button.btn:first-child{ background-color:#e9ebec; }
+
+div.select-pay-away{ width:100%; border:1px solid #dee2e7; margin:15px 0; padding:10px 0; }
+div.ipt-select2{ width:100%; background:url('../images/personal/radio_none.png') no-repeat 96% center; padding:8px 15px; font-size:14px; color:#9199a0; cursor: pointer; }
+div.ipt-select2:hover{ background-color:#f2f2f2; }
+div.ipt-select2.active{ background-image:url('../images/personal/radio.png'); }
+div.ipt-select2 input{ display:none; }
+
+/*支付密码*/
+form.inputPwd-form{ width:100%; }
+form.inputPwd-form h3{ text-align:center; font-size:18px;}
+form.inputPwd-form div.btn-box{ text-align:right; }
+form.inputPwd-form div.btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; }
+form.inputPwd-form div.btn-box button.btn:first-child{ background-color:#e9ebec; }
+
+form.inputPwd-form div.pay-group{ width:290px; margin:30px auto; border:1px solid #dee2e7; }
+form.inputPwd-form div.pay-group input{ border:0; border-left:1px solid #dee2e7; width:45px; padding:10px; outline:none; text-align:center; }
+
+/*扫码支付*/
+form.qr-code-form{ width:100%; }
+form.qr-code-form h3{ text-align:center; font-size:18px; padding-bottom:15px;}
+form.qr-code-form img{ width:100%; }
+
+/*账单支付*/
+div.cwb-top-title{ width:100%; color:#4c4c54; margin-top:20px; }
+div.cwb-top-title h3{ font-size:18px; padding:15px 10px; border-bottom:1px solid #dee2e7; }
+
+div.cwb-top{ width:100%; border-bottom:1px solid #dee2e7; padding:10px; }
+dl.cwb-table{ width:100%; display:table; font-size:14px; }
+dl.cwb-table dt, dl.cwb-table dd{ display:table-cell; padding:10px 5px; }
+dl.cwb-table dt{ width:120px; text-align:right; white-space:nowrap; font-weight:normal; color:#4c4c54; }
+dl.cwb-table dd{ color:#9199a0; }
+
+form.checkbox-form{ width:100%; }
+div.ckd-list{ width:100%; padding:10px 0; }
+div.ckd-list .row{ border-bottom: 1px solid #f6f8fb; padding: 10px 0;  }
+p.ipt-checkbox{ display:inline-block; color:#4c4c54; font-size:14px; background:url('../images/personal/checkbox.png') no-repeat right center; padding-right:35px; cursor:pointer; }
+p.ipt-checkbox input[type=checkbox]{ display: none; }
+p.ipt-checkbox.active{ background-image:url('../images/personal/checkbox_hover.png'); }
+
+form.checkbox-form p.ipt-checkbox{ width:20%; font-size:18px; text-align:center; white-space:nowrap; margin:5px 2%; }
+
+form.checkbox-form div.ckd-price{ width:100%; text-align:right; line-height: 42px; padding:15px 0; color: #4c4c54; font-size: 20px; border-bottom: 1px solid #dee2e7; }
+form.checkbox-form div.ckd-price .orange{ color: #ffae1f; }
+
+form.checkbox-form div.error{ padding: 15px 0 15px 5%; color: #F00; font-size: 14px;}
+
+div.ckd-btn-box{ width:100%; text-align:right; padding:15px 0; }
+div.ckd-btn-box button.btn{ border:1px solid #7335b0; background-color:#7335b0; color:#FFF; padding:8px 30px; font-size:16px; }
+
+table.cwb-list{ width:100%; margin:50px 0 30px; }
+table.cwb-list th, table.cwb-list td{ border-top:1px solid #dee2e7; border-bottom:1px solid #dee2e7; padding:25px 15px; }
+table.cwb-list th{ font-weight:normal; font-size:14px; color:#9199a0; }
+table.cwb-list th h3{ font-size:18px; color:#4c4c54; margin-bottom:10px; }
+table.cwb-list th h3 a{ color:#4c4c54; }
+
+table.cwb-list td{  width:250px; color:#9199a0; }
+table.cwb-list p.star{ color:#ffae1f; }
+
+div.view-info-btn{ width:100%; text-align:right; }
+div.view-info-btn a.btn{ background-color:#7335b0; color:#FFF; padding:10px 30px; }
+
+form.upload-score{ width:100%; border:1px solid #dee2e7; margin:50px 0 30px; }
+form.upload-score dl{ width:100%; display:table; }
+form.upload-score dl dt, form.upload-score dl dd{ display:table-cell; padding:30px 15px; vertical-align: top; font-size: 14px; }
+form.upload-score dl dt{ width:100px; text-align:right; font-weight: normal; }
+form.upload-score input.scoreValue{ display:inline-block; width:80px; height:24px; padding:5px 15px;; font-size:12px; }
+
+form.upload-score .btn-box{ text-align: right; border-top: 1px solid #dee2e7; padding: 15px; }
+form.upload-score .btn-box button.btn{ border:1px solid #7335b0; background-color:#7335b0; color:#FFF; padding:8px 45px; font-size:16px; }
+form.upload-score div.error{ padding-left: 15px; color: #f00; }
+
+
+/*我的工作*/
+div.p-work{}
+div.p-work .tab-pane{ position: relative; }
+div.p-work div.score{ width: 120px; text-align: center; margin-bottom: 15px; }
+div.p-work div.score p.star{ color: #ffae1f; padding-left: 0; padding-top: 15px; margin-top: 10px; background-position: top center; }
+div.p-work p.meet{ width: 300px; position: absolute; top: 25px; right: 200px; color: #9199a0; }
+div.p-work div.btn-box{ width: 300px; text-align: right; }
+div.p-work .complete{ text-align: right; padding: 10px 20px; color: #ffae1f; }
+
+div.p-work .p-left{ width: 790px; }
+div.p-work .p-right{ width: 210px; }
+
+
+form.relieveApply{ width:100%;}
+form.relieveApply h3{ text-align:center; font-size:18px; color:#4c4c54; }
+form.relieveApply textarea.tta{ width:100%; height:100px; overflow-x:hidden; overflow-y:auto; border:1px solid #DDD; margin:20px 0 10px; padding:10px; resize:none; }
+form.relieveApply .btn-box{ width:100%; text-align:center; }
+form.relieveApply .btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; margin:0 1px; padding:8px 30px; }
+form.relieveApply label.error{ color: #F00; padding-bottom: 10px; }
+
+
+form.meetMsg{ width:100%;}
+form.meetMsg h3{ text-align:center; font-size:18px; color:#4c4c54; }
+form.meetMsg textarea.tta{ width:100%; height:100px; overflow-x:hidden; overflow-y:auto; border:1px solid #DDD; margin:20px 0 10px; padding:10px; outline: none; resize:none; }
+form.meetMsg .btn-box{ width:100%; text-align:center; }
+form.meetMsg .btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; margin:0 1px; padding:8px 30px; }
+form.meetMsg label.error{ color: #F00; padding-bottom: 10px; }
+
+form.cancelMeetMsg{ width:100%;}
+form.cancelMeetMsg h3{ text-align:center; font-size:18px; color:#4c4c54; }
+form.cancelMeetMsg .btn-box{ width:100%; text-align:center; }
+form.cancelMeetMsg .btn-box button.btn{ border:1px solid #DDD; background-color:#f7f8f9; margin:0 1px; padding:8px 30px; }
+form.cancelMeetMsg label.error{ color: #F00; padding-bottom: 10px; }
+
+form.cancelMeetMsg  div.select-pay-away{ max-height: 100px; overflow-x: hidden; overflow-y: auto; }
+
+/*账户信息*/
+a.getMoney{ background-color: #e9ebec; color: #9199a0; border: 1px solid #DDD; padding: 6px 30px; float: right; }
+div.draw-money-box{ padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px solid #dee2e7; }
+div.drawMoney{ width: 500px; font-size: 14px; color: #4c4c54; line-height: 32px; }
+div.drawMoney span.price{ font-size: 24px; color: #ffae1f; }
+
+div.p-account .tab-pane{ min-height: inherit; padding-bottom: 0; }
+div.p-account div.bottom-btn-box{ padding: 0; }
+
+/*过往评价*/
+div.comment-list{ width: 100%; margin-bottom: 30px; }
+div.comment-row{ width: 100%; padding: 20px 0; border-bottom: 1px solid #dee2e7; }
+div.comment-left{ width:750px; font-size: 14px; color: #9199a0; line-height: 24px; float:left; }
+div.comment-left h3{ font-size: 18px; color: #4c4c54; margin-bottom: 10px; }
+div.comment-left h3 a{ color: #4c4c54; }
+
+div.comment-right{ width:240px; color: #9199a0; font-size: 14px; float:right; }
+div.comment-right p.star{ color: #ffae1f; }
+
+/*个人信息*/
+div.warn-error{ height: 30px !important; padding: 5px 10px 5px 30px; border: 1px solid #F00; background: url('../images/personal/warn.png') no-repeat 10px center; display: none; }
+div.warn-error.wd420{ width: 420px !important; }
+
+table.enterprise-base-info{ width: 100%; font-size: 14px; }
+table.enterprise-base-info th, table.enterprise-base-info td{ padding: 10px;}
+table.enterprise-base-info th{ font-weight: normal; width: 80px; white-space: nowrap; text-align: right; vertical-align: top; line-height: 38px; }
+table.enterprise-base-info th[colspan]{ text-align: left; border-bottom: 1px solid #dee2e7; padding: 20px 10px; }
+table.enterprise-base-info h2{ font-size: 18px; color: #4c4c54; }
+table.enterprise-base-info tr.pd-none th, table.enterprise-base-info tr.pd-none td{ padding-top: 0; padding-bottom: 0 }
+
+table.enterprise-base-info div.ipt-select.wd200{ width: 200px; }
+table.enterprise-base-info div.ipt-select.wd420{ width: 420px; }
+
+table.enterprise-base-info p.ipt-txt.wd420{ width: 420px; }
+table.enterprise-base-info p.ipt-txt.wd670{ width: 670px; }
+
+table.enterprise-base-info p.ipt-txt.mt15{ margin-top: 15px; }
+
+table.enterprise-base-info p.ipt-txt input.schoolTime{ padding-left: 36px; background: url('../images/personal/time.png') no-repeat 10px center; }
+
+table.enterprise-base-info i.warn-star{ line-height: 38px; padding-left: 5px; color: #F00; }
+table.enterprise-base-info p.unit{ line-height: 38px; padding-left: 10px; }
+
+table.enterprise-base-info .ipt-radio.mr20{ margin-right: 20px; }
+
+table.enterprise-base-info button.btn-delete{ background-color: #f7f8f9; border: 1px solid #DDD; margin-left: 10px; padding-left: 25px; padding-right: 25px; }
+table.enterprise-base-info button.btn-add{ background-color: #f7f8f9; border: 1px solid #DDD; margin: 10px 0 30px; padding-left: 25px; padding-right: 25px; }
+
+div.pl-btn-box{ width: 100%; text-align: center; padding: 20px 0; }
+div.pl-btn-box button.btn{ background: #7335b0; padding: 8px 30px; color: #FFF; font-size: 14px; margin: 0 10px; }
+
+div.pl-btn-box p.desc{ color: #9199a0; padding-top: 15px; text-indent: 18em; }
+
+div.progress-tit{ display: inline-block; width: 80px; text-align: right; padding-right: 15px; }
+div.progress{ display: inline-block; width: 360px; height: 8px; margin-bottom: 0; margin-top: 8px; }
+div.progress.wd275{ width: 275px; }
+
+div#selectLanguage{}
+ul.progress-list{ width: 500px; max-height: 160px; overflow-x: hidden; overflow-y: auto; display: block; }
+ul.progress-list li{ padding: 5px 15px; background: none; }
+ul.progress-list div.progress{ cursor: pointer; }
+
+/*我的简历*/
+div.resume-top{}
+div.resume-top dl{ width: 100%; display: table;}
+div.resume-top dl a.head{ display: block; width: 88px; height: 88px; overflow: hidden; }
+div.resume-top dl a.head img{ width: 100%; }
+div.resume-top dl dt, div.resume-top dl dd{ display: table-cell; float: none !important; vertical-align: middle; }
+div.resume-top dl dd{ font-size: 14px; }
+
+table.resume{ width:100%; }
+table.resume th, table.resume td{ border-bottom:1px solid #f6f8fb; padding:15px 10px; font-size:14px; }
+table.resume th{ width:50px; white-space:nowrap; text-align:right; vertical-align:top;  }
+table.resume thead th[colspan="4"]{ font-size:18px; text-align:left; border-bottom-color:#dee2e7;  }
+table.resume thead h3{ font-size:18px; }
+table.resume td{ width:40%; }
+
+table.resume tbody th, table.resume tbody td{  color:#4c4c54;  }
+table.resume tbody .gray{ color:#9199a0; }
 
 
 
-
-
+    /**/
+iframe#uploadImageFrame{ width: 100%; height: 420px;  }
+.modal-content{ margin-top: 50px; overflow: hidden; }
+.modal-dialog.wd380{ width: 380px; }
+div.modal-body{ padding: 30px; }
 
     /*底部*/
 div.footer{ width: 100%; padding: 35px 0; border-top: 1px solid #DEE2E7; background-color: #f8f9fb; }
@@ -305,6 +689,8 @@ div.footer .f-right h2{ font-size:16px; color:#7335b0; margin-bottom:10px; }
 div.footer .f-right p{ color:#9199a0; }
 div.footer .f-right p.email{ color:#4c4c54; background-color:#FFF; border:1px solid #e9ebef; padding:5px 10px; margin-top:10px; }
 
+div.footer .QR-code{ width: 105px; height: 105px; overflow: hidden; }
+div.footer .QR-code img{ width: 100%; }
 
 /*>1366px*/
 @media screen and (min-width: 1366px) {

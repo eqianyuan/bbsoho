@@ -20,7 +20,11 @@ public enum DataDictionaryConf {
     /**
      * 公司规模
      */
-    ENTERPRISE_SCALE("enterprise_scale");
+    ENTERPRISE_SCALE("enterprise_scale"),
+    /**
+     * 尊称
+     */
+    RESPECTFUL_NAME("respectful_name");
 
     private Object value;
 

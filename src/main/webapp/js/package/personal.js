@@ -39,10 +39,29 @@ function enterpriseInfoVerify(){
     });
 }
 
+//时间设置
+function setWorkTime(){
+    var analysisStartTime = $('input.startJob').datepicker({
+        onClose : function(selectDate){
+            analysisEndTime.datepicker( "option", "minDate", selectDate );
+        }
+    });                //加载日期控件
+    var analysisEndTime = $('input.endJob').datepicker({
+        onClose : function(selectDate){
+            analysisStartTime.datepicker( "option", "maxDate", selectDate );
+        }
+    });
+}
+
 $(function(){
     demandInfoVerify();         //调用需求信息校验函数
     enterpriseInfoVerify();    //调用企业信息校验函数
 
+    setWorkTime();              //设置工作时间
+
+    $('#uploadImage').modal('hide');
+
+    //radio
     $('div.radio-box p.ipt-radio').click(function(){
         var _input = $(this).find('input[type=radio]');
         $('div.radio-box p.ipt-radio').removeClass('active');
