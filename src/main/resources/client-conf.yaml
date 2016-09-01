@@ -15,9 +15,9 @@ SMS:
 # host 发件人的邮箱的 SMTP 服务器地址
 mail:
   host: smtp.163.com
-  account_number: S422065325@163.com
+  account_number: nanjingyiqianyuan@163.com
   account_name: 南京驿乾元软件科技有限公司
-  authorization_code: jason123
+  authorization_code: eqianyuan123
   subject: 账号激活
   content: 您好 {?} ：<br><br>为了保障您帐号的安全性，请点击下面的链接激活邮箱：<br><br><a href="{?}" target="_blank">{?}</a><br><br>如果链接无法点击，请完整拷贝到浏览器地址栏里直接访问。<br><br>邮件服务器自动发送邮件请勿回信。<br><span style="border-bottom:1px dashed ;" t="5" times="">{?}</span>
   address: http://bbsoho.eqianyuan.cn/demandSide/account_activation

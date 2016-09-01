@@ -2,7 +2,6 @@ package cn.eqianyuan.controller;
 
 import cn.eqianyuan.bean.ServerResponse;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
-import cn.eqianyuan.bean.dto.SupplierSideDTO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
@@ -78,16 +77,16 @@ public class SupplierSideController extends BaseController {
     /**
      * 会员（服务方）用户注册
      *
-     * @param supplierSideDTO 数据对象
-     * @param verifyCodeBySMS 短信验证码
+     * @param supplierSideBasicInfoDTO 数据对象
+     * @param verifyCodeBySMS          短信验证码
      * @return
      * @throws EqianyuanException
      */
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse supplierRegister(SupplierSideDTO supplierSideDTO,
+    public ServerResponse supplierRegister(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO,
                                            String verifyCodeBySMS) throws EqianyuanException {
-        supplierSideService.add(supplierSideDTO, verifyCodeBySMS);
+        supplierSideService.add(supplierSideBasicInfoDTO, verifyCodeBySMS);
         return new ServerResponse();
     }
 

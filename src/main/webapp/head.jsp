@@ -18,8 +18,8 @@
                                 <dd>
                                     <a href="javascript:;">${supplierUserByLogin.nickName}</a>
                                     <ul class="top-menu">
-                                        <li><a href="javascript:;">我的${empty supplierUserByLogin.headPortrait}工作</a></li>
-                                        <li><a href="javascript:;">个人信息</a></li>
+                                        <li><a href="javascript:;">我的工作</a></li>
+                                        <li><a href="supplierSide/basicInformation.jsp?tabWidget=basicInformation">个人信息</a></li>
                                         <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
                                         <li><a href="javascript:;" class="exit supplierLogout">退出</a></li>
                                     </ul>

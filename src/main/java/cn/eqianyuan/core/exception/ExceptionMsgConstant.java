@@ -52,6 +52,26 @@ public class ExceptionMsgConstant {
     public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_SEX_IS_EMPTY = "2001008";
     //会员（供应商）用户基本信息，真实姓名太长
     public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_REAL_NAME_TO_LONG = "2001009";
+    //会员（供应商）用户基本信息，昵称为空
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_NICK_NAME_IS_EMPTY = "2001010";
+    //会员（供应商）用户基本信息，生日不正确
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL = "2001011";
+    //会员（供应商）用户基本信息，邮箱为空
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_EMAIL_IS_EMPTY = "2001012";
+    //会员（供应商）用户基本信息，邮箱不正确
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_EMAIL_IS_FAIL = "2001013";
+    //会员（供应商）用户基本信息，工作年限为空
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_WORKING_YEARS_IS_EMPTY = "2001014";
+    //会员（供应商）用户基本信息，学历不正确
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_SCHOOLING_IS_FAIL = "2001015";
+    //会员（供应商）用户基本信息，昵称太长
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_NICK_NAME_TO_LONG = "2001016";
+    //会员（供应商）用户基本信息，邮箱太长
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_EMAIL_TO_LONG = "2001017";
+    //会员（供应商）用户基本信息，学校名称太长
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_SCHOOL_NAME_TO_LONG = "2001018";
+    //会员（供应商）用户基本信息，专业太长
+    public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_PROFESSIONAL_NAME_TO_LONG = "2001019";
 
     //会员（需求商）用户注册，邮箱为空
     public static final String DEMAND_USER_REGISTER_BY_EMAIL_IS_EMPTY = "2002001";

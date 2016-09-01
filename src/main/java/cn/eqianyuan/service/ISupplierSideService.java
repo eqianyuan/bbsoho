@@ -1,7 +1,6 @@
 package cn.eqianyuan.service;
 
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
-import cn.eqianyuan.bean.dto.SupplierSideDTO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.core.exception.EqianyuanException;
@@ -14,11 +13,11 @@ public interface ISupplierSideService {
     /**
      * 添加供应商用户
      *
-     * @param supplierSideDTO 数据对象
-     * @param verifyCodeBySMS 短信验证码
+     * @param supplierSideBasicInfoDTO 数据对象
+     * @param verifyCodeBySMS          短信验证码
      * @throws EqianyuanException
      */
-    void add(SupplierSideDTO supplierSideDTO, String verifyCodeBySMS) throws EqianyuanException;
+    void add(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO, String verifyCodeBySMS) throws EqianyuanException;
 
     /**
      * 供应商会员注册，发送手机短信验证码

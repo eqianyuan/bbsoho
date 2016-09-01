@@ -59,7 +59,11 @@ public enum SystemConf {
     /**
      * 需求商会员LOGO图片存放路径
      */
-    DEMAND_USER_LOGO_FILE_UPLOAD_PATH(File.separator + "images" + File.separator + "demand" + File.separator + "logo");;
+    DEMAND_USER_LOGO_FILE_UPLOAD_PATH(File.separator + "images" + File.separator + "demand" + File.separator + "logo"),
+    /**
+     * 供应商会员headPortrait图片存放路径
+     */
+    SUPPLIER_USER_HEAD_PORTRAIT_FILE_UPLOAD_PATH(File.separator + "images" + File.separator + "supplier" + File.separator + "head protrait");
 
     private Object value;
 

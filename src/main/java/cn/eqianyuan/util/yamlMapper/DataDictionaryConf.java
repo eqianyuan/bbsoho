@@ -24,7 +24,15 @@ public enum DataDictionaryConf {
     /**
      * 尊称
      */
-    RESPECTFUL_NAME("respectful_name");
+    RESPECTFUL_NAME("respectful_name"),
+    /**
+     * 学历
+     */
+    SCHOOLING("schooling"),
+    /**
+     * 工作年限
+     */
+    WORKING_YEARS("working_years");
 
     private Object value;
 

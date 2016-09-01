@@ -684,7 +684,7 @@ public class DemandSideServiceImpl implements IDemandSideService {
             //logo写入文件
             //canvas数据是base64加密数据，所以使用对应解密
             byte[] logoBytes = Base64Utils.decode(logo);
-            FileUtilHandle.writeFile(logoBytes, logoFileName);
+            FileUtilHandle.writeFile(logoBytes, SystemConf.DEMAND_USER_LOGO_FILE_UPLOAD_PATH.toString() + File.separator, logoFileName);
             demandSidePO.setLogo(SystemConf.DEMAND_USER_LOGO_FILE_UPLOAD_PATH.toString() + File.separator + logoFileName);
         }
 

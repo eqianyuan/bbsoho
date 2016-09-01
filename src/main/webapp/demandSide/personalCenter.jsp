@@ -24,9 +24,8 @@
             </li>
             <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#accountInfo" data-toggle="tab">账户信息</a>
             </li>
-            <li class="<c:if test="${param.tabWidget eq 'basicInformation'}">active</c:if> demandSideBasicInfoTab"><a
-                    href="#demandSideBasicInfo"
-                    data-toggle="tab">企业信息</a>
+            <li class="<c:if test="${param.tabWidget eq 'basicInformation'}">active</c:if> demandSideBasicInfoTab">
+                <a href="#demandSideBasicInfo" data-toggle="tab">企业信息</a>
             </li>
             <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#accountAuth" data-toggle="tab">账号认证</a>
             </li>
@@ -51,22 +50,21 @@
                     <div class="enterprise-top">
                         <div class="left">
                             <dl>
-                                <dt data-toggle="modal" data-target="#uploadImage" id="viewHeadBox"><img name="logo"
-                                                                                                         alt="logo"
-                                /></dt>
+                                <dt data-toggle="modal" data-target="#uploadImage" id="viewHeadBox">
+                                    <img name="logo" src="/images/head.png" />
+                                </dt>
                                 <dd>
-                                    <input type="hidden" name="headImageUrl" value="" id="headImageUrl"/>
-                                    <h3>Joyce</h3>
+                                    <h3 class="companyName"></h3>
                                 </dd>
                             </dl>
                         </div>
                         <%--<div class="right">--%>
-                            <%--<dl>--%>
-                                <%--<dt>企业平均评分：</dt>--%>
-                                <%--<dd>--%>
-                                    <%--<p class="star star_03">80分</p>--%>
-                                <%--</dd>--%>
-                            <%--</dl>--%>
+                        <%--<dl>--%>
+                        <%--<dt>企业平均评分：</dt>--%>
+                        <%--<dd>--%>
+                        <%--<p class="star star_03">80分</p>--%>
+                        <%--</dd>--%>
+                        <%--</dl>--%>
                         <%--</div>--%>
                         <div class="clearfix"></div>
                     </div>
@@ -115,8 +113,10 @@
                             <th></th>
                             <td>
                                 <p class="ipt-txt wd100"><input type="text" name="phoneAreaCode" placeholder="区号"/></p>
-                                <p class="ipt-txt wd200"><input type="text" name="telephoneNumber" placeholder="固话号码"/></p>
-                                <p class="ipt-txt wd100"><input type="text" name="extensionNumber" placeholder="分机号码"/></p>
+                                <p class="ipt-txt wd200"><input type="text" name="telephoneNumber" placeholder="固话号码"/>
+                                </p>
+                                <p class="ipt-txt wd100"><input type="text" name="extensionNumber" placeholder="分机号码"/>
+                                </p>
                             </td>
                         </tr>
                         <tr>
@@ -344,9 +344,9 @@
             url: "/demandSide/basicInformation",
             type: "GET",
             success: function (resp) {
-                if(resp.code == null){
+                if (resp.code == null) {
                     document.write(resp);
-                    return ;
+                    return;
                 }
 
                 if (resp.code == "200") {
@@ -356,6 +356,7 @@
                     }
 
                     //企业名称
+                    $(".modifyBasicInfoForm .companyName").text(resp.data.companyName);
                     $(".modifyBasicInfoForm input[name='companyName']").val(resp.data.companyName);
                     //企业性质
                     $(".modifyBasicInfoForm select[name='enterpriseNature']").attr("selectedVal", resp.data.enterpriseNature);
@@ -438,7 +439,7 @@
         /**
          * 省份数据切换，联动市区数据
          */
-        $(".modifyBasicInfoForm").on("change", "select[name='provinceId']", function(){
+        $(".modifyBasicInfoForm").on("change", "select[name='provinceId']", function () {
             var options = '<option value="">请选择</option>';
             $(".modifyBasicInfoForm select[name='cityId']").html(options);
             $(".modifyBasicInfoForm select[name='countyId']").html(options);
@@ -449,7 +450,7 @@
         /**
          * 市数据切换，联动区数据
          */
-        $(".modifyBasicInfoForm").on("change", "select[name='cityId']", function(){
+        $(".modifyBasicInfoForm").on("change", "select[name='cityId']", function () {
             var options = '<option value="">请选择</option>';
             $(".modifyBasicInfoForm select[name='countyId']").html(options);
             getArea.getCounty($(this).val());
@@ -460,12 +461,7 @@
             var _this = $(this);
             var formDataJson = {};
 
-            if ($(".modifyBasicInfoForm img[name='logo']").prop("src") == "") {
-                if ($(".modifyBasicInfoForm canvas").size() <= 0) {
-                    alert("请上传LOGO");
-                    return false;
-                }
-
+            if ($(".modifyBasicInfoForm canvas").size() > 0) {
                 formDataJson["logo"] = $(".modifyBasicInfoForm canvas").get(0).toDataURL()
             }
 

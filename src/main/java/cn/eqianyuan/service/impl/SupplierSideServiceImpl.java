@@ -1,7 +1,6 @@
 package cn.eqianyuan.service.impl;
 
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
-import cn.eqianyuan.bean.dto.SupplierSideDTO;
 import cn.eqianyuan.bean.po.DataDictionaryPO;
 import cn.eqianyuan.bean.po.SupplierSidePO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
@@ -44,22 +44,32 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
 
     //真实姓名DB许可字节长度
     private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;
+    //昵称DB许可字节长度
+    private static final int NICK_NAME_MAX_BYTES_BY_DB = 30;
+    //邮箱DB许可字节长度
+    private static final int EMAIL_MAX_BYTES_BY_DB = 300;
+    //学校名称DB许可字节长度
+    private static final int SCHOOL_NAME_MAX_BYTES_BY_DB = 100;
+    //专业名称DB许可字节长度
+    private static final int PROFESSIONAL_NAME_MAX_BYTES_BY_DB = 100;
 
     /**
      * 添加供应商用户信息
      *
-     * @param supplierSideDTO
+     * @param supplierSideBasicInfoDTO 数据对象
+     * @param verifyCodeBySMS          短信验证码
+     * @throws EqianyuanException
      */
-    public void add(SupplierSideDTO supplierSideDTO, String verifyCodeBySMS) throws EqianyuanException {
+    public void add(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO, String verifyCodeBySMS) throws EqianyuanException {
 
         //检查供应商用户输入手机号码是否正确
-        if (!RegexUtils.isMobile(String.valueOf(supplierSideDTO.getMobileNumber()))) {
+        if (!RegexUtils.isMobile(String.valueOf(supplierSideBasicInfoDTO.getMobileNumber()))) {
             logger.warn("supplier user add fail , because user input mobile number is not right mobile number");
             throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_REGISTER_BY_MOBILE_IS_FAIL);
         }
 
         //检查供应商用户输入登录密码是否为空
-        if (StringUtils.isEmpty(supplierSideDTO.getLoginPassword())) {
+        if (StringUtils.isEmpty(supplierSideBasicInfoDTO.getLoginPassword())) {
             logger.warn("supplier user add fail , because user input login password , value is empty");
             throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_REGISTER_BY_LOGIN_PASSWORD_IS_EMPTY);
         }
@@ -85,13 +95,13 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         }
 
         //检查供应商用户输入登录密码是否含有空格
-        if (RegexUtils.hasBlankCharacters(supplierSideDTO.getLoginPassword())) {
+        if (RegexUtils.hasBlankCharacters(supplierSideBasicInfoDTO.getLoginPassword())) {
             logger.warn("supplier user add fail , because user input login password , value contains invalid characters");
             throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_REGISTER_BY_LOGIN_PASSWORD_CONTAINS_INVALID_CHARACTERS);
         }
 
         //检查供应商用户输入密码是否在长度范围中
-        if (supplierSideDTO.getLoginPassword().length() < 6 || supplierSideDTO.getLoginPassword().length() > 20) {
+        if (supplierSideBasicInfoDTO.getLoginPassword().length() < 6 || supplierSideBasicInfoDTO.getLoginPassword().length() > 20) {
             logger.warn("supplier user add fail , because user input login password , value length is beyond the scope of [6 ~ 20]");
             throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_REGISTER_BY_LOGIN_PASSWORD_COMPLEXITY_IS_NOT_ENOUGH);
         }
@@ -103,15 +113,15 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             //声明复杂性
             int complexity = 0;
             //是否含有数字
-            if (RegexUtils.hasDigital(supplierSideDTO.getLoginPassword())) {
+            if (RegexUtils.hasDigital(supplierSideBasicInfoDTO.getLoginPassword())) {
                 complexity++;
             }
             //是否含有字母及下划线
-            if (RegexUtils.hasAlphabet(supplierSideDTO.getLoginPassword())) {
+            if (RegexUtils.hasAlphabet(supplierSideBasicInfoDTO.getLoginPassword())) {
                 complexity++;
             }
             //是否含有特殊字符
-            if (RegexUtils.hasSpecialCharacters(supplierSideDTO.getLoginPassword())) {
+            if (RegexUtils.hasSpecialCharacters(supplierSideBasicInfoDTO.getLoginPassword())) {
                 complexity++;
             }
 
@@ -123,7 +133,7 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         }
 
         //检查手机号是否已经注册过
-        int memberCountByMobile = supplierSideDao.selectCountByMobile(supplierSideDTO.getMobileNumber());
+        int memberCountByMobile = supplierSideDao.selectCountByMobile(supplierSideBasicInfoDTO.getMobileNumber());
         //当结果数量大于0，说明已经被注册
         if (memberCountByMobile > 0) {
             logger.warn("supplier user add fail , because mobile is already register.");
@@ -131,7 +141,7 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         }
 
         //密码MD5加密处理
-        String encryptionPwd = Md5Util.MD5By32(StringUtils.lowerCase(supplierSideDTO.getLoginPassword()));
+        String encryptionPwd = Md5Util.MD5By32(StringUtils.lowerCase(supplierSideBasicInfoDTO.getLoginPassword()));
         //获取当前系统月份英文描述
         String monthEN = CalendarUtil.getCurrentMonthEN();
         //截取月份英文描述首字母
@@ -143,7 +153,7 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
 
         //创建PO对象并设置内容
         SupplierSidePO supplierSidePO = new SupplierSidePO();
-        supplierSidePO.setMobileNumber(supplierSideDTO.getMobileNumber());
+        supplierSidePO.setMobileNumber(supplierSideBasicInfoDTO.getMobileNumber());
         supplierSidePO.setLoginPassword(encryptionPwd);
         //注册期，给与默认用户名，用户名生成规则：当月月份英文大写首字母+当前系统秒数时间
         supplierSidePO.setNickName(firstCharacterUpper + systemSeconds);
@@ -351,10 +361,79 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_REAL_NAME_IS_EMPTY);
         }
 
-        //检查需求商用户输入性别是否为空
+        //检查供应商用户输入昵称是否为空
+        if (StringUtils.isEmpty(supplierSideBasicInfoDTO.getNickName())) {
+            logger.warn("modifyBasicInformation fail , because user input nick name , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_NICK_NAME_IS_EMPTY);
+        }
+
+        //检查供应商用户输入性别是否为空
         if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getSex())) {
             logger.warn("modifyBasicInformation fail , because user input sex , value is empty");
             throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_SEX_IS_EMPTY);
+        }
+
+        //检查供应商用户生日
+        {
+            //检查供应商用户输入生日-年是否为空
+            if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getBirthdayYear())) {
+                logger.warn("modifyBasicInformation fail , because user input birthday year , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL);
+            }
+
+            //检查供应商用户输入生日-月是否为空
+            if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getBirthdayMonth())) {
+                logger.warn("modifyBasicInformation fail , because user input month , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL);
+            }
+
+            //检查供应商用户输入生日-日是否为空
+            if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getBirthdayDay())) {
+                logger.warn("modifyBasicInformation fail , because user input day , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL);
+            }
+
+            //检查供应商用户输入生日-年是否为数字
+            if (!RegexUtils.isDigital(String.valueOf(supplierSideBasicInfoDTO.getBirthdayYear()))) {
+                logger.warn("modifyBasicInformation fail , because user input birthday year , value is not number");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL);
+            }
+
+            //检查供应商用户输入生日-月是否为数字
+            if (!RegexUtils.isDigital(String.valueOf(supplierSideBasicInfoDTO.getBirthdayMonth()))) {
+                logger.warn("modifyBasicInformation fail , because user input birthday month , value is not number");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL);
+            }
+
+            //检查供应商用户输入生日-日是否为数字
+            if (!RegexUtils.isDigital(String.valueOf(supplierSideBasicInfoDTO.getBirthdayDay()))) {
+                logger.warn("modifyBasicInformation fail , because user input birthday day , value is not number");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_BIRTHDAY_IS_FAIL);
+            }
+        }
+
+        //检查供应商用户输入邮箱是否为空
+        if (StringUtils.isEmpty(supplierSideBasicInfoDTO.getEmail())) {
+            logger.warn("modifyBasicInformation fail , because user input email , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_EMAIL_IS_EMPTY);
+        }
+
+        //检查供应商用户输入邮箱是否为邮箱
+        if (!RegexUtils.isEmail(supplierSideBasicInfoDTO.getEmail())) {
+            logger.warn("modifyBasicInformation fail , because user input email , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_EMAIL_IS_FAIL);
+        }
+
+        //检查供应商用户输入学历是否为空
+        if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getHighestSchooling())) {
+            logger.warn("modifyBasicInformation fail , because user input highest schooling , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_SCHOOLING_IS_FAIL);
+        }
+
+        //检查供应商用户输入工作年限是否为空
+        if (ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getWorkingYears())) {
+            logger.warn("modifyBasicInformation fail , because user input working years , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_WORKING_YEARS_IS_EMPTY);
         }
 
         //检查真实姓名内容长度是否超出DB许可长度
@@ -366,6 +445,19 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             }
         } catch (UnsupportedEncodingException e) {
             logger.info("modifyBasicInformation fail , because real name [" + supplierSideBasicInfoDTO.getRealName() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        //检查昵称内容长度是否超出DB许可长度
+        try {
+            if (supplierSideBasicInfoDTO.getNickName().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > NICK_NAME_MAX_BYTES_BY_DB) {
+                logger.info("modifyBasicInformation fail , because nick name [" + supplierSideBasicInfoDTO.getNickName() + "] bytes greater than"
+                        + NICK_NAME_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_NICK_NAME_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("modifyBasicInformation fail , because nick name [" + supplierSideBasicInfoDTO.getNickName() + "] getBytes("
                     + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
             throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
         }
@@ -402,14 +494,178 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             }
         }
 
+        //检查邮箱内容长度是否超出DB许可长度
+        try {
+            if (supplierSideBasicInfoDTO.getEmail().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > EMAIL_MAX_BYTES_BY_DB) {
+                logger.info("modifyBasicInformation fail , because email [" + supplierSideBasicInfoDTO.getEmail() + "] bytes greater than"
+                        + EMAIL_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_EMAIL_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("modifyBasicInformation fail , because email [" + supplierSideBasicInfoDTO.getEmail() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        /**
+         * 检查学历正确性
+         */
+        {
+            //从数据字典缓存中获取学历集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.SCHOOLING.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.SCHOOLING.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //学历是否存在字典数据中
+            boolean schoolingInDictionary = false;
+
+            //检查学历是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideBasicInfoDTO.getHighestSchooling()))) {
+                    schoolingInDictionary = true;
+                    break;
+                }
+            }
+
+            //当学历值不存在字典数据中时，抛出错误信息
+            if (!schoolingInDictionary) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.SCHOOLING.toString() + "] " +
+                        " [" + supplierSideBasicInfoDTO.getHighestSchooling() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        /**
+         * 检查工作年限正确性
+         */
+        {
+            //从数据字典缓存中获取工作年限集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORKING_YEARS.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.WORKING_YEARS.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //工作年限是否存在字典数据中
+            boolean workingYearsInDictionary = false;
+
+            //检查工作年限是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideBasicInfoDTO.getWorkingYears()))) {
+                    workingYearsInDictionary = true;
+                    break;
+                }
+            }
+
+            //当工作年限值不存在字典数据中时，抛出错误信息
+            if (!workingYearsInDictionary) {
+                logger.warn("modifyBasicInformation fail , because group key [" + DataDictionaryConf.WORKING_YEARS.toString() + "] " +
+                        " [" + supplierSideBasicInfoDTO.getWorkingYears() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
         //获取session用户
         SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
         //获取用户手机号码，并且根据手机号码获取供应商基本信息
         SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(String.valueOf(supplierSideVOByLogin.getMobileNumber()));
+
+        //检查学校名称内容长度是否超出DB许可长度
+        if (!StringUtils.isEmpty(supplierSideBasicInfoDTO.getSchoolName())) {
+            //检查学校名称内容长度是否超出DB许可长度
+            try {
+                if (supplierSideBasicInfoDTO.getSchoolName().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > SCHOOL_NAME_MAX_BYTES_BY_DB) {
+                    logger.info("modifyBasicInformation fail , because school name [" + supplierSideBasicInfoDTO.getSchoolName() + "] bytes greater than"
+                            + SCHOOL_NAME_MAX_BYTES_BY_DB);
+                    throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_SCHOOL_NAME_TO_LONG);
+                }
+            } catch (UnsupportedEncodingException e) {
+                logger.info("modifyBasicInformation fail , because school name [" + supplierSideBasicInfoDTO.getSchoolName() + "] getBytes("
+                        + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+            }
+
+            supplierSidePO.setSchoolName(supplierSideBasicInfoDTO.getSchoolName());
+        }
+
+        //检查专业名称内容长度是否超出DB许可长度
+        if (!StringUtils.isEmpty(supplierSideBasicInfoDTO.getProfessionalName())) {
+            //检查专业名称内容长度是否超出DB许可长度
+            try {
+                if (supplierSideBasicInfoDTO.getProfessionalName().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > PROFESSIONAL_NAME_MAX_BYTES_BY_DB) {
+                    logger.info("modifyBasicInformation fail , because professional name [" + supplierSideBasicInfoDTO.getProfessionalName() + "] bytes greater than"
+                            + PROFESSIONAL_NAME_MAX_BYTES_BY_DB);
+                    throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_BASIC_INFORMATION_BY_PROFESSIONAL_NAME_TO_LONG);
+                }
+            } catch (UnsupportedEncodingException e) {
+                logger.info("modifyBasicInformation fail , because professional name [" + supplierSideBasicInfoDTO.getProfessionalName() + "] getBytes("
+                        + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+            }
+
+            supplierSidePO.setProfessionalName(supplierSideBasicInfoDTO.getProfessionalName());
+        }
+
+        //检查供应商用户选择籍贯地区-省是否为空
+        if (!ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getNativePlaceProvinceId())) {
+            supplierSidePO.setNativePlaceProvinceId(supplierSideBasicInfoDTO.getNativePlaceProvinceId());
+        }
+
+        //检查供应商用户选择籍贯地区-市是否为空
+        if (!ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getNativePlaceCityId())) {
+            supplierSidePO.setNativePlaceCityId(supplierSideBasicInfoDTO.getNativePlaceCityId());
+        }
+
+        //检查供应商用户选择籍贯地区-区是否为空
+        if (!ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getNativePlaceCountyId())) {
+            supplierSidePO.setNativePlaceCountyId(supplierSideBasicInfoDTO.getNativePlaceCountyId());
+        }
+
+        //检查供应商用户选择现居地区-省是否为空
+        if (!ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getLiveAddressProvinceId())) {
+            supplierSidePO.setLiveAddressProvinceId(supplierSideBasicInfoDTO.getLiveAddressProvinceId());
+        }
+
+        //检查供应商用户选择现居地区-市是否为空
+        if (!ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getLiveAddressCityId())) {
+            supplierSidePO.setLiveAddressCityId(supplierSideBasicInfoDTO.getLiveAddressCityId());
+        }
+
+        //检查供应商用户选择现居地区-区是否为空
+        if (!ObjectUtils.isEmpty(supplierSideBasicInfoDTO.getLiveAddressCountyId())) {
+            supplierSidePO.setLiveAddressCountyId(supplierSideBasicInfoDTO.getLiveAddressCountyId());
+        }
+
         supplierSidePO.setRealName(supplierSideBasicInfoDTO.getRealName());
+        supplierSidePO.setNickName(supplierSideBasicInfoDTO.getNickName());
         supplierSidePO.setSex(supplierSideBasicInfoDTO.getSex());
+        supplierSidePO.setBirthdayYear(supplierSideBasicInfoDTO.getBirthdayYear());
+        supplierSidePO.setBirthdayMonth(supplierSideBasicInfoDTO.getBirthdayMonth());
+        supplierSidePO.setBirthdayDay(supplierSideBasicInfoDTO.getBirthdayDay());
+        supplierSidePO.setEmail(supplierSideBasicInfoDTO.getEmail());
+        supplierSidePO.setHighestSchooling(supplierSideBasicInfoDTO.getHighestSchooling());
+        supplierSidePO.setWorkingYears(supplierSideBasicInfoDTO.getWorkingYears());
+
+        if (!StringUtils.isEmpty(supplierSideBasicInfoDTO.getHeadPortrait())) {
+            String headPortraitSuffix = ".png";
+            String headPortraitFileName = supplierSideBasicInfoDTO.getNickName() + headPortraitSuffix;
+            //获取headPortrait数据，因为是canvas数据，所以需要截取掉前22个无用字符
+            String headPortrait = supplierSideBasicInfoDTO.getHeadPortrait().substring(22);
+            //headPortrait写入文件
+            //canvas数据是base64加密数据，所以使用对应解密
+            byte[] headPortraitBytes = Base64Utils.decode(headPortrait);
+            FileUtilHandle.writeFile(headPortraitBytes, SystemConf.SUPPLIER_USER_HEAD_PORTRAIT_FILE_UPLOAD_PATH.toString() + File.separator, headPortraitFileName);
+            supplierSidePO.setHeadPortrait(SystemConf.SUPPLIER_USER_HEAD_PORTRAIT_FILE_UPLOAD_PATH.toString() + File.separator + headPortraitFileName);
+        }
 
         //持久化基本信息
         supplierSideDao.updateByPrimaryKeySelective(supplierSidePO);
+
+        //将PO转为VO
+        supplierSideVOByLogin = supplierConvert.supplierLogin(supplierSidePO);
+        //将会员（供应商）编辑后的新数据重新写入session
+        SessionUtil.setAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString(), supplierSideVOByLogin);
     }
 }

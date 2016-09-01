@@ -120,10 +120,17 @@ public class FileUtilHandle {
      * @param fileName   文件名称
      * @return
      */
-    public static boolean writeFile(byte[] fileStream, String fileName) {
+    public static boolean writeFile(byte[] fileStream, String filePath, String fileName) {
         OutputStream fileOutputStream = null;
+        File fileDirectory = new File(absoluteDirectory + filePath);
+        if (!fileDirectory.isDirectory()) {
+            if (!fileDirectory.mkdir()) {
+                return false;
+            }
+        }
+
         try {
-            fileOutputStream = new FileOutputStream(absoluteDirectory + SystemConf.DEMAND_USER_LOGO_FILE_UPLOAD_PATH.toString() + File.separator + fileName);
+            fileOutputStream = new FileOutputStream(fileDirectory.getPath() + File.separator + fileName);
             fileOutputStream.write(fileStream);
             return true;
         } catch (FileNotFoundException e) {
