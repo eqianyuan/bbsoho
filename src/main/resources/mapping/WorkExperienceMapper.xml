@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.IWorkExperienceDao" >
+  <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.WorkExperiencePO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="begin_years" property="beginYears" jdbcType="INTEGER" />
+    <result column="begin_month" property="beginMonth" jdbcType="INTEGER" />
+    <result column="end_years" property="endYears" jdbcType="INTEGER" />
+    <result column="end_month" property="endMonth" jdbcType="INTEGER" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="position_name" property="positionName" jdbcType="VARCHAR" />
+    <result column="work_discribe" property="workDiscribe" jdbcType="VARCHAR" />
+    <result column="resume_id" property="resumeId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, begin_years, begin_month, end_years, end_month, company_name, position_name, 
+    work_discribe, resume_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_experience
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from work_experience
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.eqianyuan.bean.po.WorkExperiencePO" >
+    insert into work_experience (begin_years, begin_month,
+      end_years, end_month, company_name, 
+      position_name, work_discribe, resume_id
+      )
+    values (#{beginYears,jdbcType=INTEGER}, #{beginMonth,jdbcType=INTEGER},
+      #{endYears,jdbcType=INTEGER}, #{endMonth,jdbcType=INTEGER}, #{companyName,jdbcType=VARCHAR}, 
+      #{positionName,jdbcType=VARCHAR}, #{workDiscribe,jdbcType=VARCHAR}, #{resumeId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.WorkExperiencePO" >
+    insert into work_experience
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beginYears != null" >
+        begin_years,
+      </if>
+      <if test="beginMonth != null" >
+        begin_month,
+      </if>
+      <if test="endYears != null" >
+        end_years,
+      </if>
+      <if test="endMonth != null" >
+        end_month,
+      </if>
+      <if test="companyName != null" >
+        company_name,
+      </if>
+      <if test="positionName != null" >
+        position_name,
+      </if>
+      <if test="workDiscribe != null" >
+        work_discribe,
+      </if>
+      <if test="resumeId != null" >
+        resume_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beginYears != null" >
+        #{beginYears,jdbcType=INTEGER},
+      </if>
+      <if test="beginMonth != null" >
+        #{beginMonth,jdbcType=INTEGER},
+      </if>
+      <if test="endYears != null" >
+        #{endYears,jdbcType=INTEGER},
+      </if>
+      <if test="endMonth != null" >
+        #{endMonth,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="workDiscribe != null" >
+        #{workworkDiscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="resumeId != null" >
+        #{resumeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.WorkExperiencePO" >
+    update work_experience
+    <set >
+      <if test="beginYears != null" >
+        begin_years = #{beginYears,jdbcType=INTEGER},
+      </if>
+      <if test="beginMonth != null" >
+        begin_month = #{beginMonth,jdbcType=INTEGER},
+      </if>
+      <if test="endYears != null" >
+        end_years = #{endYears,jdbcType=INTEGER},
+      </if>
+      <if test="endMonth != null" >
+        end_month = #{endMonth,jdbcType=INTEGER},
+      </if>
+      <if test="companyName != null" >
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="positionName != null" >
+        position_name = #{positionName,jdbcType=VARCHAR},
+      </if>
+      <if test="workDiscribe != null" >
+        work_discribe = #{workDiscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="resumeId != null" >
+        resume_id = #{resumeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.WorkExperiencePO" >
+    update work_experience
+    set begin_years = #{beginYears,jdbcType=INTEGER},
+      begin_month = #{beginMonth,jdbcType=INTEGER},
+      end_years = #{endYears,jdbcType=INTEGER},
+      end_month = #{endMonth,jdbcType=INTEGER},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      position_name = #{positionName,jdbcType=VARCHAR},
+      work_discribe = #{workDiscribe,jdbcType=VARCHAR},
+      resume_id = #{resumeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByResumeId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from work_experience
+    where resume_id = #{resume_id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByResumeId" parameterType="java.lang.String" >
+    delete from work_experience
+    where resume_id = #{resume_id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertByList" parameterType="java.util.List" >
+    <if test="workExperiencePOList != null">
+      insert into work_experience
+      (
+          begin_years,
+          begin_month,
+          end_years,
+          end_month,
+          company_name,
+          position_name,
+          work_discribe,
+          resume_id
+      )
+      values
+      <foreach item="workExperience" collection="workExperiencePOList" open="" separator="," close="">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <choose>
+            <when test="workExperience.beginYears != null">
+              #{workExperience.beginYears,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="workExperience.beginMonth != null">
+              #{workExperience.beginMonth,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="workExperience.endYears != null">
+              #{workExperience.endYears,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="workExperience.endMonth != null">
+              #{workExperience.endMonth,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="workExperience.companyName != null">
+              #{workExperience.companyName,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+              '',
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="workExperience.positionName != null">
+              #{workExperience.positionName,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+              '',
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="workExperience.workDiscribe != null">
+              #{workExperience.workDiscribe,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+              '',
+            </otherwise>
+          </choose>
+          #{workExperience.resumeId,jdbcType=VARCHAR},
+        </trim>
+      </foreach>
+    </if>
+  </insert>
+</mapper>

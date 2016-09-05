@@ -6,7 +6,9 @@ package cn.eqianyuan.core.exception;
  */
 public class ExceptionMsgConstant {
 
-/********** 系统级异常配置 **********/
+    /**********
+     * 系统级异常配置
+     **********/
     //系统运行时错误
     public static final String SYSTEM_RUNTIME_EXCEPTION = "1001001";
     //验证码是空
@@ -33,7 +35,9 @@ public class ExceptionMsgConstant {
     public static final String FILE_UPDATE_ERROR = "1001012";
 /********** 系统级异常配置 **********/
 
-/********** 客户端系统异常配置 **********/
+    /**********
+     * 客户端系统异常配置
+     **********/
     //会员（供应商）用户注册，手机号码不正确
     public static final String SUPPLIER_USER_REGISTER_BY_MOBILE_IS_FAIL = "2001001";
     //会员（供应商）用户注册，登录密码为空
@@ -72,6 +76,18 @@ public class ExceptionMsgConstant {
     public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_SCHOOL_NAME_TO_LONG = "2001018";
     //会员（供应商）用户基本信息，专业太长
     public static final String SUPPLIER_USER_BASIC_INFORMATION_BY_PROFESSIONAL_NAME_TO_LONG = "2001019";
+    //会员（供应商）用户简历信息，行业为空
+    public static final String SUPPLIER_USER_RESUME_BY_INDUSTRY_IS_EMPTY = "2001020";
+    //会员（供应商）用户简历信息，行业工种类别为空
+    public static final String SUPPLIER_USER_RESUME_BY_WORK_TYPE_IS_EMPTY = "2001021";
+    //会员（供应商）用户简历信息，行业工种为空
+    public static final String SUPPLIER_USER_RESUME_BY_WORK_IS_FAIL = "2001022";
+    //会员（供应商）用户简历信息，工作时间为空
+    public static final String SUPPLIER_USER_RESUME_BY_EXPECT_WORK_TIME_IS_EMPTY = "2001023";
+    //会员（供应商）用户简历信息，期望薪资为空
+    public static final String SUPPLIER_USER_RESUME_BY_EXPECT_PAY_IS_EMPTY = "2001024";
+    //会员（供应商）用户简历信息，行业工种选择太多项了
+    public static final String SUPPLIER_USER_RESUME_BY_WORK_CHOOSE_TOO_MANY = "2001025";
 
     //会员（需求商）用户注册，邮箱为空
     public static final String DEMAND_USER_REGISTER_BY_EMAIL_IS_EMPTY = "2002001";

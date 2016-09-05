@@ -1,8 +1,10 @@
 package cn.eqianyuan.service;
 
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
+import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
+import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
 import cn.eqianyuan.core.exception.EqianyuanException;
 
 /**
@@ -58,4 +60,20 @@ public interface ISupplierSideService {
      * @throws EqianyuanException
      */
     void modifyBasicInformation(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO) throws EqianyuanException;
+
+    /**
+     * 获取供应商简历信息
+     *
+     * @return
+     * @throws EqianyuanException
+     */
+    SupplierSideVOByResume getResume() throws EqianyuanException;
+
+    /**
+     * 供应商简历信息编辑
+     *
+     * @param supplierSideResumeDTO
+     * @throws EqianyuanException
+     */
+    void modifyResume(SupplierSideResumeDTO supplierSideResumeDTO) throws EqianyuanException;
 }

@@ -3,8 +3,8 @@
 ###   SMS 短信接口配置 ###
 # CorpID 购买账号
 # Pwd 密码
-# vtpl_id ID
-# show_num 对方手机显示号码
+# BatchSend2 网关接口
+# BatchSend2_message 短信消息内容模板
 SMS:
   CorpID: GZLKJ0005699
   Pwd: xy@666
@@ -13,6 +13,12 @@ SMS:
 
 ### 邮箱服务器配置 ###
 # host 发件人的邮箱的 SMTP 服务器地址
+# account_number 发送方邮箱号
+# account_name 发送方显示名称
+# authorization_code 邮箱授权码
+# subject 主题
+# content 邮件内容模板
+# address 企业账号激活接口地址
 mail:
   host: smtp.163.com
   account_number: nanjingyiqianyuan@163.com
@@ -22,3 +28,7 @@ mail:
   content: 您好 {?} ：<br><br>为了保障您帐号的安全性，请点击下面的链接激活邮箱：<br><br><a href="{?}" target="_blank">{?}</a><br><br>如果链接无法点击，请完整拷贝到浏览器地址栏里直接访问。<br><br>邮件服务器自动发送邮件请勿回信。<br><span style="border-bottom:1px dashed ;" t="5" times="">{?}</span>
   address: http://bbsoho.eqianyuan.cn/demandSide/account_activation
 
+### 会员（供应商）配置 ###
+# work_count 一个职务下允许选择的岗位数量
+supplier_side:
+  work_count: 3

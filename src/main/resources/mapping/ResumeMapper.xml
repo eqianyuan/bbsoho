@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.IResumeDao">
+    <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.ResumePO">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="expect_work_province_id" property="expectWorkProvinceId" jdbcType="VARCHAR"/>
+        <result column="expect_work_city_id" property="expectWorkCityId" jdbcType="VARCHAR"/>
+        <result column="expect_work_county_id" property="expectWorkCountyId" jdbcType="VARCHAR"/>
+        <result column="industry" property="industry" jdbcType="INTEGER"/>
+        <result column="work_type" property="workType" jdbcType="VARCHAR"/>
+        <result column="expect_pay" property="expectPay" jdbcType="INTEGER"/>
+        <result column="expect_work_time" property="expectWorkTime" jdbcType="INTEGER"/>
+        <result column="foreign_language" property="foreignLanguage" jdbcType="INTEGER"/>
+        <result column="foreign_language_ability" property="foreignLanguageAbility" jdbcType="INTEGER"/>
+        <result column="discribe" property="discribe" jdbcType="VARCHAR"/>
+        <result column="supplier_side_id" property="supplierSideId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, expect_work_province_id, expect_work_city_id, expect_work_county_id, industry, 
+    work_type, expect_pay, expect_work_time, foreign_language, foreign_language_ability, 
+    discribe, supplier_side_id
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from resume
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from resume
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.eqianyuan.bean.po.ResumePO">
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+        select replace(uuid(),'-','') from dual
+    </selectKey>
+    insert into resume (id, expect_work_province_id, expect_work_city_id, 
+      expect_work_county_id, industry, work_type, 
+      expect_pay, expect_work_time, foreign_language, 
+      foreign_language_ability, discribe, supplier_side_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{expectWorkProvinceId,jdbcType=VARCHAR}, #{expectWorkCityId,jdbcType=VARCHAR}, 
+      #{expectWorkCountyId,jdbcType=VARCHAR}, #{industry,jdbcType=INTEGER}, #{workType,jdbcType=VARCHAR},
+      #{expectPay,jdbcType=INTEGER}, #{expectWorkTime,jdbcType=INTEGER}, #{foreignLanguage,jdbcType=INTEGER}, 
+      #{foreignLanguageAbility,jdbcType=INTEGER}, #{discribe,jdbcType=VARCHAR}, #{supplierSideId,jdbcType=VARCHAR}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.ResumePO">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
+        insert into resume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="expectWorkProvinceId != null">
+                expect_work_province_id,
+            </if>
+            <if test="expectWorkCityId != null">
+                expect_work_city_id,
+            </if>
+            <if test="expectWorkCountyId != null">
+                expect_work_county_id,
+            </if>
+            <if test="industry != null">
+                industry,
+            </if>
+            <if test="workType != null">
+                work_type,
+            </if>
+            <if test="expectPay != null">
+                expect_pay,
+            </if>
+            <if test="expectWorkTime != null">
+                expect_work_time,
+            </if>
+            <if test="foreignLanguage != null">
+                foreign_language,
+            </if>
+            <if test="foreignLanguageAbility != null">
+                foreign_language_ability,
+            </if>
+            <if test="discribe != null">
+                discribe,
+            </if>
+            <if test="supplierSideId != null">
+                supplier_side_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="expectWorkProvinceId != null">
+                #{expectWorkProvinceId,jdbcType=VARCHAR},
+            </if>
+            <if test="expectWorkCityId != null">
+                #{expectWorkCityId,jdbcType=VARCHAR},
+            </if>
+            <if test="expectWorkCountyId != null">
+                #{expectWorkCountyId,jdbcType=VARCHAR},
+            </if>
+            <if test="industry != null">
+                #{industry,jdbcType=INTEGER},
+            </if>
+            <if test="workType != null">
+                #{workType,jdbcType=VARCHAR},
+            </if>
+            <if test="expectPay != null">
+                #{expectPay,jdbcType=INTEGER},
+            </if>
+            <if test="expectWorkTime != null">
+                #{expectWorkTime,jdbcType=INTEGER},
+            </if>
+            <if test="foreignLanguage != null">
+                #{foreignLanguage,jdbcType=INTEGER},
+            </if>
+            <if test="foreignLanguageAbility != null">
+                #{foreignLanguageAbility,jdbcType=INTEGER},
+            </if>
+            <if test="discribe != null">
+                #{discribe,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierSideId != null">
+                #{supplierSideId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.ResumePO">
+        update resume
+        <set>
+            <if test="expectWorkProvinceId != null">
+                expect_work_province_id = #{expectWorkProvinceId,jdbcType=VARCHAR},
+            </if>
+            <if test="expectWorkCityId != null">
+                expect_work_city_id = #{expectWorkCityId,jdbcType=VARCHAR},
+            </if>
+            <if test="expectWorkCountyId != null">
+                expect_work_county_id = #{expectWorkCountyId,jdbcType=VARCHAR},
+            </if>
+            <if test="industry != null">
+                industry = #{industry,jdbcType=INTEGER},
+            </if>
+            <if test="workType != null">
+                work_type = #{workType,jdbcType=VARCHAR},
+            </if>
+            <if test="expectPay != null">
+                expect_pay = #{expectPay,jdbcType=INTEGER},
+            </if>
+            <if test="expectWorkTime != null">
+                expect_work_time = #{expectWorkTime,jdbcType=INTEGER},
+            </if>
+            <if test="foreignLanguage != null">
+                foreign_language = #{foreignLanguage,jdbcType=INTEGER},
+            </if>
+            <if test="foreignLanguageAbility != null">
+                foreign_language_ability = #{foreignLanguageAbility,jdbcType=INTEGER},
+            </if>
+            <if test="discribe != null">
+                discribe = #{discribe,jdbcType=VARCHAR},
+            </if>
+            <if test="supplierSideId != null">
+                supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.ResumePO">
+    update resume
+    set expect_work_province_id = #{expectWorkProvinceId,jdbcType=VARCHAR},
+      expect_work_city_id = #{expectWorkCityId,jdbcType=VARCHAR},
+      expect_work_county_id = #{expectWorkCountyId,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=INTEGER},
+      work_type = #{workType,jdbcType=VARCHAR},
+      expect_pay = #{expectPay,jdbcType=INTEGER},
+      expect_work_time = #{expectWorkTime,jdbcType=INTEGER},
+      foreign_language = #{foreignLanguage,jdbcType=INTEGER},
+      foreign_language_ability = #{foreignLanguageAbility,jdbcType=INTEGER},
+      discribe = #{discribe,jdbcType=VARCHAR},
+      supplier_side_id = #{supplierSideId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+    <select id="selectBySupplierSideId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from resume
+        where supplier_side_id = #{supplier_side_id,jdbcType=VARCHAR}
+    </select>
+</mapper>

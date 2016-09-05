@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta charset="utf-8">
-    <title>个人中心 - 个人信息编辑 - 百百SOHO</title>
+    <title>个人中心 - 个人信息 - 百百SOHO</title>
     <c:import url="../common_inport.jsp"/>
 </head>
 <body class="pt97">
@@ -19,13 +19,7 @@
 <div class="mainer personal">
     <div class="container">
         <!-- nav-tabs -->
-        <ul class="nav nav-tabs">
-            <li><a href="javascript:;">我的工作</a></li>
-            <li><a href="javascript:;">账户信息</a></li>
-            <li class="<c:if test="${param.tabWidget eq 'basicInformation'}">active</c:if>"><a
-                    href="supplierSide/basicInformation.jsp?tabWidget=basicInformation">个人信息</a></li>
-            <li><a href="javascript:;">过往评价</a></li>
-        </ul>
+        <c:import url="centerTab.jsp"/>
         <!-- /nav-tabs -->
         <!-- tab-content -->
         <div class="tab-content">
@@ -202,7 +196,7 @@
                     </table>
                     <div class="pl-btn-box">
                         <button type="button" name="modifyBasicInfo" class="btn">修改信息完成</button>
-                        <button type="button" name="perfect" class="btn">完善简历</button>
+                        <button type="button" name="resume" class="btn">完善简历</button>
                         <p class="desc">完善简历可以获得更多工作哦！</p>
                     </div>
                 </form>
@@ -582,6 +576,11 @@
                     _this.removeAttr("disabled");
                 }
             })
+        });
+
+        //完善简历
+        $("button[name='resume']").click(function () {
+            document.location.href = "supplierSide/resume.jsp?tabWidget=basicInformation";
         });
     })
 </script>

@@ -54,4 +54,22 @@ public class ClientConf {
             return String.valueOf(this.key);
         }
     }
+
+    /**
+     * 利用枚举定义yaml配置文件中邮箱配置的key
+     */
+    public enum SUPPLIERSIDE {
+        SUPPLIER_SIDE("supplier_side"), WORK_COUNT("work_count");
+
+        private String key;
+
+        SUPPLIERSIDE(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(this.key);
+        }
+    }
 }

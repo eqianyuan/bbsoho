@@ -31,4 +31,17 @@ public class CommonController {
     public List<DataDictionaryPO> getDictionaryByGroupKey(String groupKey) {
         return commonService.getDictionaryByGroupKey(groupKey);
     }
+
+    /**
+     * 根据分组key及val_key前模糊获取递归字典数据
+     *
+     * @param groupKey
+     * @param group_val_key
+     * @return
+     */
+    @RequestMapping(value = "getDictionaryByValKeyFuzzy", method = RequestMethod.GET)
+    @ResponseBody
+    public List<DataDictionaryPO> getDictionaryByValKeyFuzzy(String groupKey, String group_val_key) {
+        return commonService.getDictionaryByValKeyFuzzy(groupKey, group_val_key);
+    }
 }

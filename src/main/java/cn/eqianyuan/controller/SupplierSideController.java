@@ -2,7 +2,9 @@ package cn.eqianyuan.controller;
 
 import cn.eqianyuan.bean.ServerResponse;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
+import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
+import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.service.ISupplierSideService;
@@ -11,10 +13,7 @@ import cn.eqianyuan.util.VerifyCodeUtils;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -138,6 +137,31 @@ public class SupplierSideController extends BaseController {
     @ResponseBody
     public ServerResponse basicInformationEdit(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO) throws EqianyuanException {
         supplierSideService.modifyBasicInformation(supplierSideBasicInfoDTO);
+        return new ServerResponse();
+    }
+
+    /**
+     * 供应商商简历信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/resume", method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse resume() throws EqianyuanException {
+        SupplierSideVOByResume supplierSideVOByResume = supplierSideService.getResume();
+        return new ServerResponse.ResponseBuilder().data(supplierSideVOByResume).build();
+    }
+
+    /**
+     * 供应商简历信息编辑
+     *
+     * @param supplierSideResumeDTO
+     * @return
+     */
+    @RequestMapping(value = "/resume", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse resumeEdit(@RequestBody SupplierSideResumeDTO supplierSideResumeDTO) throws EqianyuanException {
+        supplierSideService.modifyResume(supplierSideResumeDTO);
         return new ServerResponse();
     }
 }

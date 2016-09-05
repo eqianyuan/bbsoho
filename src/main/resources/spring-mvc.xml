@@ -58,18 +58,18 @@
         </mvc:interceptor>
         <mvc:interceptor>
             <!-- 拦截请求 -->
-            <mvc:mapping path="/supplier/**"/>
+            <mvc:mapping path="/supplierSide/**"/>
             <!-- 排除拦截 -->
             <!-- 获取注册页面验证码 -->
-            <mvc:exclude-mapping path="/supplier/verifyCodeByPage"/>
+            <mvc:exclude-mapping path="/supplierSide/verifyCodeByPage"/>
             <!-- 发送手机短信验证码 -->
-            <mvc:exclude-mapping path="/supplier/sendSMSVerificationCodeByRegister"/>
+            <mvc:exclude-mapping path="/supplierSide/sendSMSVerificationCodeByRegister"/>
             <!-- 注册 -->
-            <mvc:exclude-mapping path="/supplier/register"/>
+            <mvc:exclude-mapping path="/supplierSide/register"/>
             <!-- 登录 -->
-            <mvc:exclude-mapping path="/supplier/login"/>
+            <mvc:exclude-mapping path="/supplierSide/login"/>
             <!-- 登出 -->
-            <mvc:exclude-mapping path="/supplier/logout"/>
+            <mvc:exclude-mapping path="/supplierSide/logout"/>
             <bean class="cn.eqianyuan.interceptor.SupplierInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

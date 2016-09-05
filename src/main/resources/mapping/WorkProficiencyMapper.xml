@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.IWorkProficiencyDao" >
+  <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.WorkProficiencyPO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="work" property="work" jdbcType="VARCHAR" />
+    <result column="master_degree" property="masterDegree" jdbcType="INTEGER" />
+    <result column="resume_id" property="resumeId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, work, master_degree, resume_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from work_proficiency
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from work_proficiency
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.eqianyuan.bean.po.WorkProficiencyPO" >
+    insert into work_proficiency (work, master_degree,
+      resume_id)
+    values (#{work,jdbcType=VARCHAR}, #{masterDegree,jdbcType=INTEGER},
+      #{resumeId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.WorkProficiencyPO" >
+    insert into work_proficiency
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="work != null" >
+        work,
+      </if>
+      <if test="masterDegree != null" >
+        master_degree,
+      </if>
+      <if test="resumeId != null" >
+        resume_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="work != null" >
+        #{work,jdbcType=VARCHAR},
+      </if>
+      <if test="masterDegree != null" >
+        #{masterDegree,jdbcType=INTEGER},
+      </if>
+      <if test="resumeId != null" >
+        #{resumeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.WorkProficiencyPO" >
+    update work_proficiency
+    <set >
+      <if test="work != null" >
+        work = #{work,jdbcType=VARCHAR},
+      </if>
+      <if test="masterDegree != null" >
+        master_degree = #{masterDegree,jdbcType=INTEGER},
+      </if>
+      <if test="resumeId != null" >
+        resume_id = #{resumeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.WorkProficiencyPO" >
+    update work_proficiency
+    set work = #{work,jdbcType=VARCHAR},
+      master_degree = #{masterDegree,jdbcType=INTEGER},
+      resume_id = #{resumeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByResumeId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from work_proficiency
+    where resume_id = #{resume_id,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertByList" parameterType="java.util.List" >
+    <if test="workProficiencyPOList != null">
+      insert into work_proficiency
+      (work,master_degree,resume_id)
+      values
+      <foreach item="workProficiency" collection="workProficiencyPOList" open="" separator="," close="">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="workProficiency.work != null" >
+            #{workProficiency.work,jdbcType=VARCHAR},
+          </if>
+          <if test="workProficiency.masterDegree != null" >
+            #{workProficiency.masterDegree,jdbcType=INTEGER},
+          </if>
+          <if test="workProficiency.resumeId != null" >
+            #{workProficiency.resumeId,jdbcType=VARCHAR},
+          </if>
+        </trim>
+      </foreach>
+    </if>
+  </insert>
+  <delete id="deleteByResumeId" parameterType="java.lang.String" >
+    delete from work_proficiency
+    where resume_id = #{resume_id,jdbcType=VARCHAR}
+  </delete>
+</mapper>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.IProjectExperienceDao" >
+  <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.ProjectExperiencePO" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="begin_years" property="beginYears" jdbcType="INTEGER" />
+    <result column="begin_month" property="beginMonth" jdbcType="INTEGER" />
+    <result column="end_years" property="endYears" jdbcType="INTEGER" />
+    <result column="end_month" property="endMonth" jdbcType="INTEGER" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="visit_address" property="visitAddress" jdbcType="VARCHAR" />
+    <result column="project_discribe" property="projectDiscribe" jdbcType="VARCHAR" />
+    <result column="resume_id" property="resumeId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, begin_years, begin_month, end_years, end_month, project_name, visit_address, 
+    project_discribe, resume_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_experience
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from project_experience
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.eqianyuan.bean.po.ProjectExperiencePO" >
+    insert into project_experience (begin_years, begin_month,
+      end_years, end_month, project_name, 
+      visit_address, project_discribe, resume_id
+      )
+    values (#{beginYears,jdbcType=INTEGER}, #{beginMonth,jdbcType=INTEGER},
+      #{endYears,jdbcType=INTEGER}, #{endMonth,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, 
+      #{visitAddress,jdbcType=VARCHAR}, #{projectDiscribe,jdbcType=VARCHAR}, #{resumeId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.ProjectExperiencePO" >
+    insert into project_experience
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="beginYears != null" >
+        begin_years,
+      </if>
+      <if test="beginMonth != null" >
+        begin_month,
+      </if>
+      <if test="endYears != null" >
+        end_years,
+      </if>
+      <if test="endMonth != null" >
+        end_month,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="visitAddress != null" >
+        visit_address,
+      </if>
+      <if test="projectDiscribe != null" >
+        project_discribe,
+      </if>
+      <if test="resumeId != null" >
+        resume_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="beginYears != null" >
+        #{beginYears,jdbcType=INTEGER},
+      </if>
+      <if test="beginMonth != null" >
+        #{beginMonth,jdbcType=INTEGER},
+      </if>
+      <if test="endYears != null" >
+        #{endYears,jdbcType=INTEGER},
+      </if>
+      <if test="endMonth != null" >
+        #{endMonth,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="visitAddress != null" >
+        #{visitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDiscribe != null" >
+        #{projectDiscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="resumeId != null" >
+        #{resumeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.ProjectExperiencePO" >
+    update project_experience
+    <set >
+      <if test="beginYears != null" >
+        begin_years = #{beginYears,jdbcType=INTEGER},
+      </if>
+      <if test="beginMonth != null" >
+        begin_month = #{beginMonth,jdbcType=INTEGER},
+      </if>
+      <if test="endYears != null" >
+        end_years = #{endYears,jdbcType=INTEGER},
+      </if>
+      <if test="endMonth != null" >
+        end_month = #{endMonth,jdbcType=INTEGER},
+      </if>
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="visitAddress != null" >
+        visit_address = #{visitAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDiscribe != null" >
+        project_discribe = #{projectDiscribe,jdbcType=VARCHAR},
+      </if>
+      <if test="resumeId != null" >
+        resume_id = #{resumeId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.ProjectExperiencePO" >
+    update project_experience
+    set begin_years = #{beginYears,jdbcType=INTEGER},
+      begin_month = #{beginMonth,jdbcType=INTEGER},
+      end_years = #{endYears,jdbcType=INTEGER},
+      end_month = #{endMonth,jdbcType=INTEGER},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      visit_address = #{visitAddress,jdbcType=VARCHAR},
+      project_discribe = #{projectDiscribe,jdbcType=VARCHAR},
+      resume_id = #{resumeId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByResumeId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from project_experience
+    where resume_id = #{resume_id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByResumeId" parameterType="java.lang.String" >
+    delete from project_experience
+    where resume_id = #{resume_id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertByList" parameterType="java.util.List" >
+    <if test="projectExperiencePOList != null">
+      insert into project_experience
+      (
+        begin_years,
+        begin_month,
+        end_years,
+        end_month,
+        project_name,
+        visit_address,
+        project_discribe,
+        resume_id
+      )
+      values
+      <foreach item="projectExperience" collection="projectExperiencePOList" open="" separator="," close="">
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+          <choose>
+            <when test="projectExperience.beginYears != null">
+              #{projectExperience.beginYears,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="projectExperience.beginMonth != null">
+              #{projectExperience.beginMonth,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="projectExperience.endYears != null">
+              #{projectExperience.endYears,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="projectExperience.endMonth != null">
+              #{projectExperience.endMonth,jdbcType=INTEGER},
+            </when>
+            <otherwise>
+              0,
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="projectExperience.projectName != null">
+              #{projectExperience.projectName,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+              '',
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="projectExperience.visitAddress != null">
+              #{projectExperience.visitAddress,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+              '',
+            </otherwise>
+          </choose>
+          <choose>
+            <when test="projectExperience.projectDiscribe != null">
+              #{projectExperience.projectDiscribe,jdbcType=VARCHAR},
+            </when>
+            <otherwise>
+              '',
+            </otherwise>
+          </choose>
+          #{projectExperience.resumeId,jdbcType=VARCHAR},
+        </trim>
+      </foreach>
+    </if>
+  </insert>
+</mapper>

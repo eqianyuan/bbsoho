@@ -1,6 +1,9 @@
 package cn.eqianyuan.bean.vo;
 
 public class SupplierSideVOByLogin {
+    //主键ID
+    private String id;
+
     //昵称
     private String nickName;
 
@@ -9,6 +12,14 @@ public class SupplierSideVOByLogin {
 
     //头像
     private String headPortrait;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getNickName() {
         return nickName;

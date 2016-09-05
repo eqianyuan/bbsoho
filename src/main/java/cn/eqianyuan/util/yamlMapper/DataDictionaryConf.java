@@ -32,7 +32,35 @@ public enum DataDictionaryConf {
     /**
      * 工作年限
      */
-    WORKING_YEARS("working_years");
+    WORKING_YEARS("working_years"),
+    /**
+     * 行业
+     */
+    INDUSTRY("industry"),
+    /**
+     * 工种分类
+     */
+    WORK_TYPE("work_type"),
+    /**
+     * 工种
+     */
+    WORK("work"),
+    /**
+     * 期望工作时间
+     */
+    EXPECT_WORK_TIME("expect_work_time"),
+    /**
+     * 期望工作薪资
+     */
+    EXPECT_PAY("expect_pay"),
+    /**
+     * 外语语种
+     */
+    FOREIGN_LANGUAGE("foreign_language"),
+    /**
+     * 外语语种熟练度
+     */
+    FOREIGN_LANGUAGE_ABILITY("foreign_language_ability");
 
     private Object value;
 

@@ -1,29 +1,34 @@
 package cn.eqianyuan.service.impl;
 
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
-import cn.eqianyuan.bean.po.DataDictionaryPO;
-import cn.eqianyuan.bean.po.SupplierSidePO;
+import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
+import cn.eqianyuan.bean.po.*;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
+import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
 import cn.eqianyuan.controller.convert.SupplierConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
-import cn.eqianyuan.dao.ISupplierSideDao;
+import cn.eqianyuan.dao.*;
 import cn.eqianyuan.listener.InitialData;
 import cn.eqianyuan.service.ISupplierSideService;
+import cn.eqianyuan.service.convert.ServiceSupplierConvert;
 import cn.eqianyuan.util.*;
 import cn.eqianyuan.util.yamlMapper.ClientConf;
 import cn.eqianyuan.util.yamlMapper.DataDictionaryConf;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +45,22 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
     private ISupplierSideDao supplierSideDao;
 
     @Autowired
+    private IResumeDao resumeDao;
+
+    @Autowired
+    private IWorkProficiencyDao workProficiencyDao;
+
+    @Autowired
+    private IWorkExperienceDao workExperienceDao;
+
+    @Autowired
+    private IProjectExperienceDao projectExperienceDao;
+
+    @Autowired
     private SupplierConvert supplierConvert;
+
+    @Autowired
+    private ServiceSupplierConvert serviceSupplierConvert;
 
     //真实姓名DB许可字节长度
     private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;
@@ -667,5 +687,452 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         supplierSideVOByLogin = supplierConvert.supplierLogin(supplierSidePO);
         //将会员（供应商）编辑后的新数据重新写入session
         SessionUtil.setAttribute(SystemConf.SUPPLIER_USER_BY_LOGIN.toString(), supplierSideVOByLogin);
+    }
+
+    /**
+     * 获取供应商简历信息
+     *
+     * @return
+     * @throws EqianyuanException
+     */
+    public SupplierSideVOByResume getResume() throws EqianyuanException {
+        SupplierSideResumeDTO supplierSideResumeDTO = new SupplierSideResumeDTO();
+        //获取session用户
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+
+        //获取用户手机号码，并且根据手机号码获取供应商基本信息
+        ResumePO resumePO = resumeDao.selectBySupplierSideId(supplierSideVOByLogin.getId());
+
+        if (ObjectUtils.isEmpty(resumePO) ||
+                ObjectUtils.isEmpty(resumePO.getId())) {
+            logger.warn("supplier getResume fail , supplier side id [" + supplierSideVOByLogin.getId() + "] ");
+            return new SupplierSideVOByResume();
+        }
+
+        //获取工种及熟练度
+        List<WorkProficiencyPO> workProficiencyPOs = workProficiencyDao.selectByResumeId(resumePO.getId());
+        //获取工作经历
+        List<WorkExperiencePO> workExperiencePOs = workExperienceDao.selectByResumeId(resumePO.getId());
+        //获取项目经验
+        List<ProjectExperiencePO> projectExperiencePOs = projectExperienceDao.selectByResumeId(resumePO.getId());
+
+        //将PO转为DTO
+        supplierSideResumeDTO = serviceSupplierConvert.getResume(supplierSideResumeDTO, resumePO);
+        supplierSideResumeDTO = serviceSupplierConvert.getWorkProficiencyByResume(supplierSideResumeDTO, workProficiencyPOs);
+        supplierSideResumeDTO = serviceSupplierConvert.getWorkExperienceByResume(supplierSideResumeDTO, workExperiencePOs);
+        supplierSideResumeDTO = serviceSupplierConvert.getProjectExperienceByResume(supplierSideResumeDTO, projectExperiencePOs);
+
+        SupplierSideVOByResume supplierSideVOByResume = supplierConvert.getResume(supplierSideResumeDTO);
+        return supplierSideVOByResume;
+    }
+
+    /**
+     * 供应商简历信息编辑
+     *
+     * @param supplierSideResumeDTO
+     * @throws EqianyuanException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void modifyResume(SupplierSideResumeDTO supplierSideResumeDTO) throws EqianyuanException {
+        /**
+         * 检查行业正确性
+         */
+        {
+            //检查供应商用户输入所属行业是否为空
+            if (ObjectUtils.isEmpty(supplierSideResumeDTO.getIndustry())) {
+                logger.warn("modifyResume fail , because user input industry , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_INDUSTRY_IS_EMPTY);
+            }
+
+            List<DataDictionaryPO> dataDictionaryPOs;
+
+            //从数据字典缓存中获取行业集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.INDUSTRY.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.INDUSTRY.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //行业是否存在字典数据中
+            boolean industryInDictionary = false;
+
+            //检查行业是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideResumeDTO.getIndustry()))) {
+                    industryInDictionary = true;
+                    break;
+                }
+            }
+
+            //当行业值不存在字典数据中时，抛出错误信息
+            if (!industryInDictionary) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.INDUSTRY.toString() + "] " +
+                        " [" + supplierSideResumeDTO.getIndustry() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        /**
+         * 检查行业工种类别正确性
+         */
+        {
+            //检查供应商用户输入所属行业工种类别是否为空
+            if (ObjectUtils.isEmpty(supplierSideResumeDTO.getWorkType())) {
+                logger.warn("modifyResume fail , because user input work type , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_WORK_TYPE_IS_EMPTY);
+            }
+
+            List<DataDictionaryPO> dataDictionaryPOs;
+
+            //从数据字典缓存中获取行业工种类别集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK_TYPE.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.WORK_TYPE.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //行业工种类别是否存在字典数据中
+            boolean workTypeDictionary = false;
+
+            //检查行业工种类别是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideResumeDTO.getWorkType()))) {
+                    workTypeDictionary = true;
+                    break;
+                }
+            }
+
+            //当行业工种类别值不存在字典数据中时，抛出错误信息
+            if (!workTypeDictionary) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.WORK_TYPE.toString() + "] " +
+                        " [" + supplierSideResumeDTO.getWorkType() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        /**
+         * 检查行业工种正确性
+         */
+        List<SupplierSideResumeDTO.WorkProficiencyDTO> workProficiencyDTOList = new ArrayList<SupplierSideResumeDTO.WorkProficiencyDTO>();
+        {
+            //检查供应商用户输入所属行业工种是否为空
+            if (CollectionUtils.isEmpty(supplierSideResumeDTO.getWorkProficiencyDTOList())) {
+                logger.warn("modifyResume fail , because user input work , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_WORK_IS_FAIL);
+            }
+
+            List<DataDictionaryPO> dataDictionaryPOs;
+
+            //从数据字典缓存中获取行业工种集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //行业工种是否存在字典数据中
+            boolean workDictionary = false;
+
+            for (SupplierSideResumeDTO.WorkProficiencyDTO workProficiencyDTO : supplierSideResumeDTO.getWorkProficiencyDTOList()) {
+                if (StringUtils.isEmpty(workProficiencyDTO.getWork())) {
+                    continue;
+                }
+
+                //检查行业工种是否存在或正确
+                for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                    if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(workProficiencyDTO.getWork()))) {
+                        workProficiencyDTOList.add(workProficiencyDTO);
+                        workDictionary = true;
+                        break;
+                    }
+                }
+            }
+
+            //当行业工种值不存在字典数据中时，抛出错误信息
+            if (!workDictionary) {
+                logger.warn("modifyResume fail , because work data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_WORK_IS_FAIL);
+            }
+
+            //获取一个职务下允许选择的岗位数量
+            String workCount = YamlForMapHandleUtil.getValueBykey(ClientConf.getMap(), ClientConf.SUPPLIERSIDE.SUPPLIER_SIDE.toString(), ClientConf.SUPPLIERSIDE.WORK_COUNT.toString());
+            //检查会员多选工种条数，是否超出系统许可选择条数
+            if (workProficiencyDTOList.size() > Integer.parseInt(workCount)) {
+                logger.warn("modifyResume fail , because work data county [" + workProficiencyDTOList.size() + "] , but system just can choose " + workCount);
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_WORK_CHOOSE_TOO_MANY);
+            }
+        }
+
+        /**
+         * 检查工作时间正确性
+         */
+        {
+            //检查供应商用户输入工作时间是否为空
+            if (ObjectUtils.isEmpty(supplierSideResumeDTO.getExpectWorkTime())) {
+                logger.warn("modifyResume fail , because user input expect work time , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_EXPECT_WORK_TIME_IS_EMPTY);
+            }
+
+            List<DataDictionaryPO> dataDictionaryPOs;
+
+            //从数据字典缓存中获取工作时间集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.EXPECT_WORK_TIME.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.EXPECT_WORK_TIME.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //工作时间是否存在字典数据中
+            boolean expectWorkTimeDictionary = false;
+
+            //检查工作时间是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideResumeDTO.getExpectWorkTime()))) {
+                    expectWorkTimeDictionary = true;
+                    break;
+                }
+            }
+
+            //当工作时间值不存在字典数据中时，抛出错误信息
+            if (!expectWorkTimeDictionary) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.EXPECT_WORK_TIME.toString() + "] " +
+                        " [" + supplierSideResumeDTO.getExpectWorkTime() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        /**
+         * 检查薪资待遇正确性
+         */
+        {
+            //检查供应商用户输入薪资待遇是否为空
+            if (ObjectUtils.isEmpty(supplierSideResumeDTO.getExpectPay())) {
+                logger.warn("modifyResume fail , because user input expect pay , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_EXPECT_PAY_IS_EMPTY);
+            }
+
+            List<DataDictionaryPO> dataDictionaryPOs;
+
+            //从数据字典缓存中获取薪资待遇集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.EXPECT_PAY.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.EXPECT_PAY.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //薪资待遇是否存在字典数据中
+            boolean expectPayDictionary = false;
+
+            //检查薪资待遇是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideResumeDTO.getExpectPay()))) {
+                    expectPayDictionary = true;
+                    break;
+                }
+            }
+
+            //当薪资待遇值不存在字典数据中时，抛出错误信息
+            if (!expectPayDictionary) {
+                logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.EXPECT_PAY.toString() + "] " +
+                        " [" + supplierSideResumeDTO.getExpectPay() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+        }
+
+        //获取session用户
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        //获取用户手机号码，并且根据手机号码获取供应商基本信息
+        ResumePO resumePO = resumeDao.selectBySupplierSideId(supplierSideVOByLogin.getId());
+
+        if (ObjectUtils.isEmpty(resumePO)) {
+            resumePO = new ResumePO();
+            resumePO.setSupplierSideId(supplierSideVOByLogin.getId());
+        }
+
+        resumePO.setIndustry(supplierSideResumeDTO.getIndustry());
+        resumePO.setWorkType(supplierSideResumeDTO.getWorkType());
+        resumePO.setExpectPay(supplierSideResumeDTO.getExpectPay());
+        resumePO.setExpectWorkTime(supplierSideResumeDTO.getExpectWorkTime());
+        resumePO.setExpectPay(supplierSideResumeDTO.getExpectPay());
+
+        /**
+         * 检查外语语种正确性
+         */
+        {
+            //检查供应商用户输入外语语种是否为空
+            if (!ObjectUtils.isEmpty(supplierSideResumeDTO.getForeignLanguage())) {
+                List<DataDictionaryPO> dataDictionaryPOs;
+
+                //从数据字典缓存中获取外语语种集合
+                dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.FOREIGN_LANGUAGE.toString());
+                if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                    logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.FOREIGN_LANGUAGE.toString() + "] data not exists data dictionary");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+                }
+
+                //外语语种是否存在字典数据中
+                boolean foreignLanguageDictionary = false;
+
+                //检查外语语种是否存在或正确
+                for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                    if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideResumeDTO.getForeignLanguage()))) {
+                        foreignLanguageDictionary = true;
+                        break;
+                    }
+                }
+
+                //当外语语种值不存在字典数据中时，抛出错误信息
+                if (!foreignLanguageDictionary) {
+                    logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.FOREIGN_LANGUAGE.toString() + "] " +
+                            " [" + supplierSideResumeDTO.getForeignLanguage() + "] data not exists data dictionary");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+                }
+
+                resumePO.setForeignLanguage(supplierSideResumeDTO.getForeignLanguage());
+            }
+        }
+
+        /**
+         * 检查外语熟练度正确性
+         */
+        {
+            //检查供应商用户输入外语熟练度是否为空
+            if (!ObjectUtils.isEmpty(supplierSideResumeDTO.getForeignLanguageAbility())) {
+                List<DataDictionaryPO> dataDictionaryPOs;
+
+                //从数据字典缓存中获取外语熟练度集合
+                dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.FOREIGN_LANGUAGE_ABILITY.toString());
+                if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                    logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.FOREIGN_LANGUAGE_ABILITY.toString() + "] data not exists data dictionary");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+                }
+
+                //外语熟练度是否存在字典数据中
+                boolean foreignLanguageAbilityDictionary = false;
+
+                //检查外语熟练度是否存在或正确
+                for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                    if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), String.valueOf(supplierSideResumeDTO.getForeignLanguageAbility()))) {
+                        foreignLanguageAbilityDictionary = true;
+                        break;
+                    }
+                }
+
+                //当外语熟练度值不存在字典数据中时，抛出错误信息
+                if (!foreignLanguageAbilityDictionary) {
+                    logger.warn("modifyResume fail , because group key [" + DataDictionaryConf.FOREIGN_LANGUAGE_ABILITY.toString() + "] " +
+                            " [" + supplierSideResumeDTO.getForeignLanguageAbility() + "] data not exists data dictionary");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+                }
+
+                resumePO.setForeignLanguageAbility(supplierSideResumeDTO.getForeignLanguageAbility());
+            }
+        }
+
+        //检查供应商用户选择期望工作地区-省是否为空
+        if (!ObjectUtils.isEmpty(supplierSideResumeDTO.getExpectWorkProvinceId())) {
+            resumePO.setExpectWorkProvinceId(supplierSideResumeDTO.getExpectWorkProvinceId());
+        }
+
+        //检查供应商用户选择期望工作地区-市是否为空
+        if (!ObjectUtils.isEmpty(supplierSideResumeDTO.getExpectWorkCityId())) {
+            resumePO.setExpectWorkCityId(supplierSideResumeDTO.getExpectWorkCityId());
+        }
+
+        //检查供应商用户选择期望工作地区-区是否为空
+        if (!ObjectUtils.isEmpty(supplierSideResumeDTO.getExpectWorkCountyId())) {
+            resumePO.setExpectWorkCountyId(supplierSideResumeDTO.getExpectWorkCountyId());
+        }
+
+        //持久化个人简历信息
+        if (StringUtils.isEmpty(resumePO.getId())) {
+            resumeDao.insertSelective(resumePO);
+        } else {
+            resumeDao.updateByPrimaryKeySelective(resumePO);
+        }
+
+        //先删除工种熟练度数据
+        workProficiencyDao.deleteByResumeId(resumePO.getId());
+        if (!CollectionUtils.isEmpty(workProficiencyDTOList)) {
+            List<WorkProficiencyPO> workProficiencyPOs = new ArrayList<WorkProficiencyPO>();
+            for (SupplierSideResumeDTO.WorkProficiencyDTO workProficiencyDTO : workProficiencyDTOList) {
+                WorkProficiencyPO workProficiencyPO = new WorkProficiencyPO();
+                BeanUtils.copyProperties(workProficiencyDTO, workProficiencyPO);
+                workProficiencyPO.setResumeId(resumePO.getId());
+                workProficiencyPOs.add(workProficiencyPO);
+            }
+            //持久化工种熟练度
+            workProficiencyDao.insertByList(workProficiencyPOs);
+        }
+
+        //先删除工作经历数据
+        workExperienceDao.deleteByResumeId(resumePO.getId());
+        if (!CollectionUtils.isEmpty(supplierSideResumeDTO.getWorkExperienceDTOList())) {
+            List<WorkExperiencePO> workExperiencePOs = new ArrayList<WorkExperiencePO>();
+            for (SupplierSideResumeDTO.WorkExperienceDTO workExperienceDTO : supplierSideResumeDTO.getWorkExperienceDTOList()) {
+                WorkExperiencePO workExperiencePO = new WorkExperiencePO();
+                BeanUtils.copyProperties(workExperienceDTO, workExperiencePO);
+                workExperiencePO.setResumeId(resumePO.getId());
+
+                if (!StringUtils.isEmpty(workExperienceDTO.getWorkCycleBegin())
+                        && workExperienceDTO.getWorkCycleBegin().indexOf("年") != -1) {
+                    String[] begin = workExperienceDTO.getWorkCycleBegin().replace("月", StringUtils.EMPTY).split("年");
+                    if (RegexUtils.isDigital(begin[0])
+                            && RegexUtils.isDigital(begin[1])) {
+                        workExperiencePO.setBeginYears(Integer.parseInt(begin[0]));
+                        workExperiencePO.setBeginMonth(Integer.parseInt(begin[1]));
+                    }
+                }
+
+                if (!StringUtils.isEmpty(workExperienceDTO.getWorkCycleEnd())
+                        && workExperienceDTO.getWorkCycleEnd().indexOf("年") != -1) {
+                    String[] end = workExperienceDTO.getWorkCycleEnd().replace("月", StringUtils.EMPTY).split("年");
+                    if (RegexUtils.isDigital(end[0])
+                            && RegexUtils.isDigital(end[1])) {
+                        workExperiencePO.setEndYears(Integer.parseInt(end[0]));
+                        workExperiencePO.setEndMonth(Integer.parseInt(end[1]));
+                    }
+                }
+
+                workExperiencePOs.add(workExperiencePO);
+            }
+            //持久化工作经历
+            workExperienceDao.insertByList(workExperiencePOs);
+        }
+
+        //先删除项目经验数据
+        projectExperienceDao.deleteByResumeId(resumePO.getId());
+        if (!CollectionUtils.isEmpty(supplierSideResumeDTO.getProjectExperienceDTOList())) {
+            List<ProjectExperiencePO> projectExperiencePOs = new ArrayList<ProjectExperiencePO>();
+            for (SupplierSideResumeDTO.ProjectExperienceDTO projectExperienceDTO : supplierSideResumeDTO.getProjectExperienceDTOList()) {
+                ProjectExperiencePO projectExperiencePO = new ProjectExperiencePO();
+                BeanUtils.copyProperties(projectExperienceDTO, projectExperiencePO);
+                projectExperiencePO.setResumeId(resumePO.getId());
+
+                if (!StringUtils.isEmpty(projectExperienceDTO.getProjectCycleBegin())
+                        && projectExperienceDTO.getProjectCycleBegin().indexOf("年") != -1) {
+                    String[] begin = projectExperienceDTO.getProjectCycleBegin().replace("月", StringUtils.EMPTY).split("年");
+                    if (RegexUtils.isDigital(begin[0])
+                            && RegexUtils.isDigital(begin[1])) {
+                        projectExperiencePO.setBeginYears(Integer.parseInt(begin[0]));
+                        projectExperiencePO.setBeginMonth(Integer.parseInt(begin[1]));
+                    }
+                }
+
+                if (!StringUtils.isEmpty(projectExperienceDTO.getProjectCycleEnd())
+                        && projectExperienceDTO.getProjectCycleEnd().indexOf("年") != -1) {
+                    String[] end = projectExperienceDTO.getProjectCycleEnd().replace("月", StringUtils.EMPTY).split("年");
+                    if (RegexUtils.isDigital(end[0])
+                            && RegexUtils.isDigital(end[1])) {
+                        projectExperiencePO.setEndYears(Integer.parseInt(end[0]));
+                        projectExperiencePO.setEndMonth(Integer.parseInt(end[1]));
+                    }
+                }
+
+                projectExperiencePOs.add(projectExperiencePO);
+            }
+            //持久化项目经验
+            projectExperienceDao.insertByList(projectExperiencePOs);
+        }
     }
 }

@@ -25,7 +25,7 @@
             <h2>陌生的城市 -   奇妙的邂逅 -   源源不断的收入</h2>
             <h2>一场说走就走的旅行</h2>
             <div class="search-box">
-                <form action="#" method="post" class="search-form">
+                <form action="staticPage/talents_list.jsp?menuNavigation=talentPool" method="post" class="search-form">
                     <input type="text" name="keyword" class="ipt-txt" placeholder="搜索工程师" />
                     <button type="submit" class="ipt-submit">搜索</button>
                 </form>
