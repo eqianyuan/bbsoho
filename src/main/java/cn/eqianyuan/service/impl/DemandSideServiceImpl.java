@@ -5,7 +5,7 @@ import cn.eqianyuan.bean.po.DataDictionaryPO;
 import cn.eqianyuan.bean.po.DemandSidePO;
 import cn.eqianyuan.bean.vo.DemandSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
-import cn.eqianyuan.controller.convert.DemandConvert;
+import cn.eqianyuan.controller.convert.DemandSideConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.dao.IDemandSideDao;
@@ -38,7 +38,7 @@ public class DemandSideServiceImpl implements IDemandSideService {
     private IDemandSideDao demandSideDao;
 
     @Autowired
-    private DemandConvert demandConvert;
+    private DemandSideConvert demandConvert;
 
     //账号激活-已激活状态
     private static final int ACTIVATION_STATUS_BY_ACTIVATED = 1;
@@ -610,7 +610,7 @@ public class DemandSideServiceImpl implements IDemandSideService {
                 //检查需求商用户输入联系电话-固话号码-区号是否正确
                 if (!RegexUtils.isDigital(demandSideBasicInfoDTO.getPhoneAreaCode())) {
                     logger.warn("modifyBasicInformation fail , because user input phone area code is not right number");
-                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_TO_LONG);
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_IS_FAIL);
                 }
 
                 //检查企业联系电话-固话-区号内容长度是否超出DB许可长度
@@ -618,7 +618,7 @@ public class DemandSideServiceImpl implements IDemandSideService {
                     if (demandSideBasicInfoDTO.getPhoneAreaCode().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > PHONE_AREA_CODE_MAX_BYTES_BY_DB) {
                         logger.info("modifyBasicInformation fail , because phone area code [" + demandSideBasicInfoDTO.getPhoneAreaCode() + "] bytes greater than"
                                 + PHONE_AREA_CODE_MAX_BYTES_BY_DB);
-                        throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_IS_FAIL);
+                        throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_PHONE_AREA_CODE_TO_LONG);
                     }
                 } catch (UnsupportedEncodingException e) {
                     logger.info("modifyBasicInformation fail , because phone area code [" + demandSideBasicInfoDTO.getPhoneAreaCode() + "] getBytes("
@@ -695,16 +695,6 @@ public class DemandSideServiceImpl implements IDemandSideService {
         demandSideVOByLogin = demandConvert.demandLogin(demandSidePO);
         //将会员（需求商）编辑后的新数据重新写入session
         SessionUtil.setAttribute(SystemConf.DEMAND_USER_BY_LOGIN.toString(), demandSideVOByLogin);
-    }
-
-    /**
-     * 需求发布
-     *
-     * @param demandSideBasicInfoDTO
-     * @throws EqianyuanException
-     */
-    public void demandPublish(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException {
-
     }
 
 }

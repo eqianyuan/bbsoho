@@ -1,10 +1,13 @@
 package cn.eqianyuan.controller;
 
 import cn.eqianyuan.bean.ServerResponse;
-import cn.eqianyuan.bean.dto.DemandSideBasicInfoDTO;
-import cn.eqianyuan.service.IDemandSideService;
+import cn.eqianyuan.bean.dto.DemandDTO;
+import cn.eqianyuan.bean.vo.DemandVOByInfo;
+import cn.eqianyuan.core.exception.EqianyuanException;
+import cn.eqianyuan.service.IDemandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,28 +22,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class DemandController extends BaseController {
 
     @Autowired
-    private IDemandSideService demandSideService;
+    private IDemandService demandService;
 
     /**
-     * 需求发布
+     * 需求编辑
      *
      * @return
      */
     @RequestMapping(value = "/demand", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse demandPublish(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
-        System.out.println(demandSideBasicInfoDTO);
-        return new ServerResponse();
-    }
-
-    /**
-     * 需求变更
-     *
-     * @return
-     */
-    @RequestMapping(value = "/demand", method = RequestMethod.PUT)
-    @ResponseBody
-    public ServerResponse demandChange(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
+    public ServerResponse demandPublish(@RequestBody DemandDTO demandDTO) throws EqianyuanException {
+        demandService.demandPublish(demandDTO);
         return new ServerResponse();
     }
 
@@ -51,7 +43,7 @@ public class DemandController extends BaseController {
      */
     @RequestMapping(value = "/demand", method = RequestMethod.DELETE)
     @ResponseBody
-    public ServerResponse demandDelete(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
+    public ServerResponse demandDelete(DemandDTO demandDTO) {
         return new ServerResponse();
     }
 
@@ -62,8 +54,9 @@ public class DemandController extends BaseController {
      */
     @RequestMapping(value = "/demand", method = RequestMethod.GET)
     @ResponseBody
-    public ServerResponse demandInfo(DemandSideBasicInfoDTO demandSideBasicInfoDTO) {
-        return new ServerResponse();
+    public ServerResponse demandInfo(String id) throws EqianyuanException {
+        DemandVOByInfo demandVOByInfo = demandService.demandInfo(id);
+        return new ServerResponse.ResponseBuilder().data(demandVOByInfo).build();
     }
 
 }

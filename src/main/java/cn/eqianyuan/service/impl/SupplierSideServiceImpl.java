@@ -6,13 +6,13 @@ import cn.eqianyuan.bean.po.*;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
-import cn.eqianyuan.controller.convert.SupplierConvert;
+import cn.eqianyuan.controller.convert.SupplierSideConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.dao.*;
 import cn.eqianyuan.listener.InitialData;
 import cn.eqianyuan.service.ISupplierSideService;
-import cn.eqianyuan.service.convert.ServiceSupplierConvert;
+import cn.eqianyuan.service.convert.ServiceSupplierSideConvert;
 import cn.eqianyuan.util.*;
 import cn.eqianyuan.util.yamlMapper.ClientConf;
 import cn.eqianyuan.util.yamlMapper.DataDictionaryConf;
@@ -57,10 +57,10 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
     private IProjectExperienceDao projectExperienceDao;
 
     @Autowired
-    private SupplierConvert supplierConvert;
+    private SupplierSideConvert supplierConvert;
 
     @Autowired
-    private ServiceSupplierConvert serviceSupplierConvert;
+    private ServiceSupplierSideConvert serviceSupplierConvert;
 
     //真实姓名DB许可字节长度
     private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;

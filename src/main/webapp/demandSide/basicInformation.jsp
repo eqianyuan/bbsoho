@@ -19,32 +19,12 @@
 <div class="mainer personal">
     <div class="container">
         <!-- nav-tabs -->
-        <ul class="nav nav-tabs">
-            <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#demandInfo" data-toggle="tab">需求信息</a>
-            </li>
-            <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#accountInfo" data-toggle="tab">账户信息</a>
-            </li>
-            <li class="<c:if test="${param.tabWidget eq 'basicInformation'}">active</c:if> demandSideBasicInfoTab">
-                <a href="#demandSideBasicInfo" data-toggle="tab">企业信息</a>
-            </li>
-            <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#accountAuth" data-toggle="tab">账号认证</a>
-            </li>
-        </ul>
+        <c:import url="centerTab.jsp"/>
         <!-- /nav-tabs -->
         <!-- tab-content -->
         <div class="tab-content">
-            <!-- 需求信息 START -->
-            <div class="tab-pane fade <c:if test="${param.tabWidget eq '...'}">in active</c:if>" id="demandInfo">
-                正在建设中...
-            </div>
-            <!-- 需求信息 END -->
-            <!-- 账户信息 START -->
-            <div class="tab-pane fade <c:if test="${param.tabWidget eq '...'}">in active</c:if>" id="accountInfo">
-                正在建设中...
-            </div>
-            <!-- 账户信息 END -->
             <!-- 企业信息 START -->
-            <div class="tab-pane fade <c:if test="${param.tabWidget eq 'basicInformation'}">in active</c:if>"
+            <div class="tab-pane fade in active"
                  id="demandSideBasicInfo">
                 <form class="personal enterprise-form modifyBasicInfoForm">
                     <div class="enterprise-top">
@@ -158,11 +138,6 @@
                 </form>
             </div>
             <!-- 企业信息 END -->
-            <!-- 账号认证 START -->
-            <div class="tab-pane fade <c:if test="${param.tabWidget eq '...'}">in active</c:if>" id="accountAuth">
-                正在建设中...
-            </div>
-            <!-- 账号认证 END -->
         </div>
         <!-- /tab-content -->
     </div>
@@ -394,25 +369,16 @@
     }
 
     $(function () {
-        //当切换卡被点击后，异步主动加载对应tab内容及数据
-        $(".demandSideBasicInfoTab").click(function () {
-            //如果已经在当前tab，则无需重复加载内容数据
-            if ($(this).hasClass("active")) {
-                return;
-            }
-
-            //获取并加载企业基本信息
-            getBasicInformation();
-            //获取并加载企业性质
-            getEnterpriseNature();
-            //获取并加载企业规模
-            getEnterpriseScale();
-            //获取并加载企业联系人尊称
-            getRespectfulName();
-            //获取并加载省市区
-            getArea.getProvince();
-
-        });
+        //获取并加载企业基本信息
+        getBasicInformation();
+        //获取并加载企业性质
+        getEnterpriseNature();
+        //获取并加载企业规模
+        getEnterpriseScale();
+        //获取并加载企业联系人尊称
+        getRespectfulName();
+        //获取并加载省市区
+        getArea.getProvince();
 
         //radio点击选中释放选中切换
         $('div.radio-box p.ipt-radio').click(function () {
@@ -486,25 +452,4 @@
         });
     })
 </script>
-
-<c:choose>
-    <c:when test="${param.tabWidget eq 'basicInformation'}">
-        <script>
-            $(function () {
-                //初始加载企业信息tab
-
-                //获取并加载企业基本信息
-                getBasicInformation();
-                //获取并加载企业性质
-                getEnterpriseNature();
-                //获取并加载企业规模
-                getEnterpriseScale();
-                //获取并加载企业联系人尊称
-                getRespectfulName();
-                //获取并加载省市区
-                getArea.getProvince();
-            })
-        </script>
-    </c:when>
-</c:choose>
 </html>

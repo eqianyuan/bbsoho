@@ -199,9 +199,7 @@
             <if test="phoneAreaCode != null">
                 phone_area_code = #{phoneAreaCode,jdbcType=VARCHAR},
             </if>
-            <if test="telephoneNumber != null">
-                telephone_number = #{telephoneNumber,jdbcType=INTEGER},
-            </if>
+            telephone_number = #{telephoneNumber,jdbcType=INTEGER},
             <if test="extensionNumber != null">
                 extension_number = #{extensionNumber,jdbcType=VARCHAR},
             </if>

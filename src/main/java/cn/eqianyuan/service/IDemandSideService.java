@@ -83,12 +83,4 @@ public interface IDemandSideService {
      * @throws EqianyuanException
      */
     void modifyBasicInformation(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException;
-
-    /**
-     * 需求发布
-     *
-     * @param demandSideBasicInfoDTO
-     * @throws EqianyuanException
-     */
-    void demandPublish(DemandSideBasicInfoDTO demandSideBasicInfoDTO) throws EqianyuanException;
 }

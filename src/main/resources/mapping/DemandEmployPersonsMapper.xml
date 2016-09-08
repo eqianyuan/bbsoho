@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.IDemandEmployPersonsDao">
+    <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.DemandEmployPersonsPO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="industry" property="industry" jdbcType="INTEGER"/>
+        <result column="work_type" property="workType" jdbcType="VARCHAR"/>
+        <result column="work" property="work" jdbcType="VARCHAR"/>
+        <result column="persons_amount" property="personsAmount" jdbcType="INTEGER"/>
+        <result column="working_years" property="workingYears" jdbcType="INTEGER"/>
+        <result column="remuneration" property="remuneration" jdbcType="INTEGER"/>
+        <result column="demand_id" property="demandId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, industry, work_type, work, persons_amount, working_years, remuneration, demand_id
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from demand_employ_persons
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from demand_employ_persons
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="cn.eqianyuan.bean.po.DemandEmployPersonsPO">
+    insert into demand_employ_persons (id, industry, work_type, 
+      work, persons_amount, working_years, 
+      remuneration, demand_id)
+    values (#{id,jdbcType=INTEGER}, #{industry,jdbcType=INTEGER}, #{workType,jdbcType=VARCHAR}, 
+      #{work,jdbcType=VARCHAR}, #{personsAmount,jdbcType=INTEGER}, #{workingYears,jdbcType=INTEGER}, 
+      #{remuneration,jdbcType=INTEGER}, #{demandId,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.DemandEmployPersonsPO">
+        insert into demand_employ_persons
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="industry != null">
+                industry,
+            </if>
+            <if test="workType != null">
+                work_type,
+            </if>
+            <if test="work != null">
+                work,
+            </if>
+            <if test="personsAmount != null">
+                persons_amount,
+            </if>
+            <if test="workingYears != null">
+                working_years,
+            </if>
+            <if test="remuneration != null">
+                remuneration,
+            </if>
+            <if test="demandId != null">
+                demand_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="industry != null">
+                #{industry,jdbcType=INTEGER},
+            </if>
+            <if test="workType != null">
+                #{workType,jdbcType=VARCHAR},
+            </if>
+            <if test="work != null">
+                #{work,jdbcType=VARCHAR},
+            </if>
+            <if test="personsAmount != null">
+                #{personsAmount,jdbcType=INTEGER},
+            </if>
+            <if test="workingYears != null">
+                #{workingYears,jdbcType=INTEGER},
+            </if>
+            <if test="remuneration != null">
+                #{remuneration,jdbcType=INTEGER},
+            </if>
+            <if test="demandId != null">
+                #{demandId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.DemandEmployPersonsPO">
+        update demand_employ_persons
+        <set>
+            <if test="industry != null">
+                industry = #{industry,jdbcType=INTEGER},
+            </if>
+            <if test="workType != null">
+                work_type = #{workType,jdbcType=VARCHAR},
+            </if>
+            <if test="work != null">
+                work = #{work,jdbcType=VARCHAR},
+            </if>
+            <if test="personsAmount != null">
+                persons_amount = #{personsAmount,jdbcType=INTEGER},
+            </if>
+            <if test="workingYears != null">
+                working_years = #{workingYears,jdbcType=INTEGER},
+            </if>
+            <if test="remuneration != null">
+                remuneration = #{remuneration,jdbcType=INTEGER},
+            </if>
+            <if test="demandId != null">
+                demand_id = #{demandId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.DemandEmployPersonsPO">
+    update demand_employ_persons
+    set industry = #{industry,jdbcType=INTEGER},
+      work_type = #{workType,jdbcType=VARCHAR},
+      work = #{work,jdbcType=VARCHAR},
+      persons_amount = #{personsAmount,jdbcType=INTEGER},
+      working_years = #{workingYears,jdbcType=INTEGER},
+      remuneration = #{remuneration,jdbcType=INTEGER},
+      demand_id = #{demandId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByDemandId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from demand_employ_persons
+        where demand_id = #{demand_id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByDemandId" parameterType="java.lang.String">
+        delete from demand_employ_persons
+        where demand_id = #{demand_id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insertByList" parameterType="java.util.List">
+        <if test="demandEmployPersonsPOList != null">
+            insert into demand_employ_persons
+            (
+            industry, work_type,work, persons_amount, working_years,remuneration, demand_id
+            )
+            values
+            <foreach item="demandEmployPersons" collection="demandEmployPersonsPOList" open="" separator="," close="">
+                <trim prefix="(" suffix=")" suffixOverrides=",">
+                    <choose>
+                        <when test="demandEmployPersons.industry != null">
+                            #{demandEmployPersons.industry,jdbcType=INTEGER},
+                        </when>
+                        <otherwise>
+                            0,
+                        </otherwise>
+                    </choose>
+                    <choose>
+                        <when test="demandEmployPersons.workType != null">
+                            #{demandEmployPersons.workType,jdbcType=VARCHAR},
+                        </when>
+                        <otherwise>
+                            '',
+                        </otherwise>
+                    </choose>
+                    <choose>
+                        <when test="demandEmployPersons.work != null">
+                            #{demandEmployPersons.work,jdbcType=VARCHAR},
+                        </when>
+                        <otherwise>
+                            '',
+                        </otherwise>
+                    </choose>
+                    <choose>
+                        <when test="demandEmployPersons.personsAmount != null">
+                            #{demandEmployPersons.personsAmount,jdbcType=INTEGER},
+                        </when>
+                        <otherwise>
+                            0,
+                        </otherwise>
+                    </choose>
+                    <choose>
+                        <when test="demandEmployPersons.workingYears != null">
+                            #{demandEmployPersons.workingYears,jdbcType=INTEGER},
+                        </when>
+                        <otherwise>
+                            0,
+                        </otherwise>
+                    </choose>
+                    <choose>
+                        <when test="demandEmployPersons.remuneration != null">
+                            #{demandEmployPersons.remuneration,jdbcType=INTEGER},
+                        </when>
+                        <otherwise>
+                            0,
+                        </otherwise>
+                    </choose>
+                    #{demandEmployPersons.demandId,jdbcType=VARCHAR}
+                </trim>
+            </foreach>
+        </if>
+    </insert>
+</mapper>

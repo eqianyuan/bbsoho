@@ -438,6 +438,18 @@ public class CalendarUtil {
     }
 
     /**
+     * 秒数时间转为日期格式字符串
+     *
+     * @param time
+     * @return
+     */
+    public static String secondsTimeToDateTimeString(Integer time, String format) {
+        SimpleDateFormat t = new SimpleDateFormat(format);
+        String d = t.format((long) time * 1000);
+        return d;
+    }
+
+    /**
      * 获取系统当前秒数时间
      *
      * @return
@@ -446,4 +458,13 @@ public class CalendarUtil {
         return (int) (System.currentTimeMillis() / 1000);
     }
 
+    /**
+     * 根据yyyy-MM-dd日期字符串获取秒数时间
+     *
+     * @param date
+     * @return
+     */
+    public static int getSecondsByDate(String date) {
+        return (int) (parseDate(date).getTime() / 1000);
+    }
 }

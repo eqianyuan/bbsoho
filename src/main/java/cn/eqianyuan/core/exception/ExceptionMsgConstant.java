@@ -149,5 +149,41 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_USER_BASIC_INFORMATION_BY_COMPANY_EXTENSION_NUMBER_TO_LONG = "2002028";
     //会员（需求商）用户基本信息，企业详细地址太长
     public static final String DEMAND_USER_BASIC_INFORMATION_BY_ADDRESS_TO_LONG = "2002029";
+    //会员（需求商）需求信息，需求查询失败
+    public static final String DEMAND_USER_DEMAND_BY_QUERY_FAIL = "2002030";
+    //会员（需求商）需求信息，需求名称为空
+    public static final String DEMAND_USER_DEMAND_BY_NAME_IS_EMPTY = "2002031";
+    //会员（需求商）需求信息，需求周期开始时间为空
+    public static final String DEMAND_USER_DEMAND_BY_BEGIN_CYCLE_IS_EMPTY = "2002032";
+    //会员（需求商）需求信息，需求周期结束时间为空
+    public static final String DEMAND_USER_DEMAND_BY_END_CYCLE_IS_EMPTY = "2002033";
+    //会员（需求商）需求信息，需求周期开始时间格式不正确
+    public static final String DEMAND_USER_DEMAND_BY_BEGIN_CYCLE_FORMAT_IS_FAIL = "2002034";
+    //会员（需求商）需求信息，需求周期结束时间格式不正确
+    public static final String DEMAND_USER_DEMAND_BY_END_CYCLE_FORMAT_IS_FAIL = "2002035";
+    //会员（需求商）需求信息，需求联系人为空
+    public static final String DEMAND_USER_DEMAND_BY_COMPANY_CONTACT_IS_EMPTY = "2002036";
+    //会员（需求商）需求信息，需求联系人尊称为空
+    public static final String DEMAND_USER_DEMAND_BY_COMPANY_RESPECTFUL_NAME_IS_EMPTY = "2002037";
+    //会员（需求商）需求信息，需求联系电话-移动号码不能为空
+    public static final String DEMAND_USER_DEMAND_BY_COMPANY_MOBILE_NUMBER_IS_EMPTY = "2002038";
+    //会员（需求商）需求信息，需求联系电话-移动号码不正确
+    public static final String DEMAND_USER_DEMAND_BY_COMPANY_MOBILE_NUMBER_IS_FAIL = "2002039";
+    //会员（需求商）需求信息，需求名称太长
+    public static final String DEMAND_USER_DEMAND_BY_NAME_TO_LONG = "2002040";
+    //会员（需求商）需求信息，联系固话-区号不是数字
+    public static final String DEMAND_USER_DEMAND_BY_PHONE_AREA_CODE_IS_FAIL = "2002041";
+    //会员（需求商）需求信息，联系固话-区号太长
+    public static final String DEMAND_USER_DEMAND_BY_PHONE_AREA_CODE_TO_LONG = "2002042";
+    //会员（需求商）需求信息，联系固话号码不是数字
+    public static final String DEMAND_USER_DEMAND_BY_TELEPHONE_NUMBER_IS_FAIL = "2002043";
+    //会员（需求商）需求信息，联系固话-分机号不是数字
+    public static final String DEMAND_USER_DEMAND_BY_EXTENSION_NUMBER_IS_FAIL = "2002044";
+    //会员（需求商）需求信息，联系固话-分机号太长
+    public static final String DEMAND_USER_DEMAND_BY_EXTENSION_NUMBER_TO_LONG = "2002045";
+    //会员（需求商）需求信息，详细地址太长
+    public static final String DEMAND_USER_DEMAND_BY_ADDRESS_TO_LONG = "2002046";
+    //会员（需求商）需求信息，工作内容太长
+    public static final String DEMAND_USER_DEMAND_BY_DISCRIBE_TO_LONG = "2002047";
 /********** 客户端系统异常配置 **********/
 }

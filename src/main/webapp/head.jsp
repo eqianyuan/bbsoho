@@ -36,7 +36,8 @@
                                     <a href="javascript:;">${demandUserByLogin.companyName}</a>
                                     <ul class="top-menu">
                                         <li><a href="javascript:;">我的需求</a></li>
-                                        <li><a href="demandSide/personalCenter.jsp?tabWidget=basicInformation">企业信息</a></li>
+                                        <li><a href="demandSide/basicInformation.jsp?tabWidget=basicInformation">企业信息</a></li>
+                                        <li><a href="demandSide/demandEdit.jsp?tabWidget=basicInformation&isPublish=true">发布需求</a></li>
                                         <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
                                         <li><a href="javascript:;" class="exit demandLogout">退出</a></li>
                                     </ul>

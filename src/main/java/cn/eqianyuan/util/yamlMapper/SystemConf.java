@@ -55,7 +55,11 @@ public enum SystemConf {
     /**
      * 需求商会员用户账号基本信息未完善提醒页面位置
      */
-    DEMAND_USER_UN_INTEGRITY_PAGE("/demandSide/personalCenter.jsp?tabWidget=basicInformation"),
+    DEMAND_USER_UN_INTEGRITY_PAGE("/demandSide/basicInformation.jsp?tabWidget=basicInformation"),
+    /**
+     * 供应商会员用户账号基本信息未完善提醒页面位置
+     */
+    SUPPLIER_USER_UN_INTEGRITY_PAGE("/supplierSide/basicInformation.jsp?tabWidget=basicInformation"),
     /**
      * 需求商会员LOGO图片存放路径
      */

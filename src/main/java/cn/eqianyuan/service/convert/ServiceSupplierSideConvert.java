@@ -16,7 +16,7 @@ import java.util.List;
  * Created by jason on 2016-09-02.
  */
 @Component
-public class ServiceSupplierConvert {
+public class ServiceSupplierSideConvert {
 
     /**
      * 将供应商简历对象PO转为DTO对象

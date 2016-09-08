@@ -1,6 +1,8 @@
 package cn.eqianyuan.bean.vo;
 
 public class DemandSideVOByLogin {
+    private String id;
+
     private String companyName;
 
     private String logo;
@@ -8,6 +10,14 @@ public class DemandSideVOByLogin {
     private String email;
 
     private Integer activationStatus;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCompanyName() {
         return companyName;

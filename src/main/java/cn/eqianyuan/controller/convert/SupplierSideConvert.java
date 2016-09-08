@@ -20,7 +20,7 @@ import java.util.List;
  * Created by jason on 2016-08-11.
  */
 @Component
-public class SupplierConvert {
+public class SupplierSideConvert {
 
     /**
      * 将供应商对象PO转为VO对象
