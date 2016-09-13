@@ -50,6 +50,10 @@ public enum DataDictionaryConf {
      */
     EXPECT_WORK_TIME("expect_work_time"),
     /**
+     * 工作餐
+     */
+    WORKING_LUNCH("working_lunch"),
+    /**
      * 期望工作薪资
      */
     EXPECT_PAY("expect_pay"),

@@ -189,6 +189,8 @@ dl.talents-order dd a{ display: inline-block; font-weight: normal; padding-right
 dl.talents-order dd a:hover, dl.talents-order dd a:focus, dl.talents-order dd a:active{ text-decoration: none; }
 dl.talents-order dd a.act{ color: #7335b0; background-image: url('../images/talents/act_hover.png'); }
 dl.talents-order dd a:hover{ text-decoration: none; }
+dl.talents-order dd a.asc{ background-image: url('../images/talents/asc.png'); }
+dl.talents-order dd a.act.asc{ background-image: url('../images/talents/asc_hover.png'); }
 
 /*talents-list*/
 div.talents-list{ width: 100%; font-size: 14px; }

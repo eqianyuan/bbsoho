@@ -1,7 +1,10 @@
 package cn.eqianyuan.controller;
 
+import cn.eqianyuan.bean.PageResponse;
 import cn.eqianyuan.bean.ServerResponse;
+import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
+import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.service.IDemandService;
@@ -57,6 +60,18 @@ public class DemandController extends BaseController {
     public ServerResponse demandInfo(String id) throws EqianyuanException {
         DemandVOByInfo demandVOByInfo = demandService.demandInfo(id);
         return new ServerResponse.ResponseBuilder().data(demandVOByInfo).build();
+    }
+
+    /**
+     * 需求大厅分页列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/search/demandList", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse demandList(DemandByListSearchDTO demandByListSearchDTO,
+                                   Page page) throws EqianyuanException {
+        return demandService.demandList(page, demandByListSearchDTO);
     }
 
 }

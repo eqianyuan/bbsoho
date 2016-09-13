@@ -49,6 +49,8 @@
             <mvc:exclude-mapping path="/demandSide/logout"/>
             <!-- 发送激活邮件 -->
             <mvc:exclude-mapping path="/demandSide/send_activaton_mail"/>
+            <!-- 需求查询 -->
+            <mvc:exclude-mapping path="/demandSide/search/**"/>
             <bean class="cn.eqianyuan.interceptor.DemandInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>

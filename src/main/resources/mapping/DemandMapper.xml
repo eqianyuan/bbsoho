@@ -21,6 +21,19 @@
     <result column="demand_side_id" property="demandSideId" jdbcType="VARCHAR" />
     <result column="publish_time" property="publishTime" jdbcType="INTEGER" />
   </resultMap>
+  <resultMap id="BaseResultMapBySearchList" type="cn.eqianyuan.bean.po.DemandPOBySearchList" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="working_lunch" property="workingLunch" jdbcType="INTEGER" />
+    <result column="begin_cycle" property="beginCycle" jdbcType="INTEGER" />
+    <result column="end_cycle" property="endCycle" jdbcType="INTEGER" />
+    <result column="publish_time" property="publishTime" jdbcType="INTEGER" />
+    <result column="work" property="work" jdbcType="VARCHAR"/>
+    <result column="persons_amount" property="personsAmount" jdbcType="INTEGER"/>
+    <result column="working_years" property="workingYears" jdbcType="INTEGER"/>
+    <result column="remuneration" property="remuneration" jdbcType="INTEGER"/>
+    <result column="county_name" property="countyName" jdbcType="VARCHAR" />
+  </resultMap>
   <sql id="Base_Column_List" >
     id, name, working_lunch, contact, respectful_name, phone_area_code, telephone_number, 
     extension_number, mobile_number, demand_discribe, province_id, city_id, county_id, 
@@ -244,4 +257,47 @@
       publish_time = #{publishTime,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="countByPagination" resultType="java.lang.Integer">
+    select count(1) from
+    demand, demand_employ_persons dep, county
+    where demand.id = dep.demand_id
+    and demand.county_id = county.county_id
+    <include refid="conditionByList" />
+  </select>
+  <select id="selectByPagination" resultMap="BaseResultMapBySearchList">
+    select
+    demand.id, demand.name, demand.working_lunch,demand.begin_cycle, demand.end_cycle, demand.publish_time,
+    dep.working_years, dep.remuneration, dep.work, dep.persons_amount,
+    county.county_name
+    from demand, demand_employ_persons dep, county
+    where demand.id = dep.demand_id
+    and demand.county_id = county.county_id
+    <include refid="conditionByList" />
+    <choose>
+      <when test="page.orderByColumn != null and page.orderByColumn != '' and page.orderByType != null and page.orderByType != ''">
+        order by ${page.orderByColumn} ${page.orderByType}
+      </when >
+      <otherwise>
+        order by publish_time desc
+      </otherwise>
+    </choose>
+    limit ${page.start}, ${page.pageSize}
+  </select>
+  <sql id="conditionByList">
+    <if test="demand.cityId != null and demand.cityId != ''">
+      and demand.city_id = #{demand.cityId}
+    </if>
+    <if test="demand.countyId != null and demand.countyId != ''">
+      and demand.county_id = #{demand.countyId}
+    </if>
+    <if test="demand.work != null and demand.work != ''">
+      and dep.work = #{demand.work}
+    </if>
+    <if test="demand.workingYears != null and demand.workingYears != ''">
+      and dep.working_years = #{demand.workingYears}
+    </if>
+    <if test="demand.remuneration != null and demand.remuneration != ''">
+      and dep.remuneration = #{demand.remuneration}
+    </if>
+  </sql>
 </mapper>

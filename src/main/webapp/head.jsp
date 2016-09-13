@@ -67,7 +67,7 @@
             </ul>
             <ul class="nav">
                 <li class="<c:if test="${empty param.menuNavigation}">active</c:if>"><a href="index.jsp">首页</a></li>
-                <li class="<c:if test="${param.menuNavigation eq 'demandHall'}">active</c:if>"><a href="javascript:;">需求大厅</a></li>
+                <li class="<c:if test="${param.menuNavigation eq 'demandHall'}">active</c:if>"><a href="demand/demand_list.jsp?menuNavigation=demandHall">需求大厅</a></li>
                 <li class="<c:if test="${param.menuNavigation eq 'talentPool'}">active</c:if>"><a href="staticPage/talents_list.jsp?menuNavigation=talentPool">人才库</a></li>
                 <%--<li class="<c:if test="${empty param.menuNavigation}">active</c:if>"><a href="javascript:;">新手帮助</a></li>--%>
                 <%--<li class="<c:if test="${empty param.menuNavigation}">active</c:if>"><a href="javascript:;">投诉建议</a></li>--%>

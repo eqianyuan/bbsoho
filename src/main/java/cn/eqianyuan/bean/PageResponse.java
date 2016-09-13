@@ -1,5 +1,7 @@
 package cn.eqianyuan.bean;
 
+import cn.eqianyuan.bean.dto.Page;
+
 import java.util.List;
 
 
@@ -14,19 +16,15 @@ public class PageResponse {
     private int pageNo;
     private List<?> list;
 
-    public PageResponse(int pageNo, int pageSize) {
-        this.pageNo = pageNo;
-        this.pageSize = pageSize;
+    public PageResponse(Page page) {
+        this.pageNo = page.getPageNo();
+        this.pageSize = page.getPageSize();
     }
-
-    public PageResponse(int pageNo, int pageSize, long totalCount, List<?> list) {
-        this(pageNo, pageSize);
-        this.totalCount = totalCount;
+    public PageResponse(Page page, List<?> list ){
+        this(page);
+        this.totalCount = page.getTotalRow();
+        this.pageCount = page.getTotalPage();
         this.list = list;
-        if (totalCount > 0 && pageSize > 0) {
-            int totalPage = (int) (totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1);
-            this.pageCount = totalPage;
-        }
     }
 
     public long getTotalCount() {

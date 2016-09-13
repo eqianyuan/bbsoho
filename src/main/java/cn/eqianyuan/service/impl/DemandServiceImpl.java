@@ -1,8 +1,12 @@
 package cn.eqianyuan.service.impl;
 
+import cn.eqianyuan.bean.PageResponse;
+import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
+import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.po.DemandEmployPersonsPO;
 import cn.eqianyuan.bean.po.DemandPO;
+import cn.eqianyuan.bean.po.DemandPOBySearchList;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.controller.convert.DemandConvert;
@@ -328,5 +332,38 @@ public class DemandServiceImpl implements IDemandService {
             //持久化用人需要
             demandEmployPersonsDao.insertByList(demandEmployPersonsPOs);
         }
+    }
+
+    /**
+     * 根据对象及分页条件获取分页数据集合
+     *
+     * @param page
+     * @param demandByListSearchDTO
+     * @return
+     */
+    public PageResponse demandList(Page page, DemandByListSearchDTO demandByListSearchDTO) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = demandDao.countByPagination(demandByListSearchDTO);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandPOBySearchList> demandPOBySearchLists = demandDao.selectByPagination(page, demandByListSearchDTO);
+        if (CollectionUtils.isEmpty(demandPOBySearchLists)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandByListSearchDTO> demandDTOs = new ArrayList<DemandByListSearchDTO>();
+        for (DemandPOBySearchList demandPOBySearchList : demandPOBySearchLists) {
+            demandByListSearchDTO = new DemandByListSearchDTO();
+            BeanUtils.copyProperties(demandPOBySearchList, demandByListSearchDTO);
+            demandDTOs.add(demandByListSearchDTO);
+        }
+
+        return new PageResponse(page, demandConvert.demandList(demandDTOs));
     }
 }
