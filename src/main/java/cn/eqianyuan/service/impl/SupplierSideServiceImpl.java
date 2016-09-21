@@ -66,6 +66,9 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
     @Autowired
     private ServiceSupplierSideConvert serviceSupplierConvert;
 
+    @Autowired
+    private ISignUpDao signUpDao;
+
     //真实姓名DB许可字节长度
     private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;
     //昵称DB许可字节长度
@@ -1191,5 +1194,55 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         }
 
         return new PageResponse(page, supplierConvert.supplierList(supplierByListSearchDTOs));
+    }
+
+    /**
+     * 供应商用户信息是否已经完善
+     *
+     * @param mobile
+     * @return
+     * @throws EqianyuanException
+     */
+    public boolean isIntegrity(String mobile) throws EqianyuanException {
+        if (StringUtils.isEmpty(mobile)) {
+            logger.warn("supplier isIntegrity fail , because mobile , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_REGISTER_BY_MOBILE_IS_FAIL);
+        }
+
+        SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(mobile);
+        if (StringUtils.isEmpty(supplierSidePO.getRealName())
+                && StringUtils.isEmpty(supplierSidePO.getEmail())) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 需求报名
+     *
+     * @param demandId   需求编号
+     * @param supplierId 供应方用户编号
+     * @throws EqianyuanException
+     */
+    public void signUp(String demandId, String supplierId) throws EqianyuanException {
+        if (StringUtils.isEmpty(demandId)) {
+            logger.warn("signUp fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
+        //先根据用户编号和需求编号查询数据，如已存在报名信息，则提示已经报过名
+        int signUpCnt = signUpDao.countBySigup(demandId, supplierId);
+
+        if (signUpCnt > 0) {
+            logger.warn("signUp fail , because demand id [" + demandId + "], supplier id [" + supplierId + "] query data is exists");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HAS_SIGN_UP);
+        }
+
+        //插入报名数据
+        SignUpPO signUpPO = new SignUpPO();
+        signUpPO.setDemandId(demandId);
+        signUpPO.setSupplierSideId(supplierId);
+        signUpPO.setCreateTime(CalendarUtil.getSystemSeconds());
+        signUpDao.insertSelective(signUpPO);
     }
 }

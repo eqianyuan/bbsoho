@@ -36,7 +36,7 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <!-- 拦截请求 -->
+            <!-- 拦截请求：需求商是否登录且个人基本资料是否完善 -->
             <mvc:mapping path="/demandSide/**"/>
             <!-- 排除拦截 -->
             <!-- 注册 -->
@@ -54,13 +54,14 @@
             <bean class="cn.eqianyuan.interceptor.DemandInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
-            <!-- 拦截请求 -->
+            <!-- 拦截请求：需求商资料是否完善 -->
             <mvc:mapping path="/demandSide/demand/**"/>
             <bean class="cn.eqianyuan.interceptor.DemandPublishInterceptor"/>
         </mvc:interceptor>
         <mvc:interceptor>
-            <!-- 拦截请求 -->
+            <!-- 拦截请求:供应商是否登录 -->
             <mvc:mapping path="/supplierSide/**"/>
+
             <!-- 排除拦截 -->
             <!-- 获取注册页面验证码 -->
             <mvc:exclude-mapping path="/supplierSide/verifyCodeByPage"/>
@@ -75,6 +76,11 @@
             <!-- 需求查询 -->
             <mvc:exclude-mapping path="/supplierSide/search/**"/>
             <bean class="cn.eqianyuan.interceptor.SupplierInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 供应商对需求操作的拦截请求，主要过滤个人基本资料及简历信息是否完善 -->
+            <mvc:mapping path="/supplierSide/demand/**"/>
+            <bean class="cn.eqianyuan.interceptor.SupplierResumeInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

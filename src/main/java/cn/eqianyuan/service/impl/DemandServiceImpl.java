@@ -312,10 +312,6 @@ public class DemandServiceImpl implements IDemandService {
             BeanUtils.copyProperties(demandDTO, demandPO);
             demandPO.setDemandSideId(demandSideVOByLogin.getId());
 
-//            if (ObjectUtils.isEmpty(demandPO.getTelephoneNumber())) {
-//                demandPO.setTelephoneNumber(0);
-//            }
-
             demandDao.updateByPrimaryKeySelective(demandPO);
             //先删除需求用人要求数据
             demandEmployPersonsDao.deleteByDemandId(demandDTO.getId());
@@ -438,4 +434,5 @@ public class DemandServiceImpl implements IDemandService {
 
         return new PageResponse(page, demandConvert.demandListByMine(demandDTOs));
     }
+
 }

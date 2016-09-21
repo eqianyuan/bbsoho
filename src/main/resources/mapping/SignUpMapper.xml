@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.ISignUpDao" >
+  <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.SignUpPO" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="supplier_side_id" property="supplierSideId" jdbcType="VARCHAR" />
+    <result column="demand_id" property="demandId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, supplier_side_id, demand_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sign_up
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sign_up
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.eqianyuan.bean.po.SignUpPO" >
+    insert into sign_up (id, supplier_side_id, demand_id, create_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{supplierSideId,jdbcType=VARCHAR}, #{demandId,jdbcType=VARCHAR}, #{createTime,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.SignUpPO" >
+    <selectKey keyProperty="id" resultType="String" order="BEFORE">
+      select replace(uuid(),'-','') from dual
+    </selectKey>
+    insert into sign_up
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="supplierSideId != null" >
+        supplier_side_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierSideId != null" >
+        #{supplierSideId,jdbcType=VARCHAR},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.SignUpPO" >
+    update sign_up
+    <set >
+      <if test="supplierSideId != null" >
+        supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.SignUpPO" >
+    update sign_up
+    set supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+      demand_id = #{demandId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="countBySigup" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sign_up
+    where supplier_side_id = #{supplierId}
+    and demand_id = #{demandId}
+  </select>
+</mapper>

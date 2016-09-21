@@ -90,4 +90,20 @@ public interface ISupplierSideService {
      */
     PageResponse supplierList(SupplierSearchListByRequest supplierSearchListByRequest, Page page) throws EqianyuanException;
 
+    /**
+     * 供应商账户基本信息是否已经完善
+     *
+     * @param mobile
+     * @return
+     */
+    boolean isIntegrity(String mobile) throws EqianyuanException;
+
+    /**
+     * 需求报名
+     *
+     * @param demandId   需求编号
+     * @param supplierId 供应方用户编号
+     * @throws EqianyuanException
+     */
+    void signUp(String demandId, String supplierId) throws EqianyuanException;
 }

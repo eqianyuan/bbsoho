@@ -120,6 +120,26 @@
 <c:import url="../footer.jsp"/>
 <!-- /footer -->
 <script type="text/javascript" src="js/eqianyuan.page.js"></script>
+<div class="modal fade" id="signUpTip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog wd380">
+        <div class="modal-content">
+            <div class="modal-body" style="padding-bottom:10px;">
+                <!-- relieveDeal -->
+                <form action="#" method="post" class="relieveApply">
+                    <div>
+                        <h3>
+                        </h3>
+                    </div>
+                    <br>
+                    <div class="btn-box">
+                        <button type="button" class="btn btn-cancel">关闭</button>
+                    </div>
+                </form>
+                <!-- /relieveDeal -->
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script>
     //获得工种查询条件
@@ -319,7 +339,7 @@
                                     + '<dd><p class="pd8">薪资</p><p><span class="orange large">' + this.remuneration + '</span><span class="gray">元</span></p></dd>'
                                     + '<dd><p class="pd8">用人量</p><p class="ageLimit"><span class="gray">' + this.personsAmount + '</span></p></dd>'
                                     + '<dd><p>周期开始：<span class="gray">' + this.beginCycle + '</span>周期结束：<span class="gray">' + this.endCycle + '</span></p><p>工作地点：<span class="gray">' + this.countyName + '</span></p></dd>'
-                                    + '<dd><a href="javascript:;" class="btn-buy">报名</a></dd>'
+                                    + '<dd><a href="javascript:;" class="btn-buy signUp" data-id="' + this.id + '">报名</a></dd>'
                                     + '</dl>'
                                     + '</div>';
                         });
@@ -385,6 +405,34 @@
 
             //获取列表数据
             pagination.list();
+        });
+
+        //报名按钮点击事件
+        $(document).on("click", ".signUp", function(){
+            console.log();
+            $.ajax({
+                type: "POST",
+                url: "/supplierSide/demand/signUp/"+$(this).data("id"),
+                success: function (resp) {
+                    if (resp.code == null) {
+                        document.write(resp);
+                        return;
+                    }
+
+                    if(resp.code == "200"){
+                        $('#signUpTip').modal('show').find("h3").text("报名成功");
+                    }else{
+                        $('#signUpTip').modal('show').find("h3").text(resp.message);
+                    }
+                }
+            });
+        });
+
+        /**
+         * 弹窗关闭
+         */
+        $(document).on('click', 'button.btn-cancel', function(){
+            $('#signUpTip').modal('hide');
         });
     })
 </script>

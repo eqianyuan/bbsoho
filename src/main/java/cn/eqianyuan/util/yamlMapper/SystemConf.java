@@ -59,7 +59,11 @@ public enum SystemConf {
     /**
      * 供应商会员用户账号基本信息未完善提醒页面位置
      */
-    SUPPLIER_USER_UN_INTEGRITY_PAGE("/supplierSide/basicInformation.jsp?tabWidget=basicInformation"),
+    SUPPLIER_USER_UN_INTEGRITY_PAGE("/supplierSide/basicInformation.jsp?menuNavigation=talentPool&tabWidget=basicInformation"),
+    /**
+     * 供应商会员用户简历信息未完善提醒页面位置
+     */
+    SUPPLIER_USER_UN_INTEGRITY_BY_RESUME_PAGE("/supplierSide/resume.jsp?menuNavigation=talentPool&tabWidget=basicInformation"),
     /**
      * 需求商会员LOGO图片存放路径
      */

@@ -7,11 +7,13 @@ import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
+import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.service.ISupplierSideService;
 import cn.eqianyuan.util.SessionUtil;
+import cn.eqianyuan.util.UserUtils;
 import cn.eqianyuan.util.VerifyCodeUtils;
 import cn.eqianyuan.util.yamlMapper.SystemConf;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,5 +180,20 @@ public class SupplierSideController extends BaseController {
     public PageResponse supplierList(SupplierSearchListByRequest supplierSearchListByRequest,
                                      Page page) throws EqianyuanException {
         return supplierSideService.supplierList(supplierSearchListByRequest, page);
+    }
+
+    /**
+     * 供应商报名需求
+     *
+     * @param demandId
+     * @return
+     */
+    @RequestMapping(value = "/demand/signUp/{demandId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse signUp(@PathVariable("demandId") String demandId) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+
+        supplierSideService.signUp(demandId, supplierSideVOByLogin.getId());
+        return new ServerResponse();
     }
 }

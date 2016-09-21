@@ -56,4 +56,5 @@ public interface IDemandService {
      * @return
      */
     PageResponse demandListByMine(Page page, String isEnd) throws EqianyuanException;
+
 }

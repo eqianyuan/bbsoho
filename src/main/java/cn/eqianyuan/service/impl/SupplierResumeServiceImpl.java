@@ -98,4 +98,25 @@ public class SupplierResumeServiceImpl implements ISupplierResumeService {
         supplierResumeVOBySearchInfo = supplierConvert.supplierResumeBySearchInfo(supplierSideBasicInfoDTO, supplierSideResumeDTO);
         return supplierResumeVOBySearchInfo;
     }
+
+    /**
+     * 供应商简历信息是否已经完善
+     *
+     * @param mobile
+     * @return
+     * @throws EqianyuanException
+     */
+    public boolean isIntegrity(String mobile) throws EqianyuanException {
+        if (StringUtils.isEmpty(mobile)) {
+            logger.warn("supplier isIntegrity fail , because mobile , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_REGISTER_BY_MOBILE_IS_FAIL);
+        }
+
+        SupplierSidePO supplierSidePO = supplierSideDao.selectByMobile(mobile);
+        ResumePO resumePO = resumeDao.selectBySupplierSideId(supplierSidePO.getId());
+        if (StringUtils.isEmpty(resumePO.getWorkType())) {
+            return false;
+        }
+        return true;
+    }
 }

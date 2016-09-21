@@ -191,5 +191,10 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_USER_DEMAND_BY_DISCRIBE_TO_LONG = "2002047";
     //会员（需求商）需求信息，需求用人为空
     public static final String DEMAND_USER_DEMAND_BY_EMPLOY_PERSONS_IS_EMPTY = "2002048";
+
+    //需求操作,找不到需求
+    public static final String DEMAND_IS_EMPTY = "2003001";
+    //需求操作，已报过名
+    public static final String DEMAND_HAS_SIGN_UP = "2003002";
 /********** 客户端系统异常配置 **********/
 }
