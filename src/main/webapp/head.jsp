@@ -19,8 +19,8 @@
                                     <a href="javascript:;">${supplierUserByLogin.nickName}</a>
                                     <ul class="top-menu">
                                         <li><a href="javascript:;">我的工作</a></li>
-                                        <li><a href="supplierSide/basicInformation.jsp?tabWidget=basicInformation">个人信息</a></li>
-                                        <li><a href="supplierSide/resume.jsp?tabWidget=basicInformation">个人简历</a></li>
+                                        <li><a href="supplierSide/basicInformation.jsp?menuNavigation=talentPool&tabWidget=basicInformation">个人信息</a></li>
+                                        <li><a href="supplierSide/resume.jsp?menuNavigation=talentPool&tabWidget=basicInformation">个人简历</a></li>
                                         <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
                                         <li><a href="javascript:;" class="exit supplierLogout">退出</a></li>
                                     </ul>
@@ -35,9 +35,9 @@
                                 <dd>
                                     <a href="javascript:;">${demandUserByLogin.companyName}</a>
                                     <ul class="top-menu">
-                                        <li><a href="javascript:;">我的需求</a></li>
-                                        <li><a href="demandSide/basicInformation.jsp?tabWidget=basicInformation">企业信息</a></li>
-                                        <li><a href="demandSide/demandEdit.jsp?tabWidget=basicInformation&isPublish=true">发布需求</a></li>
+                                        <li><a href="demand/demand_list_mine.jsp?menuNavigation=demandHall&demandId&tabWidget=mineDemand">我的需求</a></li>
+                                        <li><a href="demandSide/basicInformation.jsp?menuNavigation=demandHall&demandId&tabWidget=basicInformation">企业信息</a></li>
+                                        <li><a href="demandSide/demandEdit.jsp?menuNavigation=demandHall&demandId&isPublish=true">发布需求</a></li>
                                         <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
                                         <li><a href="javascript:;" class="exit demandLogout">退出</a></li>
                                     </ul>
@@ -68,7 +68,7 @@
             <ul class="nav">
                 <li class="<c:if test="${empty param.menuNavigation}">active</c:if>"><a href="index.jsp">首页</a></li>
                 <li class="<c:if test="${param.menuNavigation eq 'demandHall'}">active</c:if>"><a href="demand/demand_list.jsp?menuNavigation=demandHall">需求大厅</a></li>
-                <li class="<c:if test="${param.menuNavigation eq 'talentPool'}">active</c:if>"><a href="staticPage/talents_list.jsp?menuNavigation=talentPool">人才库</a></li>
+                <li class="<c:if test="${param.menuNavigation eq 'talentPool'}">active</c:if>"><a href="supplier/supplier_list.jsp?menuNavigation=talentPool">人才库</a></li>
                 <%--<li class="<c:if test="${empty param.menuNavigation}">active</c:if>"><a href="javascript:;">新手帮助</a></li>--%>
                 <%--<li class="<c:if test="${empty param.menuNavigation}">active</c:if>"><a href="javascript:;">投诉建议</a></li>--%>
             </ul>

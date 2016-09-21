@@ -41,6 +41,8 @@ public class DemandDTO {
 
     private Integer publishTime;
 
+    private Integer endTime;
+
     private List<DemandEmployPersonsDTO> demandEmployPersonsDTOList;
 
     public class DemandEmployPersonsDTO extends DemandEmployPersonsPO {
@@ -197,5 +199,13 @@ public class DemandDTO {
 
     public void setDemandEmployPersonsDTOList(List<DemandEmployPersonsDTO> demandEmployPersonsDTOList) {
         this.demandEmployPersonsDTOList = demandEmployPersonsDTOList;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
     }
 }

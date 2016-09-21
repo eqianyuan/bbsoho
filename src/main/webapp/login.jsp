@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="renderer" content="webkit">
     <meta charset="utf-8">
@@ -25,7 +25,7 @@
         <!-- lr-logo -->
         <div class="lr-logo">
             <a href="index.jsp" class="left-logo">
-                <img src="images/logo.png" alt="LOGO" />
+                <img src="images/logo.png" alt="LOGO"/>
             </a>
             <div class="right-tit">工作平台</div>
             <div class="clearfix"></div>
@@ -37,7 +37,7 @@
 <!-- /header -->
 <!-- lr-wrapper -->
 <div class="lr-wrapper">
-    <div class="lr-img"><img src="images/login/lr_bg.jpg" alt="background-image" /></div>
+    <div class="lr-img"><img src="images/login/lr_bg.jpg" alt="background-image"/></div>
     <div class="container">
         <!-- lr-box -->
         <div class="lr-box">
@@ -52,8 +52,13 @@
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="supplier-area">
                     <form action="#" method="post" class="forms login-from">
-                        <p class="ipt-txt"><input type="text" name="mobile" placeholder="手机号码" /></p>
-                        <p class="ipt-txt"><input type="password" name="loginPassword" placeholder="密码" /></p>
+                        <div class="error warn-error">
+                            <p>
+                                <label class="error" style="display: inline-block;"></label>
+                            </p>
+                        </div>
+                        <p class="ipt-txt"><input type="text" name="mobile" placeholder="手机号码"/></p>
+                        <p class="ipt-txt"><input type="password" name="loginPassword" placeholder="密码"/></p>
                         <%--<p class="ipt-txt ttr"><a href="resetLR.html" class="link-forget">忘记密码</a></p>--%>
                         <div class="error"></div>
                         <div class="btn-area">
@@ -64,8 +69,13 @@
                 </div>
                 <div class="tab-pane fade" id="demand-area">
                     <form action="#" method="post" class="forms login-from">
-                        <p class="ipt-txt"><input type="text" name="email" placeholder="邮箱号码" /></p>
-                        <p class="ipt-txt"><input type="password" name="loginPassword" placeholder="密码" /></p>
+                        <div class="error warn-error">
+                            <p>
+                                <label class="error" style="display: inline-block;"></label>
+                            </p>
+                        </div>
+                        <p class="ipt-txt"><input type="text" name="email" placeholder="邮箱号码"/></p>
+                        <p class="ipt-txt"><input type="password" name="loginPassword" placeholder="密码"/></p>
                         <%--<p class="ipt-txt ttr"><a href="resetLR.html" class="link-forget">忘记密码</a></p>--%>
                         <div class="error"></div>
                         <div class="btn-area">
@@ -89,7 +99,7 @@
     /**
      * 个人登录按钮点击提交事件
      */
-    $("button[name='supplierSubmit']").click(function(){
+    $("button[name='supplierSubmit']").click(function () {
         $.ajax({
             type: "GET",
             url: "/supplierSide/login",
@@ -100,8 +110,8 @@
             success: function (resp) {
                 if (resp.code == "200") {
                     window.location.href = "index.jsp";
-                }else{
-                    alert(resp.message);
+                } else {
+                    $("#supplier-area .warn-error").show().find("label").text(resp.message);
                 }
             }
         });
@@ -110,7 +120,7 @@
     /**
      * 企业登录按钮点击提交事件
      */
-    $("button[name='demandSubmit']").click(function(){
+    $("button[name='demandSubmit']").click(function () {
         $.ajax({
             type: "GET",
             url: "/demandSide/login",
@@ -121,8 +131,8 @@
             success: function (resp) {
                 if (resp.code == "200") {
                     window.location.href = "index.jsp";
-                }else{
-                    alert(resp.message);
+                } else {
+                    $("#demand-area .warn-error").show().find("label").text(resp.message);
                 }
             }
         });

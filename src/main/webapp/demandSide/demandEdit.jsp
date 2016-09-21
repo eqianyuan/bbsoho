@@ -19,9 +19,6 @@
 <!-- mainer -->
 <div class="mainer personal">
     <div class="container">
-        <!-- nav-tabs -->
-        <c:import url="centerTab.jsp"/>
-        <!-- /nav-tabs -->
         <!-- tab-content -->
         <div class="tab-content">
             <!-- 需求信息 START -->
@@ -37,6 +34,16 @@
                         </tr>
                         </thead>
                         <tbody>
+                        <tr class="pd-none">
+                            <th></th>
+                            <td style="padding-top: 20px;">
+                                <div class="error warn-error wd420 ">
+                                    <p>
+                                        <label class="error" style="display: inline-block;"></label>
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <th>需求名称：</th>
                             <td><p class="ipt-txt wd415"><input type="text" name="name"/></p><i
@@ -586,7 +593,7 @@
                     //获取并加载用人数据
                     initDemandEmployPersons(resp.data.demandEmployPersonsList);
                 } else {
-                    alert(resp.message);
+                    $(".warn-error").show().find("label").text(resp.message);
                 }
             }
         })
@@ -694,7 +701,16 @@
                 type: "post",
                 contentType: "application/json",
                 success: function (resp) {
-                    alert(resp.message);
+                    if (resp.code == null) {
+                        document.write(resp);
+                        return;
+                    }
+
+                    if(resp.code == "200"){
+                        window.location.href = "demand/demand_list.jsp?menuNavigation=demandHall";
+                    }
+
+                    $(".warn-error").show().find("label").text(resp.message);
                     _this.removeAttr("disabled");
                 }
             })

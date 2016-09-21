@@ -1,8 +1,12 @@
 package cn.eqianyuan.service.impl;
 
+import cn.eqianyuan.bean.PageResponse;
+import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.dto.SupplierByListSearchDTO;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.po.*;
+import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
@@ -72,6 +76,8 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
     private static final int SCHOOL_NAME_MAX_BYTES_BY_DB = 100;
     //专业名称DB许可字节长度
     private static final int PROFESSIONAL_NAME_MAX_BYTES_BY_DB = 100;
+    //擅长方向DB许可字节长度
+    private static final int DISCRIBE_MAX_BYTES_BY_DB = 3000;
 
     /**
      * 添加供应商用户信息
@@ -863,6 +869,22 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             }
         }
 
+        //检查擅长方向是否为空
+        if (!StringUtils.isEmpty(supplierSideResumeDTO.getDiscribe())) {
+            //检查擅长方向内容长度是否超出DB许可长度
+            try {
+                if (supplierSideResumeDTO.getDiscribe().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > DISCRIBE_MAX_BYTES_BY_DB) {
+                    logger.info("modifyResume fail , because discribe [" + supplierSideResumeDTO.getDiscribe() + "] bytes greater than"
+                            + DISCRIBE_MAX_BYTES_BY_DB);
+                    throw new EqianyuanException(ExceptionMsgConstant.SUPPLIER_USER_RESUME_BY_DISCRIBE_TOO_MANY);
+                }
+            } catch (UnsupportedEncodingException e) {
+                logger.info("modifyResume fail , because discribe [" + supplierSideResumeDTO.getDiscribe() + "] getBytes("
+                        + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+            }
+        }
+
         /**
          * 检查工作时间正确性
          */
@@ -954,6 +976,7 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         resumePO.setExpectPay(supplierSideResumeDTO.getExpectPay());
         resumePO.setExpectWorkTime(supplierSideResumeDTO.getExpectWorkTime());
         resumePO.setExpectPay(supplierSideResumeDTO.getExpectPay());
+        resumePO.setDiscribe(supplierSideResumeDTO.getDiscribe());
 
         /**
          * 检查外语语种正确性
@@ -1134,5 +1157,39 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             //持久化项目经验
             projectExperienceDao.insertByList(projectExperiencePOs);
         }
+    }
+
+    /**
+     * 根据对象及分页条件获取分页数据集合
+     *
+     * @param supplierSearchListByRequest
+     * @param page
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse supplierList(SupplierSearchListByRequest supplierSearchListByRequest, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = supplierSideDao.countByPagination(supplierSearchListByRequest);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<SupplierPOBySearchList> supplierPOBySearchLists = supplierSideDao.selectByPagination(page, supplierSearchListByRequest);
+        if (CollectionUtils.isEmpty(supplierPOBySearchLists)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        List<SupplierByListSearchDTO> supplierByListSearchDTOs = new ArrayList<SupplierByListSearchDTO>();
+        for (SupplierPOBySearchList supplierPOBySearchList : supplierPOBySearchLists) {
+            SupplierByListSearchDTO supplierByListSearchDTO = new SupplierByListSearchDTO();
+            BeanUtils.copyProperties(supplierPOBySearchList, supplierByListSearchDTO);
+            supplierByListSearchDTOs.add(supplierByListSearchDTO);
+        }
+
+        return new PageResponse(page, supplierConvert.supplierList(supplierByListSearchDTOs));
     }
 }

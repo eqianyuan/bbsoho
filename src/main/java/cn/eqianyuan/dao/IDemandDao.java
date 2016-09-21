@@ -34,4 +34,18 @@ public interface IDemandDao {
      * @return
      */
     List<DemandPOBySearchList> selectByPagination(@Param("page") Page page, @Param("demand") DemandByListSearchDTO demandByListSearchDTO);
+
+    /**
+     * 获取数据总条数
+     *
+     * @return
+     */
+    Integer countByMinePagination(@Param("isEnd") String isEnd);
+
+    /**
+     * 根据对象及分页条件获取分页数据集合
+     *
+     * @return
+     */
+    List<DemandPOBySearchList> selectByMinePagination(@Param("page") Page page, @Param("isEnd") String isEnd);
 }

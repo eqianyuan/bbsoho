@@ -49,6 +49,16 @@
                         <div class="clearfix"></div>
                     </div>
                     <table class="demandInfo">
+                        <tr class="pd-none">
+                            <th></th>
+                            <td style="padding-top: 20px;">
+                                <div class="error warn-error wd420 ">
+                                    <p>
+                                        <label class="error" style="display: inline-block;"></label>
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
                         <tr>
                             <th>企业名称：</th>
                             <td><p class="ipt-txt wd415"><input type="text" name="companyName"/></p><i
@@ -362,7 +372,7 @@
                     //企业详细地址
                     $(".modifyBasicInfoForm input[name='address']").val(resp.data.address);
                 } else {
-                    alert(resp.message);
+                    $(".warn-error").show().find("label").text(resp.message);
                 }
             }
         })
@@ -445,7 +455,7 @@
                 data: $.extend({_method: "put"}, formDataJson),
                 type: "post",
                 success: function (resp) {
-                    alert(resp.message);
+                    $(".warn-error").show().find("label").text(resp.message);
                     _this.removeAttr("disabled");
                 }
             })

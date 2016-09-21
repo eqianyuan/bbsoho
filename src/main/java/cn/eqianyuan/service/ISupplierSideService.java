@@ -1,7 +1,10 @@
 package cn.eqianyuan.service;
 
+import cn.eqianyuan.bean.PageResponse;
+import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
+import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
@@ -76,4 +79,15 @@ public interface ISupplierSideService {
      * @throws EqianyuanException
      */
     void modifyResume(SupplierSideResumeDTO supplierSideResumeDTO) throws EqianyuanException;
+
+    /**
+     * 根据对象及分页条件获取分页数据集合
+     *
+     * @param supplierSearchListByRequest
+     * @param page
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse supplierList(SupplierSearchListByRequest supplierSearchListByRequest, Page page) throws EqianyuanException;
+
 }

@@ -88,6 +88,10 @@ public class ExceptionMsgConstant {
     public static final String SUPPLIER_USER_RESUME_BY_EXPECT_PAY_IS_EMPTY = "2001024";
     //会员（供应商）用户简历信息，行业工种选择太多项了
     public static final String SUPPLIER_USER_RESUME_BY_WORK_CHOOSE_TOO_MANY = "2001025";
+    //会员（供应商）用户简历信息，擅长方向内容太多了
+    public static final String SUPPLIER_USER_RESUME_BY_DISCRIBE_TOO_MANY = "2001026";
+    //会员（供应商）简历信息，简历查询失败
+    public static final String SUPPLIER_USER_RESUME_BY_QUERY_FAIL = "2001027";
 
     //会员（需求商）用户注册，邮箱为空
     public static final String DEMAND_USER_REGISTER_BY_EMAIL_IS_EMPTY = "2002001";
@@ -185,5 +189,7 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_USER_DEMAND_BY_ADDRESS_TO_LONG = "2002046";
     //会员（需求商）需求信息，工作内容太长
     public static final String DEMAND_USER_DEMAND_BY_DISCRIBE_TO_LONG = "2002047";
+    //会员（需求商）需求信息，需求用人为空
+    public static final String DEMAND_USER_DEMAND_BY_EMPLOY_PERSONS_IS_EMPTY = "2002048";
 /********** 客户端系统异常配置 **********/
 }

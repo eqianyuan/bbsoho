@@ -39,7 +39,11 @@
                         <tr class="pd-none">
                             <th></th>
                             <td style="padding-top: 20px;">
-                                <div class="error warn-error wd420"></div>
+                                <div class="error warn-error wd420 ">
+                                    <p>
+                                        <label class="error" style="display: inline-block;"></label>
+                                    </p>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -65,6 +69,13 @@
                                     </div>
                                 </div>
                                 <i class="warn-star">*</i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>擅长方向：</th>
+                            <td>
+                                <p class="ipt-txt wd420 fl"><input type="text" name="discribe" placeholder="请输入擅长关键词，多个关键词以空格隔开"/>
+                                </p>
                             </td>
                         </tr>
                         <tr>
@@ -558,6 +569,7 @@
                     industry.getWorkType($("select[name='workType']"), resp.data.workType, resp.data.industry);
                     //获取并加载行业工种信息
                     industry.getWork($("input[name='work'] + .select-list ul"), resp.data.workProficiencies, resp.data.workType);
+                    $("input[name='discribe']").val(resp.data.discribe);
                     //获取并加载期望工作时间
                     expectWorkTime(resp.data.expectWorkTime);
                     //获取并加载期望薪资
@@ -577,7 +589,7 @@
                     //获取并加载项目经验
                     projectExperience(resp.data.projectExperiences);
                 } else {
-                    alert(resp.message);
+                    $(".warn-error").show().find("label").text(resp.message);
                 }
             }
         })
@@ -851,7 +863,12 @@
                 type: "post",
                 contentType: "application/json",
                 success: function (resp) {
-                    alert(resp.message);
+
+                    if(resp.code == "200"){
+                        window.location.href = "supplier/supplier_list.jsp?menuNavigation=talentPool";
+                    }
+
+                    $(".warn-error").show().find("label").text(resp.message);
                     _this.removeAttr("disabled");
                 }
             })

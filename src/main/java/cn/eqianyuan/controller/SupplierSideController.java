@@ -1,8 +1,11 @@
 package cn.eqianyuan.controller;
 
+import cn.eqianyuan.bean.PageResponse;
 import cn.eqianyuan.bean.ServerResponse;
+import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
+import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
 import cn.eqianyuan.core.exception.EqianyuanException;
@@ -163,5 +166,17 @@ public class SupplierSideController extends BaseController {
     public ServerResponse resumeEdit(@RequestBody SupplierSideResumeDTO supplierSideResumeDTO) throws EqianyuanException {
         supplierSideService.modifyResume(supplierSideResumeDTO);
         return new ServerResponse();
+    }
+
+    /**
+     * 人才库分页列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "/search/supplierList", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse supplierList(SupplierSearchListByRequest supplierSearchListByRequest,
+                                     Page page) throws EqianyuanException {
+        return supplierSideService.supplierList(supplierSearchListByRequest, page);
     }
 }

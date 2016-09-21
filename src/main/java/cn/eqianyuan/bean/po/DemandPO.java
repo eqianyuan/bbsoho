@@ -37,6 +37,8 @@ public class DemandPO {
 
     private Integer publishTime;
 
+    private Integer endTime;
+
     public String getId() {
         return id;
     }
@@ -179,5 +181,13 @@ public class DemandPO {
 
     public void setPublishTime(Integer publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Integer getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Integer endTime) {
+        this.endTime = endTime;
     }
 }

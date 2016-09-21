@@ -64,7 +64,11 @@ public enum DataDictionaryConf {
     /**
      * 外语语种熟练度
      */
-    FOREIGN_LANGUAGE_ABILITY("foreign_language_ability");
+    FOREIGN_LANGUAGE_ABILITY("foreign_language_ability"),
+    /**
+     * 工作状态
+     */
+    WORKING_STATUS("working_status");
 
     private Object value;
 

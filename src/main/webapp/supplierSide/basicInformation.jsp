@@ -66,7 +66,11 @@
                         <tr class="pd-none">
                             <th></th>
                             <td style="padding-top: 20px;">
-                                <div class="error warn-error wd420"></div>
+                                <div class="error warn-error wd420 ">
+                                    <p>
+                                        <label class="error" style="display: inline-block;"></label>
+                                    </p>
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -486,7 +490,7 @@
                     //现居地区
                     getArea.getCounty($("select[name='liveAddressCountyId']"), resp.data.liveAddressCountyId, resp.data.liveAddressCityId);
                 } else {
-                    alert(resp.message);
+                    $(".warn-error").show().find("label").text(resp.message);
                 }
             }
         })
@@ -572,7 +576,7 @@
                 data: $.extend({_method: "put"}, formDataJson),
                 type: "post",
                 success: function (resp) {
-                    alert(resp.message);
+                    $(".warn-error").show().find("label").text(resp.message);
                     _this.removeAttr("disabled");
                 }
             })

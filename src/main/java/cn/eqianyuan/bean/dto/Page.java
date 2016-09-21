@@ -64,11 +64,12 @@ public class Page {
     }
 
     public void setPageNo(Integer pageNo) {
-        this.pageNo = (pageNo <= 0 ? 1 : pageNo - 1) * this.pageSize;
+        this.pageNo = pageNo;
     }
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+        this.start = (pageNo <= 0 ? 1 : pageNo - 1) * pageSize;
     }
 
     public String getOrderByColumn() {

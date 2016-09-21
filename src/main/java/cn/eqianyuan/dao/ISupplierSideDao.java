@@ -1,8 +1,13 @@
 package cn.eqianyuan.dao;
 
 
+import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.po.SupplierPOBySearchList;
 import cn.eqianyuan.bean.po.SupplierSidePO;
+import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ISupplierSideDao {
     int deleteByPrimaryKey(String id);
@@ -41,4 +46,18 @@ public interface ISupplierSideDao {
      * @return
      */
     SupplierSidePO selectByMobile(@Param("mobile_number") String mobileNumber);
+
+    /**
+     * 获取数据总条数
+     *
+     * @return
+     */
+    Integer countByPagination(@Param("supplier") SupplierSearchListByRequest supplierSearchListByRequest);
+
+    /**
+     * 根据对象及分页条件获取分页数据集合
+     *
+     * @return
+     */
+    List<SupplierPOBySearchList> selectByPagination(@Param("page") Page page, @Param("supplier") SupplierSearchListByRequest supplierSearchListByRequest);
 }

@@ -1,10 +1,8 @@
 package cn.eqianyuan.service.convert;
 
+import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
-import cn.eqianyuan.bean.po.ProjectExperiencePO;
-import cn.eqianyuan.bean.po.ResumePO;
-import cn.eqianyuan.bean.po.WorkExperiencePO;
-import cn.eqianyuan.bean.po.WorkProficiencyPO;
+import cn.eqianyuan.bean.po.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -17,6 +15,18 @@ import java.util.List;
  */
 @Component
 public class ServiceSupplierSideConvert {
+
+    /**
+     * 将供应商用户信息PO转为DTO
+     *
+     * @param supplierSideBasicInfoDTO
+     * @param supplierSidePO
+     * @return
+     */
+    public SupplierSideBasicInfoDTO getSupplierSideBasicInfo(SupplierSideBasicInfoDTO supplierSideBasicInfoDTO, SupplierSidePO supplierSidePO) {
+        BeanUtils.copyProperties(supplierSidePO, supplierSideBasicInfoDTO);
+        return supplierSideBasicInfoDTO;
+    }
 
     /**
      * 将供应商简历对象PO转为DTO对象

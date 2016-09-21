@@ -72,6 +72,8 @@
             <mvc:exclude-mapping path="/supplierSide/login"/>
             <!-- 登出 -->
             <mvc:exclude-mapping path="/supplierSide/logout"/>
+            <!-- 需求查询 -->
+            <mvc:exclude-mapping path="/supplierSide/search/**"/>
             <bean class="cn.eqianyuan.interceptor.SupplierInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

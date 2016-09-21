@@ -2,7 +2,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <ul class="nav nav-tabs">
-    <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#demandInfo" data-toggle="tab">需求信息</a>
+    <li class="<c:if test="${param.tabWidget eq 'mineDemand'}">active</c:if>">
+        <a href="demand/demand_list_mine.jsp?tabWidget=mineDemand">需求信息</a>
     </li>
     <li class="<c:if test="${param.tabWidget eq '...'}">active</c:if>"><a href="#accountInfo" data-toggle="tab">账户信息</a>
     </li>

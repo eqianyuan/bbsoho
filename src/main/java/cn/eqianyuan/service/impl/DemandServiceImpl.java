@@ -9,6 +9,7 @@ import cn.eqianyuan.bean.po.DemandPO;
 import cn.eqianyuan.bean.po.DemandPOBySearchList;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
+import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
 import cn.eqianyuan.controller.convert.DemandConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
@@ -279,6 +280,12 @@ public class DemandServiceImpl implements IDemandService {
             }
         }
 
+        //检查需求是否有用人
+        if (CollectionUtils.isEmpty(demandDTO.getDemandEmployPersonsDTOList())) {
+            logger.info("demandPublish fail , because demand employ persons is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_DEMAND_BY_EMPLOY_PERSONS_IS_EMPTY);
+        }
+
         DemandPO demandPO = new DemandPO();
         //获取session用户
         DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
@@ -365,5 +372,70 @@ public class DemandServiceImpl implements IDemandService {
         }
 
         return new PageResponse(page, demandConvert.demandList(demandDTOs));
+    }
+
+    /**
+     * 根据需求主键查询详细数据，且字典数据已转码
+     *
+     * @param id
+     * @return
+     * @throws EqianyuanException
+     */
+    public DemandVOBySearchInfo demandInfoBySearch(String id) throws EqianyuanException {
+        if (StringUtils.isEmpty(id)) {
+            logger.warn("demandInfoBySearch fail , because id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_DEMAND_BY_QUERY_FAIL);
+        }
+
+        DemandPO demandPO = demandDao.selectByPrimaryKey(id);
+        if (ObjectUtils.isEmpty(demandPO) ||
+                ObjectUtils.isEmpty(demandPO.getId())) {
+            logger.warn("demandInfoBySearch fail , because query data by id [" + id + "] not exists");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_USER_DEMAND_BY_QUERY_FAIL);
+        }
+
+        //获取用人需求
+        List<DemandEmployPersonsPO> demandEmployPersonsPOs = demandEmployPersonsDao.selectByDemandId(demandPO.getId());
+
+        //将po转为dto
+        DemandDTO demandDTO = serviceDemandConvert.demandInfo(demandPO);
+        serviceDemandConvert.getEmployPersonsByDemandInfo(demandDTO, demandEmployPersonsPOs);
+
+        DemandVOBySearchInfo demandVOBySearchInfo = demandConvert.demandInfoBySearch(demandDTO);
+        return demandVOBySearchInfo;
+    }
+
+    /**
+     * 根据需求状态及分页条件获取分页数据集合
+     *
+     * @param page
+     * @param isEnd
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse demandListByMine(Page page, String isEnd) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = demandDao.countByMinePagination(isEnd);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandPOBySearchList> demandPOBySearchLists = demandDao.selectByMinePagination(page, isEnd);
+        if (CollectionUtils.isEmpty(demandPOBySearchLists)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandByListSearchDTO> demandDTOs = new ArrayList<DemandByListSearchDTO>();
+        for (DemandPOBySearchList demandPOBySearchList : demandPOBySearchLists) {
+            DemandByListSearchDTO demandByListSearchDTO = new DemandByListSearchDTO();
+            BeanUtils.copyProperties(demandPOBySearchList, demandByListSearchDTO);
+            demandDTOs.add(demandByListSearchDTO);
+        }
+
+        return new PageResponse(page, demandConvert.demandListByMine(demandDTOs));
     }
 }

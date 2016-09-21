@@ -28,6 +28,16 @@
         <result column="status" property="status" jdbcType="INTEGER" />
         <result column="create_time" property="createTime" jdbcType="INTEGER" />
     </resultMap>
+    <resultMap id="BaseResultMapBySearchList" type="cn.eqianyuan.bean.po.SupplierPOBySearchList" >
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+        <result column="discribe" property="discribe" jdbcType="VARCHAR"/>
+        <result column="working_years" property="workingYears" jdbcType="INTEGER" />
+        <result column="expect_pay" property="expectPay" jdbcType="INTEGER"/>
+        <result column="expect_work_time" property="expectWorkTime" jdbcType="INTEGER"/>
+        <result column="work" property="work" jdbcType="VARCHAR" />
+        <result column="county_name" property="countyName" jdbcType="VARCHAR" />
+    </resultMap>
     <sql id="Base_Column_List" >
         id, head_portrait, real_name, nick_name, mobile_number, sex, birthday_year, birthday_month,
         birthday_day, live_address_province_id, live_address_city_id, live_address_county_id,
@@ -350,4 +360,52 @@
         from supplier_side
         where mobile_number = #{mobile_number}
     </select>
+    <select id="countByPagination" resultType="java.lang.Integer">
+        select count(1) from
+        (
+          select resume.id from
+            supplier_side ss,resume
+            LEFT JOIN work_proficiency wp on (resume.id = wp.resume_id)
+            LEFT JOIN county on (resume.expect_work_county_id = county.county_id)
+            where ss.id = resume.supplier_side_id
+            <include refid="conditionByList" />
+          group by resume.id
+        ) cnt
+    </select>
+    <select id="selectByPagination" resultMap="BaseResultMapBySearchList">
+        select
+        ss.nick_name,ss.working_years,
+        resume.id,resume.expect_pay, resume.expect_work_time,resume.discribe,
+        group_concat(wp.work) as work,
+        county.county_name
+        from
+        supplier_side ss,resume
+        LEFT JOIN work_proficiency wp on (resume.id = wp.resume_id)
+        LEFT JOIN county on (resume.expect_work_county_id = county.county_id)
+        where ss.id = resume.supplier_side_id
+        <include refid="conditionByList" />
+        <choose>
+            <when test="page.orderByColumn != null and page.orderByColumn != '' and page.orderByType != null and page.orderByType != ''">
+                order by ${page.orderByColumn} ${page.orderByType}
+            </when >
+            <otherwise>
+                order by resume.id desc
+            </otherwise>
+        </choose>
+        limit ${page.start}, ${page.pageSize}
+    </select>
+    <sql id="conditionByList">
+        <if test="supplier.cityId != null and supplier.cityId != ''">
+            and resume.expect_work_city_id = #{supplier.cityId}
+        </if>
+        <if test="supplier.countyId != null and supplier.countyId != ''">
+            and resume.expect_work_county_id = #{supplier.countyId}
+        </if>
+        <if test="supplier.work != null and supplier.work != ''">
+            and wp.work = #{supplier.work}
+        </if>
+        <if test="supplier.workingYears != null and supplier.workingYears != ''">
+            and ss.working_years = #{supplier.workingYears}
+        </if>
+    </sql>
 </mapper>

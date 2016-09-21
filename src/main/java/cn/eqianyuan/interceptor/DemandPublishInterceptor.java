@@ -41,7 +41,7 @@ public class DemandPublishInterceptor implements HandlerInterceptor {
     }
 
     /**
-     * 未激活拦截结果响应，跳转到未激活提醒+激活邮件发送页面
+     * 资料未完善，跳转到资料完善页面
      *
      * @param request
      * @param response

@@ -89,9 +89,14 @@
                 } else {
                     if (args.pageCount > 1) {
                         obj.append('<a href="javascript:;" class="tcdNumber" number="' + args.pageCount + '">' + args.pageCount + '</a>');
+                        obj.append('<a href="javascript:;" class="next">下一页</a>');
+                        obj.append('<a href="javascript:;" class="tcdNumber" number="' + args.pageCount + '" >尾页</a>');
+                    }else{
+                        //禁用下一页按钮
+                        obj.remove('.next');
+                        obj.append('<a>下一页</a>');
+                        obj.append('<a>尾页</a>');
                     }
-                    obj.append('<a href="javascript:;" class="next">下一页</a>');
-                    obj.append('<a href="javascript:;" class="tcdNumber" number="' + args.pageCount + '" >尾页</a>');
                 }
             })();
         },

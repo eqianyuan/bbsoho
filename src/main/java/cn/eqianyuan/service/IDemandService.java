@@ -5,6 +5,7 @@ import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
+import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
 
 /**
@@ -37,4 +38,22 @@ public interface IDemandService {
      * @return
      */
     PageResponse demandList(Page page, DemandByListSearchDTO demandByListSearchDTO) throws EqianyuanException;
+
+    /**
+     * 根据需求编号查询需求详细信息，且字典数据已经转码
+     *
+     * @param id
+     * @return
+     * @throws EqianyuanException
+     */
+    DemandVOBySearchInfo demandInfoBySearch(String id) throws EqianyuanException;
+
+    /**
+     * 根据需求状态及分页条件获取分页数据集合
+     *
+     * @param page
+     * @param isEnd
+     * @return
+     */
+    PageResponse demandListByMine(Page page, String isEnd) throws EqianyuanException;
 }

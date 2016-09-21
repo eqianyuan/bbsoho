@@ -1,19 +1,24 @@
 package cn.eqianyuan.bean.vo;
 
 import cn.eqianyuan.bean.po.DemandEmployPersonsPO;
+import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.List;
 
-public class DemandVOByInfo {
+/**
+ * Created by jason on 2016-09-14.
+ */
+public class DemandVOBySearchInfo {
+
     private String id;
 
     private String name;
 
-    private Integer workingLunch;
+    private String workingLunch;
 
     private String contact;
 
-    private Integer respectfulName;
+    private String respectfulName;
 
     private String phoneAreaCode;
 
@@ -25,11 +30,11 @@ public class DemandVOByInfo {
 
     private String demandDiscribe;
 
-    private String provinceId;
+    private String province;
 
-    private String cityId;
+    private String city;
 
-    private String countyId;
+    private String county;
 
     private String address;
 
@@ -39,14 +44,71 @@ public class DemandVOByInfo {
 
     private String demandSideId;
 
-    private Integer publishTime;
-
-    private Integer endTime;
+    private String publishTime;
 
     private List<DemandEmployPersons> demandEmployPersonsList;
 
-    public class DemandEmployPersons extends DemandEmployPersonsPO {
+    public class DemandEmployPersons{
 
+        private String industry;
+
+        private String workType;
+
+        private String work;
+
+        private String personsAmount;
+
+        private String workingYears;
+
+        private String remuneration;
+
+        public String getIndustry() {
+            return industry;
+        }
+
+        public void setIndustry(String industry) {
+            this.industry = industry;
+        }
+
+        public String getWorkType() {
+            return workType;
+        }
+
+        public void setWorkType(String workType) {
+            this.workType = workType;
+        }
+
+        public String getWork() {
+            return work;
+        }
+
+        public void setWork(String work) {
+            this.work = work;
+        }
+
+        public String getPersonsAmount() {
+            return personsAmount;
+        }
+
+        public void setPersonsAmount(String personsAmount) {
+            this.personsAmount = personsAmount;
+        }
+
+        public String getWorkingYears() {
+            return workingYears;
+        }
+
+        public void setWorkingYears(String workingYears) {
+            this.workingYears = workingYears;
+        }
+
+        public String getRemuneration() {
+            return remuneration;
+        }
+
+        public void setRemuneration(String remuneration) {
+            this.remuneration = remuneration;
+        }
     }
 
     public String getId() {
@@ -54,7 +116,7 @@ public class DemandVOByInfo {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getName() {
@@ -62,14 +124,14 @@ public class DemandVOByInfo {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
-    public Integer getWorkingLunch() {
+    public String getWorkingLunch() {
         return workingLunch;
     }
 
-    public void setWorkingLunch(Integer workingLunch) {
+    public void setWorkingLunch(String workingLunch) {
         this.workingLunch = workingLunch;
     }
 
@@ -78,14 +140,14 @@ public class DemandVOByInfo {
     }
 
     public void setContact(String contact) {
-        this.contact = contact == null ? null : contact.trim();
+        this.contact = contact;
     }
 
-    public Integer getRespectfulName() {
+    public String getRespectfulName() {
         return respectfulName;
     }
 
-    public void setRespectfulName(Integer respectfulName) {
+    public void setRespectfulName(String respectfulName) {
         this.respectfulName = respectfulName;
     }
 
@@ -94,7 +156,7 @@ public class DemandVOByInfo {
     }
 
     public void setPhoneAreaCode(String phoneAreaCode) {
-        this.phoneAreaCode = phoneAreaCode == null ? null : phoneAreaCode.trim();
+        this.phoneAreaCode = phoneAreaCode;
     }
 
     public Integer getTelephoneNumber() {
@@ -110,7 +172,7 @@ public class DemandVOByInfo {
     }
 
     public void setExtensionNumber(String extensionNumber) {
-        this.extensionNumber = extensionNumber == null ? null : extensionNumber.trim();
+        this.extensionNumber = extensionNumber;
     }
 
     public Long getMobileNumber() {
@@ -126,31 +188,31 @@ public class DemandVOByInfo {
     }
 
     public void setDemandDiscribe(String demandDiscribe) {
-        this.demandDiscribe = demandDiscribe == null ? null : demandDiscribe.trim();
+        this.demandDiscribe = demandDiscribe;
     }
 
-    public String getProvinceId() {
-        return provinceId;
+    public String getProvince() {
+        return province;
     }
 
-    public void setProvinceId(String provinceId) {
-        this.provinceId = provinceId == null ? null : provinceId.trim();
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getCityId() {
-        return cityId;
+    public String getCity() {
+        return city;
     }
 
-    public void setCityId(String cityId) {
-        this.cityId = cityId == null ? null : cityId.trim();
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public String getCountyId() {
-        return countyId;
+    public String getCounty() {
+        return county;
     }
 
-    public void setCountyId(String countyId) {
-        this.countyId = countyId == null ? null : countyId.trim();
+    public void setCounty(String county) {
+        this.county = county;
     }
 
     public String getAddress() {
@@ -158,7 +220,7 @@ public class DemandVOByInfo {
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+        this.address = address;
     }
 
     public String getBeginCycle() {
@@ -182,14 +244,14 @@ public class DemandVOByInfo {
     }
 
     public void setDemandSideId(String demandSideId) {
-        this.demandSideId = demandSideId == null ? null : demandSideId.trim();
+        this.demandSideId = demandSideId;
     }
 
-    public Integer getPublishTime() {
+    public String getPublishTime() {
         return publishTime;
     }
 
-    public void setPublishTime(Integer publishTime) {
+    public void setPublishTime(String publishTime) {
         this.publishTime = publishTime;
     }
 
@@ -199,13 +261,5 @@ public class DemandVOByInfo {
 
     public void setDemandEmployPersonsList(List<DemandEmployPersons> demandEmployPersonsList) {
         this.demandEmployPersonsList = demandEmployPersonsList;
-    }
-
-    public Integer getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Integer endTime) {
-        this.endTime = endTime;
     }
 }
