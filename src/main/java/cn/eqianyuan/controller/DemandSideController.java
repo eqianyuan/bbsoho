@@ -96,16 +96,6 @@ public class DemandSideController extends BaseController {
     }
 
     /**
-     * 会员（需求商）账号是否已经激活
-     *
-     * @return
-     */
-    @RequestMapping(value = "/isActivation", method = RequestMethod.GET)
-    @ResponseBody
-    public void isActivation(HttpServletRequest request, HttpServletResponse response) {
-    }
-
-    /**
      * 需求商基本信息
      *
      * @return

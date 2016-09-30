@@ -11,6 +11,7 @@ public class DemandVOBySearchList {
     private String endCycle;
     private String publishTime;
     private String work;
+    private String workText;
     private String workingYears;
     private String remuneration;
     private String workingLunch;
@@ -63,6 +64,14 @@ public class DemandVOBySearchList {
 
     public void setWork(String work) {
         this.work = work;
+    }
+
+    public String getWorkText() {
+        return workText;
+    }
+
+    public void setWorkText(String workText) {
+        this.workText = workText;
     }
 
     public String getWorkingYears() {

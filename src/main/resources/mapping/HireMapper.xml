@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.IHireDao" >
+  <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.HirePO" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="supplier_side_id" property="supplierSideId" jdbcType="VARCHAR" />
+    <result column="demand_id" property="demandId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remuneration" property="remuneration" jdbcType="INTEGER" />
+    <result column="work" property="work" jdbcType="VARCHAR" />
+    <result column="contract_comes_into_effect_time" property="contractComesIntoEffectTime" jdbcType="INTEGER" />
+    <result column="contract_expires_time" property="contractExpiresTime" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="BaseResultMapBySupplierHire" type="cn.eqianyuan.bean.po.SupplierHireDemandPO">
+    <id column="id" property="id" jdbcType="VARCHAR"/>
+    <id column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="begin_cycle" property="beginCycle" jdbcType="INTEGER"/>
+    <result column="end_cycle" property="endCycle" jdbcType="INTEGER"/>
+    <result column="demand_discribe" property="demandDiscribe" jdbcType="VARCHAR"/>
+    <result column="work" property="work" jdbcType="VARCHAR"/>
+    <result column="persons_amount" property="personsAmount" jdbcType="INTEGER"/>
+    <result column="sign_up_work" property="signUpWork" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+  </resultMap>
+  <resultMap id="BaseResultMapByDemandHire" type="cn.eqianyuan.bean.po.DemandHireSupplierPO" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="work" property="work" jdbcType="VARCHAR" />
+    <result column="contract_comes_into_effect_time" property="contractComesIntoEffectTime" jdbcType="INTEGER" />
+    <result column="contract_expires_time" property="contractExpiresTime" jdbcType="INTEGER" />
+    <result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+    <result column="head_portrait" property="headPortrait" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="remuneration" property="remuneration" jdbcType="INTEGER" />
+    <result column="working_years" property="workingYears" jdbcType="INTEGER" />
+    <result column="expect_pay" property="expectPay" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, supplier_side_id, demand_id, status, remuneration, work, contract_comes_into_effect_time, 
+    contract_expires_time, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from hire
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from hire
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.eqianyuan.bean.po.HirePO" >
+    insert into hire (id, supplier_side_id, demand_id, 
+      status, remuneration, work, 
+      contract_comes_into_effect_time, contract_expires_time, 
+      create_time)
+    values (#{id,jdbcType=VARCHAR}, #{supplierSideId,jdbcType=VARCHAR}, #{demandId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{remuneration,jdbcType=INTEGER}, #{work,jdbcType=VARCHAR}, 
+      #{contractComesIntoEffectTime,jdbcType=INTEGER}, #{contractExpiresTime,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.HirePO" >
+    insert into hire
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="supplierSideId != null" >
+        supplier_side_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remuneration != null" >
+        remuneration,
+      </if>
+      <if test="work != null" >
+        work,
+      </if>
+      <if test="contractComesIntoEffectTime != null" >
+        contract_comes_into_effect_time,
+      </if>
+      <if test="contractExpiresTime != null" >
+        contract_expires_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierSideId != null" >
+        #{supplierSideId,jdbcType=VARCHAR},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remuneration != null" >
+        #{remuneration,jdbcType=INTEGER},
+      </if>
+      <if test="work != null" >
+        #{work,jdbcType=VARCHAR},
+      </if>
+      <if test="contractComesIntoEffectTime != null" >
+        #{contractComesIntoEffectTime,jdbcType=INTEGER},
+      </if>
+      <if test="contractExpiresTime != null" >
+        #{contractExpiresTime,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.HirePO" >
+    update hire
+    <set >
+      <if test="supplierSideId != null" >
+        supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remuneration != null" >
+        remuneration = #{remuneration,jdbcType=INTEGER},
+      </if>
+      <if test="work != null" >
+        work = #{work,jdbcType=VARCHAR},
+      </if>
+      <if test="contractComesIntoEffectTime != null" >
+        contract_comes_into_effect_time = #{contractComesIntoEffectTime,jdbcType=INTEGER},
+      </if>
+      <if test="contractExpiresTime != null" >
+        contract_expires_time = #{contractExpiresTime,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.HirePO" >
+    update hire
+    set supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+      demand_id = #{demandId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      remuneration = #{remuneration,jdbcType=INTEGER},
+      work = #{work,jdbcType=VARCHAR},
+      contract_comes_into_effect_time = #{contractComesIntoEffectTime,jdbcType=INTEGER},
+      contract_expires_time = #{contractExpiresTime,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="countBySupplierId" resultType="java.lang.Integer">
+    select sum(cnt) from (
+    select count(1) cnt from hire, demand where hire.supplier_side_id = #{supplierId} and hire.demand_id = demand.id
+    union
+    select count(1) cnt from hire_history hh, demand where hh.supplier_side_id = #{supplierId} and hh.demand_id = demand.id and hh.status in (1, 2)
+    ) cnt
+  </select>
+
+  <select id="selectBySupplierPagination" resultMap="BaseResultMapBySupplierHire">
+    select * from (
+    select
+    demand.id, demand.name, demand.begin_cycle, demand.end_cycle, demand.demand_discribe, hire.`work` sign_up_work, GROUP_CONCAT(dep.work) work, sum(dep.persons_amount) persons_amount, '' status, hire.create_time
+    from hire, demand, demand_employ_persons dep
+    where
+    demand.id = hire.demand_id
+    and
+    demand.id = dep.demand_id
+    and
+    hire.supplier_side_id = #{supplierId}
+    group by dep.work
+    union
+    select
+    demand.id, demand.name, demand.begin_cycle, demand.end_cycle, demand.demand_discribe, hh.`work` sign_up_work, GROUP_CONCAT(dep.work) work, sum(dep.persons_amount) persons_amount, hh.status, hh.create_time
+    from hire_history hh, demand, demand_employ_persons dep
+    where
+    demand.id = hh.demand_id
+    and
+    demand.id = dep.demand_id
+    and
+    hh.supplier_side_id = #{supplierId}
+    group by dep.work
+    ) unionTB
+    order by create_time desc
+    limit ${page.start}, ${page.pageSize}
+  </select>
+
+  <select id="countByDemandId" resultType="java.lang.Integer">
+    select sum(cnt) from (
+    select count(1) cnt from hire, demand where hire.demand_id = #{demandId} and hire.demand_id = demand.id and demand.demand_side_id = #{demandSideId}
+    union
+    select count(1) cnt from hire_history hh, demand where hh.demand_id = #{demandId}  and hh.demand_id = demand.id and demand.demand_side_id = #{demandSideId} and hh.status in (2)
+    ) cnt
+  </select>
+  <select id="selectByDemandPagination" resultMap="BaseResultMapByDemandHire">
+    select * from (
+    select
+    demand.id,hire.work, hire.contract_comes_into_effect_time , hire.contract_expires_time,
+    ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,hire.status,hire.remuneration
+    from hire, demand, supplier_side ss, resume
+    where
+    hire.supplier_side_id = ss.id
+    and
+    hire.demand_id = #{demandId}
+    and
+    hire.demand_id = demand.id
+    and
+    demand.demand_side_id = #{demandSideId}
+    and
+    ss.id = resume.supplier_side_id
+    union
+    select
+    demand.id,hh.work, hh.contract_comes_into_effect_time , hh.contract_expires_time,
+    ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,hh.status,hh.remuneration
+    from hire_history hh, demand, supplier_side ss, resume
+    where
+    hh.supplier_side_id = ss.id
+    and
+    hh.demand_id = #{demandId}
+    and
+    hh.demand_id = demand.id
+    and
+    demand.demand_side_id = #{demandSideId}
+    and
+    ss.id = resume.supplier_side_id
+    ) unionTB
+    order by status asc
+    limit ${page.start}, ${page.pageSize}
+  </select>
+</mapper>

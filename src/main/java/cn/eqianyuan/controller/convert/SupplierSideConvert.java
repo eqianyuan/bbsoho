@@ -22,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -458,5 +459,438 @@ public class SupplierSideConvert {
         }
 
         return supplierResumeVOBySearchInfo;
+    }
+
+    /**
+     * 将需求报名供应商PO转为VO
+     *
+     * @param demandSignUpSupplierPOs
+     * @return
+     * @throws EqianyuanException
+     */
+    public List<DemandSignUpSupplierVO> demandSignUpSupplier(List<DemandSignUpSupplierPO> demandSignUpSupplierPOs) throws EqianyuanException {
+        if (CollectionUtils.isEmpty(demandSignUpSupplierPOs)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("demandSignUpSupplier fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取期望薪资集合
+        List<DataDictionaryPO> expectPayDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.EXPECT_PAY.toString());
+        if (CollectionUtils.isEmpty(expectPayDictionary)) {
+            logger.warn("demandSignUpSupplier fail , because group key [" + DataDictionaryConf.EXPECT_PAY.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取工龄集合
+        List<DataDictionaryPO> workingYearsDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORKING_YEARS.toString());
+        if (CollectionUtils.isEmpty(workingYearsDictionary)) {
+            logger.warn("demandSignUpSupplier fail , because group key [" + DataDictionaryConf.WORKING_YEARS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        List<DemandSignUpSupplierVO> demandSignUpSupplierVOs = new ArrayList<DemandSignUpSupplierVO>();
+        for (DemandSignUpSupplierPO demandSignUpSupplierPO : demandSignUpSupplierPOs) {
+            DemandSignUpSupplierVO demandSignUpSupplierVO = new DemandSignUpSupplierVO();
+            BeanUtils.copyProperties(demandSignUpSupplierPO, demandSignUpSupplierVO);
+            demandSignUpSupplierVO.setSignUpTime(CalendarUtil.secondsTimeToDateTimeString(demandSignUpSupplierPO.getSignUpTime(), CalendarUtil.Format_Date));
+
+            //转换报名岗位工种数据
+            for (DataDictionaryPO work : workDictionary) {
+                if (StringUtils.equals(demandSignUpSupplierPO.getSignUpWork(), work.getGroupValKey())) {
+                    demandSignUpSupplierVO.setSignUpWork(work.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换期望薪资数据
+            for (DataDictionaryPO expectPay : expectPayDictionary) {
+                if (StringUtils.equals(String.valueOf(demandSignUpSupplierPO.getExpectPay()), expectPay.getGroupValKey())) {
+                    demandSignUpSupplierVO.setExpectPay(expectPay.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换工龄数据
+            for (DataDictionaryPO workingYears : workingYearsDictionary) {
+                if (StringUtils.equals(String.valueOf(demandSignUpSupplierPO.getWorkingYears()), workingYears.getGroupValKey())) {
+                    demandSignUpSupplierVO.setWorkingYears(workingYears.getGroupValVal());
+                    break;
+                }
+            }
+
+            demandSignUpSupplierVOs.add(demandSignUpSupplierVO);
+        }
+
+        return demandSignUpSupplierVOs;
+    }
+
+    /**
+     * 将需求约见供应商PO转为VO
+     *
+     * @param demandSignUpMeetSupplierPOs
+     * @return
+     * @throws EqianyuanException
+     */
+    public List<DemandSignUpMeetSupplierVO> demandSignUpMeetSupplier(List<DemandSignUpMeetSupplierPO> demandSignUpMeetSupplierPOs) throws EqianyuanException {
+        if (CollectionUtils.isEmpty(demandSignUpMeetSupplierPOs)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("demandSignUpMeetSupplier fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取期望薪资集合
+        List<DataDictionaryPO> expectPayDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.EXPECT_PAY.toString());
+        if (CollectionUtils.isEmpty(expectPayDictionary)) {
+            logger.warn("demandSignUpMeetSupplier fail , because group key [" + DataDictionaryConf.EXPECT_PAY.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取工龄集合
+        List<DataDictionaryPO> workingYearsDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORKING_YEARS.toString());
+        if (CollectionUtils.isEmpty(workingYearsDictionary)) {
+            logger.warn("demandSignUpMeetSupplier fail , because group key [" + DataDictionaryConf.WORKING_YEARS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取约见状态集合
+        List<DataDictionaryPO> signUpMeetDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.SIGN_UP_MEET_STATUS.toString());
+        if (CollectionUtils.isEmpty(signUpMeetDictionary)) {
+            logger.warn("demandSignUpMeetSupplier fail , because group key [" + DataDictionaryConf.SIGN_UP_MEET_STATUS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        List<DemandSignUpMeetSupplierVO> demandSignUpMeetSupplierVOs = new ArrayList<DemandSignUpMeetSupplierVO>();
+        for (DemandSignUpMeetSupplierPO demandSignUpMeetSupplierPO : demandSignUpMeetSupplierPOs) {
+            DemandSignUpMeetSupplierVO demandSignUpMeetSupplierVO = new DemandSignUpMeetSupplierVO();
+            BeanUtils.copyProperties(demandSignUpMeetSupplierPO, demandSignUpMeetSupplierVO);
+            demandSignUpMeetSupplierVO.setMeetTime(CalendarUtil.secondsTimeToDateTimeString(demandSignUpMeetSupplierPO.getMeetTime(), CalendarUtil.Format_Date));
+
+            //转换报名岗位工种数据
+            for (DataDictionaryPO work : workDictionary) {
+                if (StringUtils.equals(demandSignUpMeetSupplierPO.getSignUpWork(), work.getGroupValKey())) {
+                    demandSignUpMeetSupplierVO.setSignUpWork(work.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换期望薪资数据
+            for (DataDictionaryPO expectPay : expectPayDictionary) {
+                if (StringUtils.equals(String.valueOf(demandSignUpMeetSupplierPO.getExpectPay()), expectPay.getGroupValKey())) {
+                    demandSignUpMeetSupplierVO.setExpectPay(expectPay.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换工龄数据
+            for (DataDictionaryPO workingYears : workingYearsDictionary) {
+                if (StringUtils.equals(String.valueOf(demandSignUpMeetSupplierPO.getWorkingYears()), workingYears.getGroupValKey())) {
+                    demandSignUpMeetSupplierVO.setWorkingYears(workingYears.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换约见数据
+            for (DataDictionaryPO signUpMeet : signUpMeetDictionary) {
+                if (StringUtils.equals(String.valueOf(demandSignUpMeetSupplierPO.getStatus()), signUpMeet.getGroupValKey())) {
+                    demandSignUpMeetSupplierVO.setStatusText(signUpMeet.getGroupValVal());
+                    break;
+                }
+            }
+
+            demandSignUpMeetSupplierVOs.add(demandSignUpMeetSupplierVO);
+        }
+
+        return demandSignUpMeetSupplierVOs;
+    }
+
+    /**
+     * 将需求聘用供应商PO转为VO
+     *
+     * @param demandHireSupplierPOs
+     * @return
+     * @throws EqianyuanException
+     */
+    public List<DemandHireSupplierVO> demandHireSupplier(List<DemandHireSupplierPO> demandHireSupplierPOs) throws EqianyuanException {
+        if (CollectionUtils.isEmpty(demandHireSupplierPOs)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("demandHireSupplier fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取期望薪资集合
+        List<DataDictionaryPO> expectPayDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.EXPECT_PAY.toString());
+        if (CollectionUtils.isEmpty(expectPayDictionary)) {
+            logger.warn("demandHireSupplier fail , because group key [" + DataDictionaryConf.EXPECT_PAY.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取工龄集合
+        List<DataDictionaryPO> workingYearsDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORKING_YEARS.toString());
+        if (CollectionUtils.isEmpty(workingYearsDictionary)) {
+            logger.warn("demandHireSupplier fail , because group key [" + DataDictionaryConf.WORKING_YEARS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取聘用状态集合
+        List<DataDictionaryPO> hiredDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.HIRE_STATUS.toString());
+        if (CollectionUtils.isEmpty(hiredDictionary)) {
+            logger.warn("demandHireSupplier fail , because group key [" + DataDictionaryConf.HIRE_STATUS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        List<DemandHireSupplierVO> demandHireSupplierVOs = new ArrayList<DemandHireSupplierVO>();
+        for (DemandHireSupplierPO demandHireSupplierPO : demandHireSupplierPOs) {
+            DemandHireSupplierVO demandHireSupplierVO = new DemandHireSupplierVO();
+            BeanUtils.copyProperties(demandHireSupplierPO, demandHireSupplierVO);
+            demandHireSupplierVO.setContractComesIntoEffectTime(CalendarUtil.secondsTimeToDateTimeString(demandHireSupplierPO.getContractComesIntoEffectTime(), CalendarUtil.Format_DateMinute));
+            demandHireSupplierVO.setContractExpiresTime(CalendarUtil.secondsTimeToDateTimeString(demandHireSupplierPO.getContractExpiresTime(), CalendarUtil.Format_DateMinute));
+
+            //转换报名岗位工种数据
+            for (DataDictionaryPO work : workDictionary) {
+                if (StringUtils.equals(demandHireSupplierPO.getWork(), work.getGroupValKey())) {
+                    demandHireSupplierVO.setWork(work.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换期望薪资数据
+            for (DataDictionaryPO expectPay : expectPayDictionary) {
+                if (StringUtils.equals(String.valueOf(demandHireSupplierPO.getExpectPay()), expectPay.getGroupValKey())) {
+                    demandHireSupplierVO.setExpectPay(expectPay.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换工龄数据
+            for (DataDictionaryPO workingYears : workingYearsDictionary) {
+                if (StringUtils.equals(String.valueOf(demandHireSupplierPO.getWorkingYears()), workingYears.getGroupValKey())) {
+                    demandHireSupplierVO.setWorkingYears(workingYears.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换聘用数据
+            for (DataDictionaryPO hire : hiredDictionary) {
+                if (StringUtils.equals(String.valueOf(demandHireSupplierPO.getStatus()), hire.getGroupValKey())) {
+                    demandHireSupplierVO.setStatusText(hire.getGroupValVal());
+                    break;
+                }
+            }
+
+            demandHireSupplierVOs.add(demandHireSupplierVO);
+        }
+
+        return demandHireSupplierVOs;
+    }
+
+    /**
+     * 将供应商报名需求PO转为VO
+     *
+     * @param supplierSignUpDemandPOs
+     * @return
+     * @throws EqianyuanException
+     */
+    public List<SupplierSignUpDemandVO> supplierSignUpDemand(List<SupplierSignUpDemandPO> supplierSignUpDemandPOs) throws EqianyuanException {
+        if (CollectionUtils.isEmpty(supplierSignUpDemandPOs)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("supplierSignUpDemand fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        List<SupplierSignUpDemandVO> supplierSignUpDemandVOs = new ArrayList<SupplierSignUpDemandVO>();
+        for (SupplierSignUpDemandPO supplierSignUpDemandPO : supplierSignUpDemandPOs) {
+            SupplierSignUpDemandVO supplierSignUpDemandVO = new SupplierSignUpDemandVO();
+            BeanUtils.copyProperties(supplierSignUpDemandPO, supplierSignUpDemandVO);
+            supplierSignUpDemandVO.setBeginCycle(CalendarUtil.secondsTimeToDateTimeString(supplierSignUpDemandPO.getBeginCycle(), CalendarUtil.Format_Date));
+            supplierSignUpDemandVO.setEndCycle(CalendarUtil.secondsTimeToDateTimeString(supplierSignUpDemandPO.getEndCycle(), CalendarUtil.Format_Date));
+
+            //转换需求工种数据
+            if (!StringUtils.isEmpty(supplierSignUpDemandPO.getWork())) {
+                List<String> workList = new ArrayList<String>();
+                for (String workKey : supplierSignUpDemandPO.getWork().split(",")) {
+                    for (DataDictionaryPO work : workDictionary) {
+                        if (StringUtils.equals(workKey, work.getGroupValKey())) {
+                            workList.add(work.getGroupValVal());
+                            break;
+                        }
+                    }
+                }
+                supplierSignUpDemandVO.setWork(StringUtils.join(workList, ","));
+            }
+
+
+            //转换报名岗位工种数据
+            for (DataDictionaryPO work : workDictionary) {
+                if (StringUtils.equals(supplierSignUpDemandPO.getSignUpWork(), work.getGroupValKey())) {
+                    supplierSignUpDemandVO.setSignUpWork(work.getGroupValVal());
+                    break;
+                }
+            }
+
+            supplierSignUpDemandVOs.add(supplierSignUpDemandVO);
+        }
+
+        return supplierSignUpDemandVOs;
+    }
+
+    /**
+     * 将供应商约见需求PO转为VO
+     *
+     * @param supplierSignUpMeetDemandPOs
+     * @return
+     * @throws EqianyuanException
+     */
+    public List<SupplierSignUpMeetDemandVO> supplierSignUpMeetDemand(List<SupplierSignUpMeetDemandPO> supplierSignUpMeetDemandPOs) throws EqianyuanException {
+        if (CollectionUtils.isEmpty(supplierSignUpMeetDemandPOs)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("supplierSignUpMeetDemand fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取约见状态集合
+        List<DataDictionaryPO> signUpMeetDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.SIGN_UP_MEET_STATUS.toString());
+        if (CollectionUtils.isEmpty(signUpMeetDictionary)) {
+            logger.warn("supplierSignUpMeetDemand fail , because group key [" + DataDictionaryConf.SIGN_UP_MEET_STATUS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        List<SupplierSignUpMeetDemandVO> supplierSignUpMeetDemandVOs = new ArrayList<SupplierSignUpMeetDemandVO>();
+        for (SupplierSignUpMeetDemandPO supplierSignUpMeetDemandPO : supplierSignUpMeetDemandPOs) {
+            SupplierSignUpMeetDemandVO supplierSignUpMeetDemandVO = new SupplierSignUpMeetDemandVO();
+            BeanUtils.copyProperties(supplierSignUpMeetDemandPO, supplierSignUpMeetDemandVO);
+            supplierSignUpMeetDemandVO.setBeginCycle(CalendarUtil.secondsTimeToDateTimeString(supplierSignUpMeetDemandPO.getBeginCycle(), CalendarUtil.Format_Date));
+            supplierSignUpMeetDemandVO.setEndCycle(CalendarUtil.secondsTimeToDateTimeString(supplierSignUpMeetDemandPO.getEndCycle(), CalendarUtil.Format_Date));
+
+            //转换需求工种数据
+            if (!StringUtils.isEmpty(supplierSignUpMeetDemandPO.getWork())) {
+                List<String> workList = new ArrayList<String>();
+                for (String workKey : supplierSignUpMeetDemandPO.getWork().split(",")) {
+                    for (DataDictionaryPO work : workDictionary) {
+                        if (StringUtils.equals(workKey, work.getGroupValKey())) {
+                            workList.add(work.getGroupValVal());
+                            break;
+                        }
+                    }
+                }
+                supplierSignUpMeetDemandVO.setWork(StringUtils.join(workList, ","));
+            }
+
+
+            //转换报名岗位工种数据
+            for (DataDictionaryPO work : workDictionary) {
+                if (StringUtils.equals(supplierSignUpMeetDemandPO.getSignUpWork(), work.getGroupValKey())) {
+                    supplierSignUpMeetDemandVO.setSignUpWork(work.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换约见状态数据
+            for (DataDictionaryPO signUpMeet : signUpMeetDictionary) {
+                if (StringUtils.equals(String.valueOf(supplierSignUpMeetDemandPO.getStatus()), signUpMeet.getGroupValKey())) {
+                    supplierSignUpMeetDemandVO.setStatusText(signUpMeet.getGroupValVal());
+                    break;
+                }
+            }
+
+            supplierSignUpMeetDemandVOs.add(supplierSignUpMeetDemandVO);
+        }
+
+        return supplierSignUpMeetDemandVOs;
+    }
+
+    /**
+     * 将供应商聘用需求PO转为VO
+     *
+     * @param supplierHireDemandPOs
+     * @return
+     * @throws EqianyuanException
+     */
+    public List<SupplierHireDemandVO> supplierHireDemand(List<SupplierHireDemandPO> supplierHireDemandPOs) throws EqianyuanException {
+        if (CollectionUtils.isEmpty(supplierHireDemandPOs)) {
+            return Collections.EMPTY_LIST;
+        }
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("supplierHireDemand fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //从数据字典缓存中获取聘用状态集合
+        List<DataDictionaryPO> hireDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.HIRE_STATUS.toString());
+        if (CollectionUtils.isEmpty(hireDictionary)) {
+            logger.warn("supplierHireDemand fail , because group key [" + DataDictionaryConf.HIRE_STATUS.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        List<SupplierHireDemandVO> supplierHireDemandVOs = new ArrayList<SupplierHireDemandVO>();
+        for (SupplierHireDemandPO supplierHireDemandPO : supplierHireDemandPOs) {
+            SupplierHireDemandVO supplierHireDemandVO = new SupplierHireDemandVO();
+            BeanUtils.copyProperties(supplierHireDemandPO, supplierHireDemandVO);
+            supplierHireDemandVO.setBeginCycle(CalendarUtil.secondsTimeToDateTimeString(supplierHireDemandPO.getBeginCycle(), CalendarUtil.Format_Date));
+            supplierHireDemandVO.setEndCycle(CalendarUtil.secondsTimeToDateTimeString(supplierHireDemandPO.getEndCycle(), CalendarUtil.Format_Date));
+
+            //转换需求工种数据
+            if (!StringUtils.isEmpty(supplierHireDemandPO.getWork())) {
+                List<String> workList = new ArrayList<String>();
+                for (String workKey : supplierHireDemandPO.getWork().split(",")) {
+                    for (DataDictionaryPO work : workDictionary) {
+                        if (StringUtils.equals(workKey, work.getGroupValKey())) {
+                            workList.add(work.getGroupValVal());
+                            break;
+                        }
+                    }
+                }
+                supplierHireDemandVO.setWork(StringUtils.join(workList, ","));
+            }
+
+
+            //转换报名岗位工种数据
+            for (DataDictionaryPO work : workDictionary) {
+                if (StringUtils.equals(supplierHireDemandPO.getSignUpWork(), work.getGroupValKey())) {
+                    supplierHireDemandVO.setSignUpWork(work.getGroupValVal());
+                    break;
+                }
+            }
+
+            //转换聘用状态数据
+            for (DataDictionaryPO hire : hireDictionary) {
+                if (StringUtils.equals(String.valueOf(supplierHireDemandPO.getStatus()), hire.getGroupValKey())) {
+                    supplierHireDemandVO.setStatusText(hire.getGroupValVal());
+                    break;
+                }
+            }
+
+            supplierHireDemandVOs.add(supplierHireDemandVO);
+        }
+
+        return supplierHireDemandVOs;
     }
 }

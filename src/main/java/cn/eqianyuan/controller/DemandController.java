@@ -5,10 +5,12 @@ import cn.eqianyuan.bean.ServerResponse;
 import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.service.IDemandService;
+import cn.eqianyuan.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -99,4 +101,42 @@ public class DemandController extends BaseController {
         return demandService.demandListByMine(page, isEnd);
     }
 
+    /**
+     * 查询需求中已报名的人员信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/signUpByDemand/{demandId}", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse signUpByDemand(@PathVariable("demandId") String demandId,
+                                       Page page) throws EqianyuanException {
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
+        return demandService.signUpByDemand(demandSideVOByLogin.getId(), demandId, page);
+    }
+
+    /**
+     * 查询需求中已约见的人员信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/signUpMeetByDemand/{demandId}", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse signUpMeetByDemand(@PathVariable("demandId") String demandId,
+                                           Page page) throws EqianyuanException {
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
+        return demandService.signUpMeetByDemand(demandSideVOByLogin.getId(), demandId, page);
+    }
+
+    /**
+     * 查询需求中已聘用的人员信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/hireByDemand/{demandId}", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse hireByDemand(@PathVariable("demandId") String demandId,
+                                     Page page) throws EqianyuanException {
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
+        return demandService.hireByDemand(demandSideVOByLogin.getId(), demandId, page);
+    }
 }

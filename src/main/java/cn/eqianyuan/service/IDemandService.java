@@ -57,4 +57,36 @@ public interface IDemandService {
      */
     PageResponse demandListByMine(Page page, String isEnd) throws EqianyuanException;
 
+    /**
+     * 查询需求中已报名的人员信息
+     *
+     * @param demandSideId 需求商编号
+     * @param demandId     需求编号
+     * @param page         分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse signUpByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException;
+
+    /**
+     * 查询需求中已约见的人员信息
+     *
+     * @param demandSideId 需求商编号
+     * @param demandId     需求编号
+     * @param page         分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse signUpMeetByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException;
+
+    /**
+     * 查询需求中已聘用的人员信息
+     *
+     * @param demandSideId 需求商编号
+     * @param demandId     需求编号
+     * @param page         分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse hireByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException;
 }

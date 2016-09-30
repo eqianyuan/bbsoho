@@ -69,6 +69,12 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
     @Autowired
     private ISignUpDao signUpDao;
 
+    @Autowired
+    private ISignUpMeetDao signUpMeetDao;
+
+    @Autowired
+    private IHireDao hireDao;
+
     //真实姓名DB许可字节长度
     private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;
     //昵称DB许可字节长度
@@ -1224,10 +1230,47 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
      * @param supplierId 供应方用户编号
      * @throws EqianyuanException
      */
-    public void signUp(String demandId, String supplierId) throws EqianyuanException {
+    public void signUp(String demandId, String supplierId, String work) throws EqianyuanException {
         if (StringUtils.isEmpty(demandId)) {
             logger.warn("signUp fail , because demand id is null");
             throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
+        if (StringUtils.isEmpty(work)) {
+            logger.warn("signUp fail , because work is null");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        /**
+         * 检查行业工种正确性
+         */
+        List<SupplierSideResumeDTO.WorkProficiencyDTO> workProficiencyDTOList = new ArrayList<SupplierSideResumeDTO.WorkProficiencyDTO>();
+        {
+            List<DataDictionaryPO> dataDictionaryPOs;
+
+            //从数据字典缓存中获取行业工种集合
+            dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+            if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+                logger.warn("signUp fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
+
+            //行业工种是否存在字典数据中
+            boolean workDictionary = false;
+
+            //检查行业工种是否存在或正确
+            for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+                if (StringUtils.equalsIgnoreCase(dataDictionaryPO.getGroupValKey(), work)) {
+                    workDictionary = true;
+                    break;
+                }
+            }
+
+            //当行业工种值不存在字典数据中时，抛出错误信息
+            if (!workDictionary) {
+                logger.warn("signUp fail , because work data not exists data dictionary");
+                throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+            }
         }
 
         //先根据用户编号和需求编号查询数据，如已存在报名信息，则提示已经报过名
@@ -1243,6 +1286,91 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         signUpPO.setDemandId(demandId);
         signUpPO.setSupplierSideId(supplierId);
         signUpPO.setCreateTime(CalendarUtil.getSystemSeconds());
+        signUpPO.setWork(work);
         signUpDao.insertSelective(signUpPO);
+    }
+
+    /**
+     * 查询供应商报名需求分页
+     *
+     * @param supplierId 供应商编号
+     * @param page       分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse signUpDemand(String supplierId, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = signUpDao.countBySupplierId(supplierId);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<SupplierSignUpDemandPO> supplierSignUpDemandPOs = signUpDao.selectBySupplierPagination(supplierId, page);
+
+        if (CollectionUtils.isEmpty(supplierSignUpDemandPOs)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        return new PageResponse(page, supplierConvert.supplierSignUpDemand(supplierSignUpDemandPOs));
+    }
+
+    /**
+     * 查询供应商约见需求分页
+     *
+     * @param supplierId 供应商编号
+     * @param page       分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse signUpMeetDemand(String supplierId, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = signUpMeetDao.countBySupplierId(supplierId);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<SupplierSignUpMeetDemandPO> supplierSignUpMeetDemandPOs = signUpMeetDao.selectBySupplierPagination(supplierId, page);
+
+        if (CollectionUtils.isEmpty(supplierSignUpMeetDemandPOs)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        return new PageResponse(page, supplierConvert.supplierSignUpMeetDemand(supplierSignUpMeetDemandPOs));
+    }
+
+    /**
+     * 查询供应商聘用需求分页
+     *
+     * @param supplierId 供应商编号
+     * @param page       分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse hireDemand(String supplierId, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = hireDao.countBySupplierId(supplierId);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<SupplierHireDemandPO> supplierHireDemandPOs = hireDao.selectBySupplierPagination(supplierId, page);
+
+        if (CollectionUtils.isEmpty(supplierHireDemandPOs)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        return new PageResponse(page, supplierConvert.supplierHireDemand(supplierHireDemandPOs));
     }
 }

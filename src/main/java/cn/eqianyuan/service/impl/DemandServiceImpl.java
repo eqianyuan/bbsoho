@@ -4,17 +4,15 @@ import cn.eqianyuan.bean.PageResponse;
 import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
-import cn.eqianyuan.bean.po.DemandEmployPersonsPO;
-import cn.eqianyuan.bean.po.DemandPO;
-import cn.eqianyuan.bean.po.DemandPOBySearchList;
+import cn.eqianyuan.bean.po.*;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
 import cn.eqianyuan.controller.convert.DemandConvert;
+import cn.eqianyuan.controller.convert.SupplierSideConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
-import cn.eqianyuan.dao.IDemandDao;
-import cn.eqianyuan.dao.IDemandEmployPersonsDao;
+import cn.eqianyuan.dao.*;
 import cn.eqianyuan.service.IDemandService;
 import cn.eqianyuan.service.convert.ServiceDemandConvert;
 import cn.eqianyuan.util.CalendarUtil;
@@ -49,7 +47,19 @@ public class DemandServiceImpl implements IDemandService {
     private DemandConvert demandConvert;
 
     @Autowired
+    private SupplierSideConvert supplierSideConvert;
+
+    @Autowired
     private IDemandDao demandDao;
+
+    @Autowired
+    private ISignUpDao signUpDao;
+
+    @Autowired
+    private ISignUpMeetDao signUpMeetDao;
+
+    @Autowired
+    private IHireDao hireDao;
 
     @Autowired
     private IDemandEmployPersonsDao demandEmployPersonsDao;
@@ -433,6 +443,93 @@ public class DemandServiceImpl implements IDemandService {
         }
 
         return new PageResponse(page, demandConvert.demandListByMine(demandDTOs));
+    }
+
+    /**
+     * 查询需求中已报名的人员信息
+     *
+     * @param demandSideId 需求商编号
+     * @param demandId     需求编号
+     * @param page         分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse signUpByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = signUpDao.countByDemandId(demandSideId, demandId);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandSignUpSupplierPO> demandPOBySearchLists = signUpDao.selectByDemandPagination(demandSideId, demandId, page);
+
+        if (CollectionUtils.isEmpty(demandPOBySearchLists)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        return new PageResponse(page, supplierSideConvert.demandSignUpSupplier(demandPOBySearchLists));
+    }
+
+    /**
+     * 查询需求中已约见的人员信息
+     *
+     * @param demandSideId 需求商编号
+     * @param demandId     需求编号
+     * @param page         分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse signUpMeetByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = signUpMeetDao.countByDemandId(demandSideId, demandId);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandSignUpMeetSupplierPO> demandSignUpMeetSupplierPOs = signUpMeetDao.selectByDemandPagination(demandSideId, demandId, page);
+
+        if (CollectionUtils.isEmpty(demandSignUpMeetSupplierPOs)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        return new PageResponse(page, supplierSideConvert.demandSignUpMeetSupplier(demandSignUpMeetSupplierPOs));
+    }
+
+    /**
+     * 查询需求中已聘用的人员信息
+     *
+     * @param demandSideId 需求商编号
+     * @param demandId     需求编号
+     * @param page         分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    public PageResponse hireByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException {
+        //根据条件查询数据条数
+        Integer rowCount = hireDao.countByDemandId(demandSideId, demandId);
+
+        page.setTotalRow(rowCount);
+        if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
+            logger.info("get total count is null");
+            return new PageResponse(page, null);
+        }
+
+        List<DemandHireSupplierPO> demandHireSupplierPOs = hireDao.selectByDemandPagination(demandSideId, demandId, page);
+
+        if (CollectionUtils.isEmpty(demandHireSupplierPOs)) {
+            logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
+            return new PageResponse(page, null);
+        }
+
+        return new PageResponse(page, supplierSideConvert.demandHireSupplier(demandHireSupplierPOs));
     }
 
 }

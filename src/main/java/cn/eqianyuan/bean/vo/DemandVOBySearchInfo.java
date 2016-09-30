@@ -56,6 +56,8 @@ public class DemandVOBySearchInfo {
 
         private String work;
 
+        private String workText;
+
         private String personsAmount;
 
         private String workingYears;
@@ -84,6 +86,14 @@ public class DemandVOBySearchInfo {
 
         public void setWork(String work) {
             this.work = work;
+        }
+
+        public String getWorkText() {
+            return workText;
+        }
+
+        public void setWorkText(String workText) {
+            this.workText = workText;
         }
 
         public String getPersonsAmount() {

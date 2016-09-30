@@ -124,7 +124,7 @@ public class DemandConvert {
             //转换工种数据
             for (DataDictionaryPO work : workDictionary) {
                 if (StringUtils.equals(demandByListSearchDTO.getWork(), work.getGroupValKey())) {
-                    demandVOBySearchList.setWork(work.getGroupValVal());
+                    demandVOBySearchList.setWorkText(work.getGroupValVal());
                     break;
                 }
             }
@@ -279,7 +279,7 @@ public class DemandConvert {
                 //转换工种数据
                 for (DataDictionaryPO work : workDictionary) {
                     if (StringUtils.equals(demandEmployPersonsDTO.getWork(), work.getGroupValKey())) {
-                        demandEmployPersons.setWork(work.getGroupValVal());
+                        demandEmployPersons.setWorkText(work.getGroupValVal());
                         break;
                     }
                 }
@@ -345,7 +345,7 @@ public class DemandConvert {
                         }
                     }
                 }
-                demandVOBySearchList.setWork(StringUtils.join(workList, ","));
+                demandVOBySearchList.setWorkText(StringUtils.join(workList, ","));
 
             }
 

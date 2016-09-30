@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.eqianyuan.dao.ISignUpMeetDao" >
+  <resultMap id="BaseResultMap" type="cn.eqianyuan.bean.po.SignUpMeetPO" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="supplier_side_id" property="supplierSideId" jdbcType="VARCHAR" />
+    <result column="demand_id" property="demandId" jdbcType="VARCHAR" />
+    <result column="work" property="work" jdbcType="VARCHAR" />
+    <result column="meet_time" property="meetTime" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="contact" property="contact" jdbcType="VARCHAR" />
+    <result column="respectful_name" property="respectfulName" jdbcType="INTEGER" />
+    <result column="phone_area_code" property="phoneAreaCode" jdbcType="VARCHAR" />
+    <result column="telephone_number" property="telephoneNumber" jdbcType="INTEGER" />
+    <result column="extension_number" property="extensionNumber" jdbcType="VARCHAR" />
+    <result column="mobile_number" property="mobileNumber" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="BaseResultMapBySupplierSignUpMeet" type="cn.eqianyuan.bean.po.SupplierSignUpMeetDemandPO">
+    <id column="id" property="id" jdbcType="VARCHAR"/>
+    <id column="name" property="name" jdbcType="VARCHAR"/>
+    <result column="begin_cycle" property="beginCycle" jdbcType="INTEGER"/>
+    <result column="end_cycle" property="endCycle" jdbcType="INTEGER"/>
+    <result column="demand_discribe" property="demandDiscribe" jdbcType="VARCHAR"/>
+    <result column="work" property="work" jdbcType="VARCHAR"/>
+    <result column="persons_amount" property="personsAmount" jdbcType="INTEGER"/>
+    <result column="sign_up_work" property="signUpWork" jdbcType="VARCHAR"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+  </resultMap>
+  <resultMap id="BaseResultMapByDemandSignUpMeet" type="cn.eqianyuan.bean.po.DemandSignUpMeetSupplierPO">
+    <id column="id" property="id" jdbcType="VARCHAR"/>
+    <id column="nick_name" property="nickName" jdbcType="VARCHAR"/>
+    <result column="head_portrait" property="headPortrait" jdbcType="VARCHAR"/>
+    <result column="working_years" property="workingYears" jdbcType="INTEGER"/>
+    <result column="expect_pay" property="expectPay" jdbcType="INTEGER"/>
+    <result column="sign_up_work" property="signUpWork" jdbcType="VARCHAR"/>
+    <result column="meet_time" property="meetTime" jdbcType="INTEGER"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, supplier_side_id, demand_id, work, meet_time, address, contact, respectful_name, 
+    phone_area_code, telephone_number, extension_number, mobile_number, status, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from sign_up_meet
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from sign_up_meet
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.eqianyuan.bean.po.SignUpMeetPO" >
+    insert into sign_up_meet (id, supplier_side_id, demand_id, 
+      work, meet_time, address, 
+      contact, respectful_name, phone_area_code, 
+      telephone_number, extension_number, mobile_number, 
+      status, create_time)
+    values (#{id,jdbcType=VARCHAR}, #{supplierSideId,jdbcType=VARCHAR}, #{demandId,jdbcType=VARCHAR}, 
+      #{work,jdbcType=VARCHAR}, #{meetTime,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{contact,jdbcType=VARCHAR}, #{respectfulName,jdbcType=INTEGER}, #{phoneAreaCode,jdbcType=VARCHAR}, 
+      #{telephoneNumber,jdbcType=INTEGER}, #{extensionNumber,jdbcType=VARCHAR}, #{mobileNumber,jdbcType=BIGINT}, 
+      #{status,jdbcType=INTEGER}, #{createTime,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.SignUpMeetPO" >
+    insert into sign_up_meet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="supplierSideId != null" >
+        supplier_side_id,
+      </if>
+      <if test="demandId != null" >
+        demand_id,
+      </if>
+      <if test="work != null" >
+        work,
+      </if>
+      <if test="meetTime != null" >
+        meet_time,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="contact != null" >
+        contact,
+      </if>
+      <if test="respectfulName != null" >
+        respectful_name,
+      </if>
+      <if test="phoneAreaCode != null" >
+        phone_area_code,
+      </if>
+      <if test="telephoneNumber != null" >
+        telephone_number,
+      </if>
+      <if test="extensionNumber != null" >
+        extension_number,
+      </if>
+      <if test="mobileNumber != null" >
+        mobile_number,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierSideId != null" >
+        #{supplierSideId,jdbcType=VARCHAR},
+      </if>
+      <if test="demandId != null" >
+        #{demandId,jdbcType=VARCHAR},
+      </if>
+      <if test="work != null" >
+        #{work,jdbcType=VARCHAR},
+      </if>
+      <if test="meetTime != null" >
+        #{meetTime,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="respectfulName != null" >
+        #{respectfulName,jdbcType=INTEGER},
+      </if>
+      <if test="phoneAreaCode != null" >
+        #{phoneAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="telephoneNumber != null" >
+        #{telephoneNumber,jdbcType=INTEGER},
+      </if>
+      <if test="extensionNumber != null" >
+        #{extensionNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNumber != null" >
+        #{mobileNumber,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.eqianyuan.bean.po.SignUpMeetPO" >
+    update sign_up_meet
+    <set >
+      <if test="supplierSideId != null" >
+        supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+      </if>
+      <if test="demandId != null" >
+        demand_id = #{demandId,jdbcType=VARCHAR},
+      </if>
+      <if test="work != null" >
+        work = #{work,jdbcType=VARCHAR},
+      </if>
+      <if test="meetTime != null" >
+        meet_time = #{meetTime,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null" >
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="respectfulName != null" >
+        respectful_name = #{respectfulName,jdbcType=INTEGER},
+      </if>
+      <if test="phoneAreaCode != null" >
+        phone_area_code = #{phoneAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="telephoneNumber != null" >
+        telephone_number = #{telephoneNumber,jdbcType=INTEGER},
+      </if>
+      <if test="extensionNumber != null" >
+        extension_number = #{extensionNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileNumber != null" >
+        mobile_number = #{mobileNumber,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.eqianyuan.bean.po.SignUpMeetPO" >
+    update sign_up_meet
+    set supplier_side_id = #{supplierSideId,jdbcType=VARCHAR},
+      demand_id = #{demandId,jdbcType=VARCHAR},
+      work = #{work,jdbcType=VARCHAR},
+      meet_time = #{meetTime,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      respectful_name = #{respectfulName,jdbcType=INTEGER},
+      phone_area_code = #{phoneAreaCode,jdbcType=VARCHAR},
+      telephone_number = #{telephoneNumber,jdbcType=INTEGER},
+      extension_number = #{extensionNumber,jdbcType=VARCHAR},
+      mobile_number = #{mobileNumber,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <select id="countBySupplierId" resultType="java.lang.Integer">
+    select sum(cnt) from (
+    select count(1) cnt from sign_up_meet sum, demand where sum.supplier_side_id = #{supplierId} and sum.demand_id = demand.id
+    union
+    select count(1) cnt from sign_up_meet_history sumh, demand where sumh.supplier_side_id = #{supplierId}  and sumh.demand_id = demand.id and sumh.status in (2,3)
+    ) cnt
+  </select>
+
+  <select id="selectBySupplierPagination" resultMap="BaseResultMapBySupplierSignUpMeet">
+    select * from (
+    select
+    demand.id, demand.name, demand.begin_cycle, demand.end_cycle, demand.demand_discribe, sum.`work` sign_up_work, GROUP_CONCAT(dep.work) work, sum(dep.persons_amount) persons_amount, sum.meet_time, sum.status
+    from sign_up_meet sum, demand, demand_employ_persons dep
+    where
+    demand.id = sum.demand_id
+    and
+    demand.id = dep.demand_id
+    and
+    sum.supplier_side_id = #{supplierId}
+    group by dep.work
+    union
+    select
+    demand.id, demand.name, demand.begin_cycle, demand.end_cycle, demand.demand_discribe, sumh.`work` sign_up_work, GROUP_CONCAT(dep.work) work, sum(dep.persons_amount) persons_amount, sumh.meet_time, sumh.status
+    from sign_up_meet_history sumh, demand, demand_employ_persons dep
+    where
+    demand.id = sumh.demand_id
+    and
+    demand.id = dep.demand_id
+    and
+    sumh.supplier_side_id = #{supplierId}
+    group by dep.work
+    ) unionTB
+    order by meet_time desc
+    limit ${page.start}, ${page.pageSize}
+  </select>
+
+  <select id="countByDemandId" resultType="java.lang.Integer">
+    select sum(cnt) from (
+    select count(1) cnt from sign_up_meet sum, demand where sum.demand_id = #{demandId} and sum.demand_id = demand.id and demand.demand_side_id = #{demandSideId}
+    union
+    select count(1) cnt from sign_up_meet_history sumh, demand where sumh.demand_id = #{demandId}  and sumh.demand_id = demand.id and demand.demand_side_id = #{demandSideId} and sumh.status in (2,3)
+    ) cnt
+  </select>
+
+  <select id="selectByDemandPagination" resultMap="BaseResultMapByDemandSignUpMeet">
+    select id, sign_up_work, meet_time, nick_name, head_portrait, working_years, expect_pay, status from (
+    select
+        demand.id,sum.`work` sign_up_work, sum.meet_time meet_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,sum.status
+        from sign_up_meet sum, demand, supplier_side ss, resume
+        where
+        sum.supplier_side_id = ss.id
+        and
+        sum.demand_id = #{demandId}
+        and
+        sum.demand_id = demand.id
+        and
+        demand.demand_side_id = #{demandSideId}
+        and
+        ss.id = resume.supplier_side_id
+    union
+    select
+        demand.id,sums.`work` sign_up_work, sums.meet_time meet_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,sums.status
+        from sign_up_meet_history sums, demand, supplier_side ss, resume
+        where
+        sums.supplier_side_id = ss.id
+        and
+        sums.demand_id = #{demandId}
+        and
+        sums.demand_id = demand.id
+        and
+        demand.demand_side_id = #{demandSideId}
+        and
+        ss.id = resume.supplier_side_id
+    ) unionTB
+    order by meet_time desc
+    limit ${page.start}, ${page.pageSize}
+  </select>
+</mapper>

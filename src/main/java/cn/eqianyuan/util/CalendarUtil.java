@@ -14,6 +14,7 @@ public class CalendarUtil {
      * 常用时间格式
      */
     public static final String Format_Date = "yyyy-MM-dd";
+    public static final String Format_DateMinute = Format_Date + " HH:mm";
     public static final String Format_Time = "HH:mm:ss";
     public static final String Format_DateTime = "yyyy-MM-dd HH:mm:ss";
     public static final String Format_DateNum = "yyyyMMddHHmmss";

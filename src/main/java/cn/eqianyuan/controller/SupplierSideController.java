@@ -188,12 +188,55 @@ public class SupplierSideController extends BaseController {
      * @param demandId
      * @return
      */
-    @RequestMapping(value = "/demand/signUp/{demandId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/demand/signUp/{demandId}/{work}", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse signUp(@PathVariable("demandId") String demandId) throws EqianyuanException {
+    public ServerResponse signUp(@PathVariable("demandId") String demandId,
+                                 @PathVariable("work") String work) throws EqianyuanException {
         SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
 
-        supplierSideService.signUp(demandId, supplierSideVOByLogin.getId());
+        supplierSideService.signUp(demandId, supplierSideVOByLogin.getId(), work);
         return new ServerResponse();
+    }
+
+    /**
+     * 查询供应商已经报名的需求分页集合
+     *
+     * @param page
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/signUpDemand", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse signUpDemand(Page page) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        return supplierSideService.signUpDemand(supplierSideVOByLogin.getId(), page);
+    }
+
+    /**
+     * 查询供应商已经约见的需求分页集合
+     *
+     * @param page
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/signUpMeetDemand", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse signUpMeetDemand(Page page) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        return supplierSideService.signUpMeetDemand(supplierSideVOByLogin.getId(), page);
+    }
+
+    /**
+     * 查询供应商已经聘用的需求分页集合
+     *
+     * @param page
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/hireDemand", method = RequestMethod.GET)
+    @ResponseBody
+    public PageResponse hireDemand(Page page) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        return supplierSideService.hireDemand(supplierSideVOByLogin.getId(), page);
     }
 }

@@ -48,4 +48,5 @@ public interface IDemandDao {
      * @return
      */
     List<DemandPOBySearchList> selectByMinePagination(@Param("page") Page page, @Param("isEnd") String isEnd);
+
 }

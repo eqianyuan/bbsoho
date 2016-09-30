@@ -178,7 +178,6 @@
                 initStatus: pagination.initStatus,
                 backFn: function (pageNo) {
                     pagination.page.pageNo = pageNo;
-                    pagination.list();
                     pagination.list(obj, pagingObj);
                 }
             });
@@ -209,7 +208,7 @@
 
                             row += '<dl class="tit"><dt data-id="' + this.id + '"><h3>' + this.name + '</h3></dt><dd>' + this.beginCycle + '到' + this.endCycle + '</dd></dl>'
                                     + '<div class="btn-box"><a href="javascript:;" class="btn" data-toggle="modal" data-target="#payWrap">待支付</a><a href="javascript:;" class="btn">详情</a></div>'
-                                    + '<dl class="rDesc"><dt>招聘岗位：</dt><dd>' + this.work + '</dd></dl>'
+                                    + '<dl class="rDesc"><dt>招聘岗位：</dt><dd>' + this.workText + '</dd></dl>'
                                     + '<dl class="rDesc"><dt>招聘人数：</dt><dd>' + this.personsAmount + '人</dd></dl>';
 
                             if (response.list.length - 1 > i) {
@@ -250,7 +249,7 @@
 
         //点击标题前往详情
         $(document).on("click", ".tit dt[data-id]", function () {
-            document.location.href = 'demand/demand_info.jsp?menuNavigation=demandHall&demandId=' + $(this).data("id");
+            document.location.href = 'demand/demand_info_mine.jsp?menuNavigation=demandHall&demandId=' + $(this).data("id");
         })
     })
 </script>

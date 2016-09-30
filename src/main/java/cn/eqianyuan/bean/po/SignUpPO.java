@@ -7,6 +7,8 @@ public class SignUpPO {
 
     private String demandId;
 
+    private String work;
+
     private Integer createTime;
 
     public String getId() {
@@ -31,6 +33,14 @@ public class SignUpPO {
 
     public void setDemandId(String demandId) {
         this.demandId = demandId;
+    }
+
+    public String getWork() {
+        return work;
+    }
+
+    public void setWork(String work) {
+        this.work = work;
     }
 
     public Integer getCreateTime() {

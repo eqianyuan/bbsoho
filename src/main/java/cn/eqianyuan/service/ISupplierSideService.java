@@ -103,7 +103,38 @@ public interface ISupplierSideService {
      *
      * @param demandId   需求编号
      * @param supplierId 供应方用户编号
+     * @param work       报名岗位
      * @throws EqianyuanException
      */
-    void signUp(String demandId, String supplierId) throws EqianyuanException;
+    void signUp(String demandId, String supplierId, String work) throws EqianyuanException;
+
+    /**
+     * 查询供应商报名需求分页
+     *
+     * @param supplierId 供应商编号
+     * @param page       分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse signUpDemand(String supplierId, Page page) throws EqianyuanException;
+
+    /**
+     * 查询供应商约见需求分页
+     *
+     * @param supplierId 供应商编号
+     * @param page       分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse signUpMeetDemand(String supplierId, Page page) throws EqianyuanException;
+
+    /**
+     * 查询供应商聘用需求分页
+     *
+     * @param supplierId 供应商编号
+     * @param page       分页对象
+     * @return
+     * @throws EqianyuanException
+     */
+    PageResponse hireDemand(String supplierId, Page page) throws EqianyuanException;
 }

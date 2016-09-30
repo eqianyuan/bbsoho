@@ -337,6 +337,7 @@ div.company-demand table.project tbody tr th:first-child{ text-align:left; }
 
 div.company-demand table.project th[colspan="3"]{ border-bottom: 0; }
 div.company-demand table.project td.wd130{ width: 130px; }
+div.company-demand table.project td.wd200{ width: 200px; }
 
 div.company-demand div.btn-box{ padding-top: 15px; }
 div.company-demand div.btn-box a.btn{ border: 1px solid #DDD; background-color: #f7f8f9; color: #4c4c54; }

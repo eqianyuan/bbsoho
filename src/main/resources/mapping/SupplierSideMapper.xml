@@ -375,7 +375,7 @@
     <select id="selectByPagination" resultMap="BaseResultMapBySearchList">
         select
         ss.nick_name,ss.working_years,
-        resume.id,resume.expect_pay, resume.expect_work_time,resume.discribe,
+        ss.id,resume.expect_pay, resume.expect_work_time,resume.discribe,
         group_concat(wp.work) as work,
         county.county_name
         from
@@ -384,6 +384,7 @@
         LEFT JOIN county on (resume.expect_work_county_id = county.county_id)
         where ss.id = resume.supplier_side_id
         <include refid="conditionByList" />
+        group by ss.id
         <choose>
             <when test="page.orderByColumn != null and page.orderByColumn != '' and page.orderByType != null and page.orderByType != ''">
                 order by ${page.orderByColumn} ${page.orderByType}

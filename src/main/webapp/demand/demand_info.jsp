@@ -220,7 +220,7 @@
                 if (resp.demandEmployPersonsList.length > 0) {
                     $(resp.demandEmployPersonsList).each(function () {
                         var demandEmployPersonsHtml = '<tr><th>用人数：</th><td>' + this.personsAmount + '</td>'
-                                + '<th>工种：</th><td>' + this.work + '</td>'
+                                + '<th>工种：</th><td>' + this.workText + '</td>'
                                 + '<th>工作经验：</th><td>' + this.workingYears + '</td>'
                                 + '<th>薪酬：</th><td>' + this.remuneration + '</td></tr>';
 

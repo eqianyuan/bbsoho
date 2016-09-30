@@ -334,12 +334,12 @@
                             row += '<div class="row">'
                                     + '<dl><dt><a href="/demand/demand_info.jsp?menuNavigation=demandHall&demandId=' + this.id + '" class="tit">' + this.name + '</a><!--<span class="grade">综合评分：<span class="orange">85分</span></span>--></dt></dl>'
                                     + '<dl>'
-                                    + '<dd><p class="pd8">岗位需要</p><p class="ageLimit"><span class="orange large">' + this.work + '</span></p></dd>'
+                                    + '<dd><p class="pd8">岗位需要</p><p class="ageLimit"><span class="orange large">' + this.workText + '</span></p></dd>'
                                     + '<dd><p class="pd8">年限要求</p><p class="ageLimit"><span class="gray">' + this.workingYears + '</span></p></dd>'
                                     + '<dd><p class="pd8">薪资</p><p><span class="orange large">' + this.remuneration + '</span><span class="gray">元</span></p></dd>'
                                     + '<dd><p class="pd8">用人量</p><p class="ageLimit"><span class="gray">' + this.personsAmount + '</span></p></dd>'
                                     + '<dd><p>周期开始：<span class="gray">' + this.beginCycle + '</span>周期结束：<span class="gray">' + this.endCycle + '</span></p><p>工作地点：<span class="gray">' + this.countyName + '</span></p></dd>'
-                                    + '<dd><a href="javascript:;" class="btn-buy signUp" data-id="' + this.id + '">报名</a></dd>'
+                                    + '<dd><a href="javascript:;" class="btn-buy signUp" data-id="' + this.id + '" data-work="' + this.work + '">报名</a></dd>'
                                     + '</dl>'
                                     + '</div>';
                         });
@@ -408,20 +408,19 @@
         });
 
         //报名按钮点击事件
-        $(document).on("click", ".signUp", function(){
-            console.log();
+        $(document).on("click", ".signUp", function () {
             $.ajax({
                 type: "POST",
-                url: "/supplierSide/demand/signUp/"+$(this).data("id"),
+                url: "/supplierSide/demand/signUp/" + $(this).data("id") + "/" + $(this).data("work"),
                 success: function (resp) {
                     if (resp.code == null) {
                         document.write(resp);
                         return;
                     }
 
-                    if(resp.code == "200"){
+                    if (resp.code == "200") {
                         $('#signUpTip').modal('show').find("h3").text("报名成功");
-                    }else{
+                    } else {
                         $('#signUpTip').modal('show').find("h3").text(resp.message);
                     }
                 }
@@ -431,7 +430,7 @@
         /**
          * 弹窗关闭
          */
-        $(document).on('click', 'button.btn-cancel', function(){
+        $(document).on('click', 'button.btn-cancel', function () {
             $('#signUpTip').modal('hide');
         });
     })

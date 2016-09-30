@@ -68,7 +68,15 @@ public enum DataDictionaryConf {
     /**
      * 工作状态
      */
-    WORKING_STATUS("working_status");
+    WORKING_STATUS("working_status"),
+    /**
+     * 报名结果状态
+     */
+    SIGN_UP_MEET_STATUS("sign_up_meet_status"),
+    /**
+     * 聘用状态
+     */
+    HIRE_STATUS("hire_status");
 
     private Object value;
 

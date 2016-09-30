@@ -18,7 +18,7 @@
                                 <dd>
                                     <a href="javascript:;">${supplierUserByLogin.nickName}</a>
                                     <ul class="top-menu">
-                                        <li><a href="javascript:;">我的工作</a></li>
+                                        <li><a href="supplierSide/work_list.jsp?menuNavigation=talentPool&tabWidget=work">我的工作</a></li>
                                         <li><a href="supplierSide/basicInformation.jsp?menuNavigation=talentPool&tabWidget=basicInformation">个人信息</a></li>
                                         <li><a href="supplierSide/resume.jsp?menuNavigation=talentPool&tabWidget=basicInformation">个人简历</a></li>
                                         <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
