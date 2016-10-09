@@ -893,4 +893,34 @@ public class SupplierSideConvert {
 
         return supplierHireDemandVOs;
     }
+
+    /**
+     * 将供应商需求约见PO对象转为VO对象
+     *
+     * @param signUpMeetPO
+     * @return
+     * @throws EqianyuanException
+     */
+    public DemandMeetInfoVO demandMeetInfo(SignUpMeetPO signUpMeetPO) throws EqianyuanException {
+        DemandMeetInfoVO demandMeetInfoVO = new DemandMeetInfoVO();
+        BeanUtils.copyProperties(signUpMeetPO, demandMeetInfoVO);
+        demandMeetInfoVO.setMeetTime(CalendarUtil.secondsTimeToDateTimeString(signUpMeetPO.getMeetTime(), CalendarUtil.Format_DateTime));
+
+        //从数据字典缓存中获取联系人尊称集合
+        List<DataDictionaryPO> dataDictionaryPOs = InitialData.dataDictionaryMap.get(DataDictionaryConf.RESPECTFUL_NAME.toString());
+        if (CollectionUtils.isEmpty(dataDictionaryPOs)) {
+            logger.warn("demandMeetInfo fail , because group key [" + DataDictionaryConf.RESPECTFUL_NAME.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //转换联系人尊称数据
+        for (DataDictionaryPO dataDictionaryPO : dataDictionaryPOs) {
+            if (StringUtils.equals(String.valueOf(signUpMeetPO.getRespectfulName()), dataDictionaryPO.getGroupValKey())) {
+                demandMeetInfoVO.setRespectfulName(dataDictionaryPO.getGroupValVal());
+                break;
+            }
+        }
+
+        return demandMeetInfoVO;
+    }
 }

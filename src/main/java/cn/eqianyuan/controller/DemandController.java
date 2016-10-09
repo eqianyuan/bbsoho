@@ -5,6 +5,7 @@ import cn.eqianyuan.bean.ServerResponse;
 import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.request.SupplierMeetRequest;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
@@ -138,5 +139,29 @@ public class DemandController extends BaseController {
                                      Page page) throws EqianyuanException {
         DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
         return demandService.hireByDemand(demandSideVOByLogin.getId(), demandId, page);
+    }
+
+    /**
+     * 需求报名人员约见
+     *
+     * @return
+     */
+    @RequestMapping(value = "/signUpMeet", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse signUpMeet(SupplierMeetRequest supplierMeetRequest) throws EqianyuanException {
+        demandService.signUpMeet(supplierMeetRequest);
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求报名人员聘用
+     *
+     * @return
+     */
+    @RequestMapping(value = "/hire", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse hire(SupplierMeetRequest supplierMeetRequest) throws EqianyuanException {
+        demandService.signUpMeet(supplierMeetRequest);
+        return new ServerResponse();
     }
 }

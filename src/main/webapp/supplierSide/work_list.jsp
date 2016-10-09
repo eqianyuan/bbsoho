@@ -114,36 +114,55 @@
 <!-- footer -->
 <c:import url="../footer.jsp"/>
 <!-- /footer -->
-<!-- relieveDeal 取消约见原因 -->
-<div class="modal fade" id="cancelMeetMsg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+
+<!-- meet 约见信息-->
+<div class="modal fade" id="meetDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body editApply-dialog">
+                <!-- editApply-form -->
+                <form class="personal editApply-form">
+                    <table>
+                        <tr>
+                            <th>约见时间：</th>
+                            <td style="vertical-align: middle;" name="meetTime">2016-10-31</td>
+                        </tr>
+                        <tr>
+                            <th>约见地址：</th>
+                            <td style="vertical-align: middle;" name="address">
+                        </tr>
+                        <tr>
+                            <th>联系人：</th>
+                            <td style="vertical-align: middle;" name="contact"></td>
+                        </tr>
+                        <tr>
+                            <th>联系电话：</th>
+                            <td style="vertical-align: middle;" name="mobileNumber"></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td style="vertical-align: middle;" name="telephoneNumber"></td>
+                        </tr>
+                    </table>
+                    <button type="button" class="ipt-submit btn-cancel">确定</button>
+                </form>
+                <!-- /editApply-form -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- meet 约见信息-->
+<!-- error msg 错误信息弹窗 -->
+<div class="modal fade" id="errorMsgDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
     <div class="modal-dialog wd380">
         <div class="modal-content">
             <div class="modal-body">
                 <!-- relieveDeal -->
-                <form action="#" method="post" class="cancelMeetMsg">
-                    <h3>取消原因</h3>
-                    <div class="select-pay-away">
-                        <!-- ipt-select -->
-                        <div class="ipt-select2">
-                            <input type="radio" name="cancelReason" value="accountBalance"/>
-                            <p>时间不对，希望能改一下面试时间。</p>
-                        </div>
-                        <div class="ipt-select2">
-                            <input type="radio" name="cancelReason" value="iPaySweep"/>
-                            <p>不想去这家公司了！</p>
-                        </div>
-                        <div class="ipt-select2">
-                            <input type="radio" name="cancelReason" value="iPaySweep"/>
-                            <p>其它原因</p>
-                        </div>
-                        <!-- /ipt-select -->
-                    </div>
-                    <div class="error"></div>
+                <form action="#" method="post" class="meetMsg">
+                    <div class="errorMsg" style="font-size: 2em;padding-bottom: 20px;text-align: center;"></div>
                     <div class="btn-box">
-                        <button type="button" class="btn">联系我们</button>
-                        <button type="submit" class="btn">确定</button>
-                        <button type="button" class="btn btn-cancel">取消</button>
+                        <button type="button" class="btn btn-cancel">确定</button>
                     </div>
                 </form>
                 <!-- /relieveDeal -->
@@ -151,7 +170,7 @@
         </div>
     </div>
 </div>
-<!-- /relieveDeal -->
+<!-- /rror msg 错误信息弹窗 -->
 <!-- relieveDeal 约见消息 -->
 <div class="modal fade" id="meetMsg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog wd380">
@@ -333,7 +352,7 @@
                         $(resp.list).each(function (i) {
                             var btn = '';
                             if (this.status == undefined || this.status == "") {
-                                btn = '<a href="javascript:;" class="btn" data-toggle="modal" data-target="#relieveApply">同意约见</a><a href="javascript:;" class="btn" data-toggle="modal" data-target="#relieveApply">拒绝约见</a>';
+                                btn = '<a href="javascript:;" class="btn meetDisposeBtn" data-status="1" data-demandId="' + this.id + '">同意约见</a><a href="javascript:;" class="btn meetDisposeBtn" data-status="2" data-demandId="' + this.id + '">拒绝约见</a>';
                             }
 
                             row += '<p class="meet fr"></p>'
@@ -347,7 +366,7 @@
                                     + '<div class="p-right fr">'
                                     + '<div class="clearfix"></div>'
                                     + '<div class="btn-box">'
-                                    + btn
+                                    + '<a href="javascript:;" class="btn meetInfoBtn" data-toggle="modal" data-target="#meetDialog" data-demandId="' + this.id + '">约见信息</a>' + btn
                                     + '</div>'
                                     + '</div>'
                                     + '<div class="clearfix"></div>';
@@ -450,40 +469,54 @@
         //获取聘用列表数据
         hirePagination.list();
 
-        //tab切换卡点击事件
-//        $(".signUp, .signUpMeet, .ongoing, .complete").click(function () {
-//            $("#signUp").hide();
-////            $("#signUpMeet").hide();
-////            $("#ongoing").hide();
-////            $("#complete").hide();
-//            $(".signUpPaging").hide();
-////            $(".signUpMeetPaging").hide();
-////            $(".ongoingPaging").hide();
-////            $(".completePaging").hide();
-//
-//            if ($(this).hasClass("signUp")) {
-//                $("#signUp").show();
-//                $(".signUpPaging").show();
-//                //获取报名列表数据
-//                signUpPagination.list();
-//            }else if ($(this).hasClass("signUpMeet")) {
-//                $("#signUpMeet").show();
-//                $(".signUpMeetPaging").show();
-//                //获取约见列表数据
-//                signUpMeetPagination.list();
-//            } else if ($(this).hasClass("ongoing")) {
-//                $("#ongoing").show();
-//                $(".ongoingPaging").show();
-//                //获取约见列表数据
-//                signUpMeetPagination.list();
-//            } else {
-//                $("#complete").show();
-//                $(".completePaging").show();
-//                pagination.data.isSignUp = "";
-//                pagination.data.isEnd = true;
-//                pagination.list($("#complete"), $(".completePaging"), "setCompleteHtml");
-//            }
-//        });
+        //点击约见信息按钮，异步查询约见信息并填充到弹窗
+        $(document).on("click", ".meetInfoBtn", function () {
+            var _this = this;
+            $.ajax({
+                url: "/supplierSide/demand/demandMeetInfo/" + $(_this).attr("data-demandId"),
+                type: "GET",
+                success: function (resp) {
+                    $("#meetDialog td[name='meetTime']").text(resp.meetTime);
+                    $("#meetDialog td[name='address']").text(resp.address);
+                    $("#meetDialog td[name='contact']").text(resp.contact + resp.respectfulName);
+                    $("#meetDialog td[name='mobileNumber']").text(resp.mobileNumber);
+
+                    var telephoneNumber = '';
+                    if (resp.phoneAreaCode != undefined) {
+                        telephoneNumber += resp.phoneAreaCode;
+                    }
+                    if (resp.telephoneNumber != undefined) {
+                        telephoneNumber += " " + resp.telephoneNumber;
+                    }
+                    if (resp.extensionNumber != undefined) {
+                        telephoneNumber += " " + resp.extensionNumber;
+                    }
+                    $("#meetDialog td[name='telephoneNumber']").text(telephoneNumber);
+                }
+            })
+        });
+
+        //约见处理按钮点击事件
+        $(document).on("click", ".meetDisposeBtn", function () {
+            var _this = this;
+            $.ajax({
+                url: "/supplierSide/demand/demandMeetDispose/" + $(_this).attr("data-demandId"),
+                data: {"status": $(_this).data("status")},
+                type: "POST",
+                success: function (resp) {
+                    if (resp.code != "200") {
+                        $("#errorMsgDialog").modal('show').find(".errorMsg").text(resp.message);
+                    } else {
+                        document.location.reload();
+                    }
+                }
+            })
+        });
+
+        //弹窗关闭
+        $(document).on('click', '.modal .btn-cancel', function () {
+            $(this).parents(".modal").modal('hide');
+        });
 
         //点击标题前往详情
         $(document).on("click", ".tit dt[data-id]", function () {

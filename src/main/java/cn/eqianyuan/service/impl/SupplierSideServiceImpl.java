@@ -7,6 +7,7 @@ import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.po.*;
 import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
+import cn.eqianyuan.bean.vo.DemandMeetInfoVO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
@@ -1372,5 +1373,69 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         }
 
         return new PageResponse(page, supplierConvert.supplierHireDemand(supplierHireDemandPOs));
+    }
+
+    /**
+     * 查询需求商需求约见信息
+     *
+     * @param demandId       需求编号
+     * @param supplierSideId 供应商编号
+     * @return
+     * @throws EqianyuanException
+     */
+    public DemandMeetInfoVO demandMeetInfo(String demandId, String supplierSideId) throws EqianyuanException {
+        if (StringUtils.isEmpty(demandId)) {
+            logger.warn("demandMeetInfo fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
+        SignUpMeetPO signUpMeetPO = signUpMeetDao.selectMeetInfo(demandId, supplierSideId);
+        if (ObjectUtils.isEmpty(signUpMeetPO) ||
+                StringUtils.isEmpty(signUpMeetPO.getId())) {
+            logger.warn("demandMeetInfo fail , because query data by demandId [" + demandId + "], supplierSideId [" + supplierSideId + "] not exists");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_QUERY_FAIL);
+        }
+
+        //将PO转为VO
+        return supplierConvert.demandMeetInfo(signUpMeetPO);
+    }
+
+    /**
+     * 约见需求处理（同意约见、拒绝约见）
+     *
+     * @param demandId       需求编号
+     * @param supplierSideId 供应商编号
+     * @param status         处理状态
+     * @throws EqianyuanException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void demandMeetDispose(String demandId, String supplierSideId, Integer status) throws EqianyuanException {
+        if (StringUtils.isEmpty(demandId)) {
+            logger.warn("demandMeetDispose fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
+        //根据需求编号和供应商编号查询约见数据
+        SignUpMeetPO signUpMeetPO = signUpMeetDao.selectMeetInfo(demandId, supplierSideId);
+
+        if (ObjectUtils.isEmpty(signUpMeetPO) ||
+                StringUtils.isEmpty(signUpMeetPO.getId())) {
+            logger.warn("demandMeetDispose fail , because query data by demandId [" + demandId + "], supplierSideId [" + supplierSideId + "] not exists");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
+        signUpMeetPO.setDemandId(demandId);
+        signUpMeetPO.setSupplierSideId(supplierSideId);
+        signUpMeetPO.setStatus(status);
+        signUpMeetDao.updateByPrimaryKeySelective(signUpMeetPO);
+
+        //判断状态是否为拒绝约见
+        if(status.equals(2)){
+            //将约见数据复制到约见历史表中
+            signUpMeetDao.copyInsertHistory(signUpMeetPO);
+
+            //删除约见数据
+            signUpMeetDao.deleteByPrimaryKey(signUpMeetPO.getId());
+        }
     }
 }

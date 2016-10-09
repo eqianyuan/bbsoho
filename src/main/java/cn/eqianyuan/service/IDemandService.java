@@ -4,6 +4,7 @@ import cn.eqianyuan.bean.PageResponse;
 import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.request.SupplierMeetRequest;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
@@ -89,4 +90,12 @@ public interface IDemandService {
      * @throws EqianyuanException
      */
     PageResponse hireByDemand(String demandSideId, String demandId, Page page) throws EqianyuanException;
+
+    /**
+     * 需求报名供应商约见
+     *
+     * @param supplierMeetRequest
+     * @throws EqianyuanException
+     */
+    void signUpMeet(SupplierMeetRequest supplierMeetRequest) throws EqianyuanException;
 }

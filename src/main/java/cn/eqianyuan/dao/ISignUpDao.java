@@ -2,9 +2,9 @@ package cn.eqianyuan.dao;
 
 
 import cn.eqianyuan.bean.dto.Page;
-import cn.eqianyuan.bean.po.SupplierSignUpDemandPO;
 import cn.eqianyuan.bean.po.DemandSignUpSupplierPO;
 import cn.eqianyuan.bean.po.SignUpPO;
+import cn.eqianyuan.bean.po.SupplierSignUpDemandPO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -21,6 +21,23 @@ public interface ISignUpDao {
     int updateByPrimaryKeySelective(SignUpPO record);
 
     int updateByPrimaryKey(SignUpPO record);
+
+    /**
+     * 将报名表数据复制到报名历史表
+     *
+     * @param record
+     * @return
+     */
+    int copyInsertHistory(SignUpPO record);
+
+    /**
+     * 根据供应商编号及需求编号查询报名数据
+     *
+     * @param demandId
+     * @param supplierId
+     * @return
+     */
+    SignUpPO selectBySupplierSideId(@Param("demandId") String demandId, @Param("supplierSideId") String supplierId);
 
     /**
      * 根据需求编号和供应商用户编号查询报名数据总数

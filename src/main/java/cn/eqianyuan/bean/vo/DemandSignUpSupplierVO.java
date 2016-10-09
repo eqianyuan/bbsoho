@@ -5,8 +5,11 @@ package cn.eqianyuan.bean.vo;
  * Created by jason on 2016-09-27.
  */
 public class DemandSignUpSupplierVO {
-    //供应商信息主键
-    private String id;
+    //供应商编号
+    private String supplierSideId;
+
+    //需求编号
+    private String demandId;
 
     //供应商昵称
     private String nickName;
@@ -26,12 +29,20 @@ public class DemandSignUpSupplierVO {
     //报名时间
     private String signUpTime;
 
-    public String getId() {
-        return id;
+    public String getSupplierSideId() {
+        return supplierSideId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSupplierSideId(String supplierSideId) {
+        this.supplierSideId = supplierSideId;
+    }
+
+    public String getDemandId() {
+        return demandId;
+    }
+
+    public void setDemandId(String demandId) {
+        this.demandId = demandId;
     }
 
     public String getNickName() {

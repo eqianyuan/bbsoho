@@ -6,6 +6,7 @@ import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
+import cn.eqianyuan.bean.vo.DemandMeetInfoVO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
@@ -238,5 +239,36 @@ public class SupplierSideController extends BaseController {
     public PageResponse hireDemand(Page page) throws EqianyuanException {
         SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
         return supplierSideService.hireDemand(supplierSideVOByLogin.getId(), page);
+    }
+
+    /**
+     * 查询需求商需求约见信息
+     *
+     * @param demandId 需求编号
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/demandMeetInfo/{demandId}", method = RequestMethod.GET)
+    @ResponseBody
+    public DemandMeetInfoVO demandMeetInfo(@PathVariable("demandId") String demandId) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        return supplierSideService.demandMeetInfo(demandId, supplierSideVOByLogin.getId());
+    }
+
+    /**
+     * 约见需求处理（同意约见、拒绝约见）
+     *
+     * @param demandId 需求编号
+     * @param status   处理状态
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/demandMeetDispose/{demandId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse demandMeetDispose(@PathVariable("demandId") String demandId,
+                                            Integer status) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        supplierSideService.demandMeetDispose(demandId, supplierSideVOByLogin.getId(), status);
+        return new ServerResponse();
     }
 }

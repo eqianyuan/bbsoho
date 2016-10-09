@@ -5,6 +5,7 @@ import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.po.*;
+import cn.eqianyuan.bean.request.SupplierMeetRequest;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
@@ -53,6 +54,9 @@ public class DemandServiceImpl implements IDemandService {
     private IDemandDao demandDao;
 
     @Autowired
+    private ISupplierSideDao supplierSideDao;
+
+    @Autowired
     private ISignUpDao signUpDao;
 
     @Autowired
@@ -76,6 +80,8 @@ public class DemandServiceImpl implements IDemandService {
     private static final int DEMAND_ADDRESS_MAX_BYTES_BY_DB = 100;
     //工作描述DB许可字节长度
     private static final int DEMAND_DISCRIBE_MAX_BYTES_BY_DB = 6000;
+    //企业详细地址DB许可字节长度
+    private static final int SIGN_UP_MEET_ADDRESS_MAX_BYTES_BY_DB = 100;
 
     /**
      * 根据主键获取需求信息
@@ -530,6 +536,194 @@ public class DemandServiceImpl implements IDemandService {
         }
 
         return new PageResponse(page, supplierSideConvert.demandHireSupplier(demandHireSupplierPOs));
+    }
+
+    /**
+     * 需求报名供应商约见
+     *
+     * @param supplierMeetRequest
+     * @throws EqianyuanException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void signUpMeet(SupplierMeetRequest supplierMeetRequest) throws EqianyuanException {
+        if (StringUtils.isEmpty(supplierMeetRequest.getDemandId())) {
+            logger.warn("signUpMeet fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_FAIL);
+        }
+
+        if (StringUtils.isEmpty(supplierMeetRequest.getSupplierSideId())) {
+            logger.warn("signUpMeet fail , because supplier side id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_FAIL);
+        }
+
+        //检查户输入约见时间是否为空
+        if (StringUtils.isEmpty(supplierMeetRequest.getMeetTime())) {
+            logger.warn("signUpMeet fail , because user input meet time , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_TIME_IS_EMPTY);
+        }
+
+        //检查约见时间是否为yyyy-MM-dd HH:mm:ss格式字符串
+        try {
+            supplierMeetRequest.setMeetTime(String.valueOf(CalendarUtil.parseDate(supplierMeetRequest.getMeetTime(), CalendarUtil.Format_DateTime).getTime() / 1000));
+        } catch (Exception e) {
+            logger.warn("signUpMeet fail , because user input meet time , value is not dateTime format");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_FAIL);
+        }
+
+        //检查需求商用户输入公司详细地址是否为空
+        if (StringUtils.isEmpty(supplierMeetRequest.getAddress())) {
+            logger.warn("signUpMeet fail , because user input address , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_ADDRESS_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联系人是否为空
+        if (StringUtils.isEmpty(supplierMeetRequest.getContact())) {
+            logger.warn("signUpMeet fail , because user input contact , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_CONTACT_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联系人尊称是否为空
+        if (ObjectUtils.isEmpty(supplierMeetRequest.getRespectfulName())) {
+            logger.warn("signUpMeet fail , because user input respectful name , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_RESPECTFULNAME_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联电话-移动号码是否为空
+        if (ObjectUtils.isEmpty(supplierMeetRequest.getMobileNumber())) {
+            logger.warn("signUpMeet fail , because user input mobile number , value is empty");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_MOBILE_IS_EMPTY);
+        }
+
+        //检查需求商用户输入联系电话-移动号码是否正确
+        if (!RegexUtils.isMobile(String.valueOf(supplierMeetRequest.getMobileNumber()))) {
+            logger.warn("signUpMeet fail , because user input mobile number is not right mobile number");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_MOBILE_NUMBER_IS_FAIL);
+        }
+
+        //构建报名用户约见数据对象
+        SignUpMeetPO signUpMeetPO = new SignUpMeetPO();
+
+        /**
+         * 检查联系电话-固话
+         */
+        {
+            //检查固话区号是否正确
+            if (!StringUtils.isEmpty(supplierMeetRequest.getPhoneAreaCode())) {
+                //检查需求商用户输入联系电话-固话号码-区号是否正确
+                if (!RegexUtils.isDigital(supplierMeetRequest.getPhoneAreaCode())) {
+                    logger.warn("signUpMeet fail , because user input phone area code is not right number");
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_COMPANY_PHONE_AREA_CODE_IS_FAIL);
+                }
+
+                //检查企业联系电话-固话-区号内容长度是否超出DB许可长度
+                try {
+                    if (supplierMeetRequest.getPhoneAreaCode().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > DEMAND_PHONE_AREA_CODE_MAX_BYTES_BY_DB) {
+                        logger.info("signUpMeet fail , because phone area code [" + supplierMeetRequest.getPhoneAreaCode() + "] bytes greater than"
+                                + DEMAND_PHONE_AREA_CODE_MAX_BYTES_BY_DB);
+                        throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_COMPANY_PHONE_AREA_CODE_TO_LONG);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    logger.info("signUpMeet fail , because phone area code [" + supplierMeetRequest.getPhoneAreaCode() + "] getBytes("
+                            + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+                }
+                signUpMeetPO.setPhoneAreaCode(supplierMeetRequest.getPhoneAreaCode());
+            }
+
+            //检查固话号码是否正确
+            if (!ObjectUtils.isEmpty(supplierMeetRequest.getTelephoneNumber())) {
+                //检查需求商用户输入联系电话-固话号码是否正确
+                if (!RegexUtils.isDigital(String.valueOf(supplierMeetRequest.getTelephoneNumber()))) {
+                    logger.warn("signUpMeet fail , because user input telephone number is not right number");
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_COMPANY_TELEPHONE_NUMBER_IS_FAIL);
+                }
+                signUpMeetPO.setTelephoneNumber(Integer.parseInt(supplierMeetRequest.getTelephoneNumber()));
+            }
+
+            //检查固话分机号是否正确
+            if (!StringUtils.isEmpty(supplierMeetRequest.getExtensionNumber())) {
+                //检查需求商用户输入联系电话-固话号码-分机号是否正确
+                if (!RegexUtils.isDigital(supplierMeetRequest.getExtensionNumber())) {
+                    logger.warn("signUpMeet fail , because user input extension number is not right number");
+                    throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_COMPANY_EXTENSION_NUMBER_IS_FAIL);
+                }
+
+                //检查企业固话分机号内容长度是否超出DB许可长度
+                try {
+                    if (supplierMeetRequest.getExtensionNumber().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > DEMAND_EXTENSION_NUMBER_CODE_MAX_BYTES_BY_DB) {
+                        logger.info("signUpMeet fail , because extension number [" + supplierMeetRequest.getExtensionNumber() + "] bytes greater than"
+                                + DEMAND_EXTENSION_NUMBER_CODE_MAX_BYTES_BY_DB);
+                        throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_COMPANY_EXTENSION_NUMBER_TO_LONG);
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    logger.info("signUpMeet fail , because extension number [" + supplierMeetRequest.getExtensionNumber() + "] getBytes("
+                            + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+                    throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+                }
+
+                signUpMeetPO.setExtensionNumber(supplierMeetRequest.getExtensionNumber());
+            }
+        }
+
+        //检查联系人内容长度是否超出DB许可长度
+        try {
+            if (supplierMeetRequest.getContact().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > DEMAND_CONTACT_MAX_BYTES_BY_DB) {
+                logger.info("signUpMeet fail , because contact [" + supplierMeetRequest.getContact() + "] bytes greater than"
+                        + DEMAND_CONTACT_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_COMPANY_CONTACT_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("signUpMeet fail , because contact [" + supplierMeetRequest.getContact() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        //检查企业地址内容长度是否超出DB许可长度
+        try {
+            if (supplierMeetRequest.getAddress().getBytes(SystemConf.PLATFORM_CHARSET.toString()).length > SIGN_UP_MEET_ADDRESS_MAX_BYTES_BY_DB) {
+                logger.info("signUpMeet fail , because address name [" + supplierMeetRequest.getAddress() + "] bytes greater than"
+                        + SIGN_UP_MEET_ADDRESS_MAX_BYTES_BY_DB);
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_BY_ADDRESS_TO_LONG);
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("signUpMeet fail , because address [" + supplierMeetRequest.getAddress() + "] getBytes("
+                    + SystemConf.PLATFORM_CHARSET.toString() + ") fail");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_GET_BYTE_FAIL);
+        }
+
+        //根据需求编号查询需求数据
+        DemandPO demandPO = demandDao.selectByPrimaryKey(supplierMeetRequest.getDemandId());
+        if (ObjectUtils.isEmpty(demandPO) ||
+                ObjectUtils.isEmpty(demandPO.getId())) {
+            logger.warn("signUpMeet fail , because demand id [" + supplierMeetRequest.getDemandId() + "] query data is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_FAIL);
+        }
+
+        //根据供应商编号查询供应商报名数据
+        SignUpPO signUpPO = signUpDao.selectBySupplierSideId(supplierMeetRequest.getDemandId(), supplierMeetRequest.getSupplierSideId());
+        if (ObjectUtils.isEmpty(signUpPO) ||
+                ObjectUtils.isEmpty(signUpPO.getId())) {
+            logger.warn("signUpMeet fail , because supplier side id [" + supplierMeetRequest.getSupplierSideId() + "] query data by table [sign_up] is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_FAIL);
+        }
+
+        signUpMeetPO.setDemandId(supplierMeetRequest.getDemandId());
+        signUpMeetPO.setSupplierSideId(supplierMeetRequest.getSupplierSideId());
+        signUpMeetPO.setWork(signUpPO.getWork());
+        signUpMeetPO.setMeetTime(Integer.parseInt(supplierMeetRequest.getMeetTime()));
+        signUpMeetPO.setAddress(supplierMeetRequest.getAddress());
+        signUpMeetPO.setContact(supplierMeetRequest.getContact());
+        signUpMeetPO.setRespectfulName(supplierMeetRequest.getRespectfulName());
+        signUpMeetPO.setMobileNumber(Long.parseLong(supplierMeetRequest.getMobileNumber()));
+        signUpMeetPO.setCreateTime(CalendarUtil.getSystemSeconds());
+        //添加新约见数据
+        signUpMeetDao.insertSelective(signUpMeetPO);
+
+        //将报名数据复制到报名历史表中
+        signUpDao.copyInsertHistory(signUpPO);
+
+        //删除报名数据
+        signUpDao.deleteByPrimaryKey(signUpPO.getId());
     }
 
 }

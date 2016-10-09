@@ -196,5 +196,41 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_IS_EMPTY = "2003001";
     //需求操作，已报过名
     public static final String DEMAND_HAS_SIGN_UP = "2003002";
+    //需求操作，约见失败
+    public static final String DEMAND_MEET_FAIL = "2003003";
+    //需求操作，约见表单-约见时间为空
+    public static final String DEMAND_MEET_TIME_IS_EMPTY = "2003004";
+    //需求操作，约见表单-约见地址为空
+    public static final String DEMAND_MEET_ADDRESS_IS_EMPTY = "2003005";
+    //需求操作，约见表单-约见联系人为空
+    public static final String DEMAND_MEET_CONTACT_IS_EMPTY = "2003006";
+    //需求操作，约见表单-约见联系人尊称为空
+    public static final String DEMAND_MEET_RESPECTFULNAME_IS_EMPTY = "2003007";
+    //需求操作，约见表单-约见联系电话-移动号码为空
+    public static final String DEMAND_MEET_MOBILE_IS_EMPTY = "2003008";
+    //需求操作，约见表单-约见联系电话-固话-区号为空
+    public static final String DEMAND_MEET_PHONEAREACODE_IS_EMPTY= "2003009";
+    //需求操作，约见表单-约见联系电话-固话-号码为空
+    public static final String DEMAND_MEET_TELEPHONENUMBER_IS_EMPTY = "2003010";
+    //需求操作，约见表单-约见联系电话-固话-分机号码为空
+    public static final String DEMAND_MEET_EXTENSIONNUMBER_IS_EMPTY = "2003011";
+    //需求操作，约见表单-约见联系电话-移动号码不正确
+    public static final String DEMAND_MEET_BY_MOBILE_NUMBER_IS_FAIL = "2003012";
+    //需求操作，约见表单-联系人太长
+    public static final String DEMAND_MEET_BY_COMPANY_CONTACT_TO_LONG = "2003013";
+    //需求操作，约见表单-约见联系固话-区号不是数字
+    public static final String DEMAND_MEET_BY_COMPANY_PHONE_AREA_CODE_IS_FAIL = "2003014";
+    //需求操作，约见表单-约见联系固话-区号太长
+    public static final String DEMAND_MEET_BY_COMPANY_PHONE_AREA_CODE_TO_LONG = "2003015";
+    //需求操作，约见表单-约见联系固话号码不是数字
+    public static final String DEMAND_MEET_BY_COMPANY_TELEPHONE_NUMBER_IS_FAIL = "2003016";
+    //需求操作，约见表单-约见联系固话-分机号不是数字
+    public static final String DEMAND_MEET_BY_COMPANY_EXTENSION_NUMBER_IS_FAIL = "2003017";
+    //需求操作，约见表单-约见联系固话-分机号太长
+    public static final String DEMAND_MEET_BY_COMPANY_EXTENSION_NUMBER_TO_LONG = "2003018";
+    //需求操作，约见表单-约见详细地址太长
+    public static final String DEMAND_MEET_BY_ADDRESS_TO_LONG = "2003019";
+    //需求操作，约见信息查询失败
+    public static final String DEMAND_MEET_BY_QUERY_FAIL = "2003020";
 /********** 客户端系统异常配置 **********/
 }

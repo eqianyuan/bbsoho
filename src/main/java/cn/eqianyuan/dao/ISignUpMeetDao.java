@@ -17,6 +17,15 @@ public interface ISignUpMeetDao {
 
     SignUpMeetPO selectByPrimaryKey(String id);
 
+    /**
+     * 根据需求编号和供应商编号查询约见信息
+     *
+     * @param demandId
+     * @param supplierSideId
+     * @return
+     */
+    SignUpMeetPO selectMeetInfo(@Param("demandId") String demandId, @Param("supplierSideId") String supplierSideId);
+
     int updateByPrimaryKeySelective(SignUpMeetPO record);
 
     int updateByPrimaryKey(SignUpMeetPO record);
@@ -54,4 +63,12 @@ public interface ISignUpMeetDao {
      * @return
      */
     List<DemandSignUpMeetSupplierPO> selectByDemandPagination(@Param("demandSideId") String demandSideId, @Param("demandId") String demandId, @Param("page") Page page);
+
+    /**
+     * 将约见表数据复制到约见历史表
+     *
+     * @param record
+     * @return
+     */
+    int copyInsertHistory(SignUpMeetPO record);
 }

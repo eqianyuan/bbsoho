@@ -11,6 +11,7 @@
     <title>需求信息 - 百百SOHO</title>
     <c:import url="../common_inport.jsp"/>
     <script type="text/javascript" src="js/eqianyuan.page.js"></script>
+    <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body class="pt97">
 <!-- header -->
@@ -129,7 +130,44 @@
 <!-- footer -->
 <c:import url="../footer.jsp"/>
 <!-- /footer -->
-<!-- -->
+<!-- meet -->
+<div class="modal fade" id="meetDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body editApply-dialog">
+                <div class="error warn-error wd420 ">
+                    <p>
+                        <label class="error" style="display: inline-block;"></label>
+                    </p>
+                </div>
+                <!-- editApply-form -->
+                <form class="personal editApply-form">
+                </form>
+                <!-- /editApply-form -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- meet -->
+<!-- hire -->
+<div class="modal fade" id="hireDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body editApply-dialog">
+                <div class="error warn-error wd420 ">
+                    <p>
+                        <label class="error" style="display: inline-block;"></label>
+                    </p>
+                </div>
+                <!-- editApply-form -->
+                <form class="personal editApply-form">
+                </form>
+                <!-- /editApply-form -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- hire -->
 <!-- relieveDeal -->
 <div class="modal fade" id="relieveDeal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog wd380">
@@ -190,6 +228,29 @@
         })
     }
 
+    //获取用户尊称字典数据
+    var respecfulName = '';
+    var getRespectfulName = function () {
+        $.ajax({
+            url: "/common/getDictionaryByGroupKey",
+            data: {groupKey: "respectful_name"},
+            type: "GET",
+            success: function (resp) {
+                var respectfulNameOptions = '';
+                if (resp != null && resp.length > 0) {
+                    $(resp).each(function () {
+                        respecfulName += '<option value="' + this.groupValKey + '" >' + this.groupValVal + '</option>';
+                    });
+                }
+            }
+        })
+    }
+
+    //设置联系人尊称
+    var setRespectfulName = function (obj) {
+        $(obj).html(respecfulName);
+    }
+
     //报名分页查询组件
     var signUpPagination = {
         initStatus: false,      //分页插件初始化状态-true:已经构建了分页插件、false:还未构建
@@ -242,7 +303,7 @@
                                     + '<th colspan="3"><a href="javascript:;" class="tit" data-id="' + this.id + '">' + this.nickName + "&nbsp;&nbsp;" + this.signUpWork + "&nbsp;&nbsp;" + this.signUpTime + '</a></th>'
                                     + '<th rowspan="2">'
                                     + '<div class="btn-box">'
-                                    + '<a href="javascript:;" class="btn">约见</a>'
+                                    + '<a href="javascript:;" class="btn meetBtn" data-toggle="modal" data-target="#meetDialog" data-demandId="' + this.demandId + '" data-supplierId="' + this.supplierSideId + '">约见</a>'
                                     + '</div>'
                                     + '</th>'
                                     + '</tr>'
@@ -316,7 +377,7 @@
 
                             var btn = '';
                             if (this.status == 1) {
-                                btn = '<a href="javascript:;" class="btn">聘用</a>&nbsp;&nbsp;<a href="javascript:;" class="btn">不聘用</a>';
+                                btn = '<a href="javascript:;" class="btn hireBtn" data-status="1">聘用</a>&nbsp;&nbsp;<a href="javascript:;" class="btn hireBtn" data-status="2" data-toggle="modal" data-target="#hireDialog">不聘用</a>';
                             }
 
                             row += '<tr>'
@@ -445,10 +506,69 @@
         //获取已聘用用户
         hirePagination.list();
 
+        //获取联系人尊称数据
+        getRespectfulName();
+
+        //约见按钮点击事件
+        $(document).on("click", ".meetBtn", function () {
+            var formHtml = '<div class="error"></div>'
+                    + '<table>'
+                    + '<input type="hidden" name="demandId" value="' + $(this).attr("data-demandId") + '"/><input type="hidden" name="supplierSideId" value="' + $(this).attr("data-supplierId") + '"/>'
+                    + '<tr><th>约见时间：</th><td><p class="ipt-txt wd300 fl"><input type="text" name="meetTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})"readonly/></p><i class="warn-star fl">*</i></td></tr>'
+                    + '<tr><th>约见地址：</th><td><p class="ipt-txt wd300 fl"><input type="text" name="address" placeholder="请输入详细地址"/></p><i class="warn-star fl">*</i></td></tr>'
+                    + '<tr><th>联系人：</th><td><p class="ipt-txt wd300"><input type="text" name="contact"/></p><p class="ipt-txt wd100"><select name="respectfulName"></select></p><i class="red">*</i></td></tr>'
+                    + '<tr><th>联系电话：</th><td><p class="ipt-txt wd300 fl"><input type="text" name="mobileNumber" placeholder="手机号码"/></p><i class="red">*</i></td></tr>'
+                    + '<tr>'
+                    + '<th></th><td><p class="ipt-txt wd100"><input type="text" name="phoneAreaCode" placeholder="区号"/></p>'
+                    + '<p class="ipt-txt wd200"><input type="text" name="telephoneNumber" placeholder="固话号码"/></p>'
+                    + '<p class="ipt-txt wd100"><input type="text" name="extensionNumber" placeholder="分机号码"/></p></td>'
+                    + '</tr>'
+                    + '</table>'
+                    + '<button type="button" class="ipt-submit meetSubmit">确定</button>';
+
+            $("#meetDialog form").html(formHtml);
+
+            //设置联系人尊称
+            setRespectfulName($("select[name='respectfulName']"));
+        });
+
+        //约见弹窗确定提交事件
+        $(document).on("click", ".meetSubmit", function () {
+            var _this = $(this);
+            _this.attr('disabled', "true")
+
+            var formDataJson = {};
+            var formData = _this.parents("form").serializeArray();
+
+            $(formData).each(function () {
+                formDataJson[this.name] = this.value;
+            });
+
+            //异步提交表单
+            $.ajax({
+                url: "/demandSide/signUpMeet",
+                data: formDataJson,
+                type: "post",
+                success: function (resp) {
+                    $(".warn-error").show().find("label").text(resp.message);
+                    _this.removeAttr("disabled");
+
+                    if(resp.code == "200"){
+                        document.location.reload();
+                    }
+                }
+            })
+        });
+
         //取消
-//        $(document).on('click', 'form.relieveDeal button.btn-cancel', function(){
-//            $('#relieveDeal').modal('hide');
-//        });
+        $(document).on('click', '.meetCancel', function () {
+            $(this).parents(".modal").modal('hide');
+        });
+
+        //聘用、不聘用操作按钮点击事件
+        $(document).on("click", ".hireBtn", function(){
+
+        });
 
         //解除协议校验
 //        $('form.relieveDeal').validate({

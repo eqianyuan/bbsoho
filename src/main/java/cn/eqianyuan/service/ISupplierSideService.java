@@ -5,6 +5,7 @@ import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
+import cn.eqianyuan.bean.vo.DemandMeetInfoVO;
 import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
 import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
 import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
@@ -137,4 +138,23 @@ public interface ISupplierSideService {
      * @throws EqianyuanException
      */
     PageResponse hireDemand(String supplierId, Page page) throws EqianyuanException;
+
+    /**
+     * 查询需求商需求约见信息
+     *
+     * @param demandId       需求编号
+     * @param supplierSideId 供应商编号
+     * @throws EqianyuanException
+     */
+    DemandMeetInfoVO demandMeetInfo(String demandId, String supplierSideId) throws EqianyuanException;
+
+    /**
+     * 约见需求处理（同意约见、拒绝约见）
+     *
+     * @param demandId       需求编号
+     * @param supplierSideId 供应商编号
+     * @param status         处理状态
+     * @throws EqianyuanException
+     */
+    void demandMeetDispose(String demandId, String supplierSideId, Integer status) throws EqianyuanException;
 }

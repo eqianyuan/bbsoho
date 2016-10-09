@@ -19,7 +19,8 @@
         <result column="sign_up_work" property="signUpWork" jdbcType="VARCHAR"/>
     </resultMap>
     <resultMap id="BaseResultMapByDemandSignUp" type="cn.eqianyuan.bean.po.DemandSignUpSupplierPO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="supplier_side_id" property="supplierSideId" jdbcType="VARCHAR"/>
+        <id column="demand_id" property="demandId" jdbcType="VARCHAR"/>
         <id column="nick_name" property="nickName" jdbcType="VARCHAR"/>
         <result column="head_portrait" property="headPortrait" jdbcType="VARCHAR"/>
         <result column="working_years" property="workingYears" jdbcType="INTEGER"/>
@@ -113,6 +114,14 @@
     where id = #{id,jdbcType=VARCHAR}
   </update>
 
+    <select id="selectBySupplierSideId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sign_up
+        where supplier_side_id = #{supplierSideId}
+        and demand_id = #{demandId}
+    </select>
+
     <select id="countBySigup" resultType="java.lang.Integer">
     select
     count(1)
@@ -155,7 +164,7 @@
 
     <select id="selectByDemandPagination" resultMap="BaseResultMapByDemandSignUp">
         select
-        ss.id,su.`work` sign_up_work, su.create_time sign_up_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay
+        su.supplier_side_id, su.demand_id ,su.`work` sign_up_work, su.create_time sign_up_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay
         from sign_up su, demand, supplier_side ss, resume
         where
         su.supplier_side_id = ss.id
@@ -170,4 +179,8 @@
         order by sign_up_time desc
         limit ${page.start}, ${page.pageSize}
     </select>
+
+    <insert id="copyInsertHistory" parameterType="cn.eqianyuan.bean.po.SignUpPO">
+        insert into sign_up_history (select * from sign_up where id = #{id})
+    </insert>
 </mapper>
