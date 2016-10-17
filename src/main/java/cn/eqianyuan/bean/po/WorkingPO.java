@@ -1,6 +1,6 @@
 package cn.eqianyuan.bean.po;
 
-public class HirePO {
+public class WorkingPO {
     private String id;
 
     private String supplierSideId;

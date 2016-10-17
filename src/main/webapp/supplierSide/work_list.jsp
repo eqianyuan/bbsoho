@@ -117,19 +117,21 @@
 
 <!-- meet 约见信息-->
 <div class="modal fade" id="meetDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog wd380">
         <div class="modal-content">
-            <div class="modal-body editApply-dialog">
-                <!-- editApply-form -->
-                <form class="personal editApply-form">
+            <div class="modal-body">
+                <!-- relieveDeal -->
+                <form action="#" method="post" class="cancelMeetMsg">
+                    <h3>约见信息</h3>
+                    <br>
                     <table>
                         <tr>
                             <th>约见时间：</th>
-                            <td style="vertical-align: middle;" name="meetTime">2016-10-31</td>
+                            <td style="vertical-align: middle;" name="meetTime"></td>
                         </tr>
                         <tr>
                             <th>约见地址：</th>
-                            <td style="vertical-align: middle;" name="address">
+                            <td style="vertical-align: middle;" name="address"></td>
                         </tr>
                         <tr>
                             <th>联系人：</th>
@@ -144,14 +146,55 @@
                             <td style="vertical-align: middle;" name="telephoneNumber"></td>
                         </tr>
                     </table>
-                    <button type="button" class="ipt-submit btn-cancel">确定</button>
+                    <br>
+                    <div class="btn-box">
+                        <button type="button" class="btn meetDisposeBtn" data-status="1">同意</button>
+                        <button type="submit" class="btn meetDisposeBtn" data-status="2">拒绝</button>
+                        <button type="button" class="btn btn-cancel">取消</button>
+                    </div>
                 </form>
-                <!-- /editApply-form -->
+                <!-- /relieveDeal -->
             </div>
         </div>
     </div>
 </div>
 <!-- meet 约见信息-->
+<!-- meet 聘用信息-->
+<div class="modal fade" id="hireDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog wd380">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- relieveDeal -->
+                <form action="#" method="post" class="cancelMeetMsg">
+                    <h3>约见信息</h3>
+                    <br>
+                    <table>
+                        <tr>
+                            <th>工作岗位：</th>
+                            <td style="vertical-align: middle;" name="work"></td>
+                        </tr>
+                        <tr>
+                            <th>合同期限：</th>
+                            <td style="vertical-align: middle;" name="contractPeriod"></td>
+                        </tr>
+                        <tr>
+                            <th>合约薪水（月薪）：</th>
+                            <td style="vertical-align: middle;" name="remuneration"></td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="btn-box">
+                        <button type="button" class="btn hireDisposeBtn" data-status="1">同意</button>
+                        <button type="submit" class="btn hireDisposeBtn" data-status="2">拒绝</button>
+                        <button type="button" class="btn btn-cancel">取消</button>
+                    </div>
+                </form>
+                <!-- /relieveDeal -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- meet 聘用信息-->
 <!-- error msg 错误信息弹窗 -->
 <div class="modal fade" id="errorMsgDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
      aria-hidden="true">
@@ -171,77 +214,10 @@
     </div>
 </div>
 <!-- /rror msg 错误信息弹窗 -->
-<!-- relieveDeal 约见消息 -->
-<div class="modal fade" id="meetMsg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog wd380">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- relieveDeal -->
-                <form action="#" method="post" class="meetMsg">
-                    <h3>约见消息</h3>
-                    <textarea class="tta" name="message" placeholder="请填写取消报名的原因。"
-                              readonly>江苏驿乾元科技有限公司约您9月12日8:30面试。</textarea>
-                    <div class="error"></div>
-                    <div class="btn-box">
-                        <button type="button" class="btn">联系我们</button>
-                        <button type="button" class="btn">确定</button>
-                        <button type="button" class="btn btn-cancel" data-toggle="modal" data-target="#cancelMeetMsg">
-                            取消
-                        </button>
-                    </div>
-                </form>
-                <!-- /relieveDeal -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /relieveDeal -->
-<!-- relieveDeal 取消报名 -->
-<div class="modal fade" id="relieveApply" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog wd380">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- relieveDeal -->
-                <form action="#" method="post" class="relieveApply">
-                    <h3>取消报名</h3>
-                    <textarea class="tta" name="message" placeholder="请填写取消报名的原因。"></textarea>
-                    <div class="error"></div>
-                    <div class="btn-box">
-                        <button type="button" class="btn">联系我们</button>
-                        <button type="submit" class="btn">确定</button>
-                        <button type="button" class="btn btn-cancel">取消</button>
-                    </div>
-                </form>
-                <!-- /relieveDeal -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /relieveDeal -->
-<!-- relieveDeal 取消协议 -->
-<div class="modal fade" id="relieveDeal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog wd380">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- relieveDeal -->
-                <form action="#" method="post" class="relieveDeal">
-                    <h3>协议解除</h3>
-                    <textarea class="tta" name="message" placeholder="请填写协议解除原因，并与您的自由员工联系。"></textarea>
-                    <div class="error"></div>
-                    <div class="btn-box">
-                        <button type="button" class="btn">联系我们</button>
-                        <button type="submit" class="btn">确定</button>
-                        <button type="button" class="btn btn-cancel">取消</button>
-                    </div>
-                </form>
-                <!-- /relieveDeal -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- /relieveDeal -->
 </body>
 <script>
+    //新窗口打开对象
+    var winOpen = null;
     //报名分页查询组件
     var signUpPagination = {
         initStatus: false,      //分页插件初始化状态-true:已经构建了分页插件、false:还未构建
@@ -273,7 +249,11 @@
                 data: $.extend({}, signUpPagination.data, signUpPagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        document.write(resp);
+                        if (winOpen == null) {
+                            winOpen = window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
                         return;
                     }
 
@@ -338,7 +318,11 @@
                 data: $.extend({}, signUpMeetPagination.data, signUpMeetPagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        document.write(resp);
+                        if (winOpen == null) {
+                            winOpen = window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
                         return;
                     }
 
@@ -350,11 +334,6 @@
                     var row = "";
                     if (resp.totalCount > 0) {
                         $(resp.list).each(function (i) {
-                            var btn = '';
-                            if (this.status == undefined || this.status == "") {
-                                btn = '<a href="javascript:;" class="btn meetDisposeBtn" data-status="1" data-demandId="' + this.id + '">同意约见</a><a href="javascript:;" class="btn meetDisposeBtn" data-status="2" data-demandId="' + this.id + '">拒绝约见</a>';
-                            }
-
                             row += '<p class="meet fr"></p>'
                                     + '<div class="p-left fl">'
                                     + '<dl class="tit"><dt data-id="' + this.id + '"><h3>' + this.name + '</h3></dt><dd><p>' + this.beginCycle + '到' + this.endCycle + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + (undefined == this.statusText ? "" : this.statusText) + '</p></dd></dl>'
@@ -366,7 +345,7 @@
                                     + '<div class="p-right fr">'
                                     + '<div class="clearfix"></div>'
                                     + '<div class="btn-box">'
-                                    + '<a href="javascript:;" class="btn meetInfoBtn" data-toggle="modal" data-target="#meetDialog" data-demandId="' + this.id + '">约见信息</a>' + btn
+                                    + '<a href="javascript:;" class="btn meetInfoBtn" data-toggle="modal" data-target="#meetDialog" data-demandId="' + this.id + '" data-status="' + this.status + '">约见信息</a>'
                                     + '</div>'
                                     + '</div>'
                                     + '<div class="clearfix"></div>';
@@ -414,7 +393,11 @@
                 data: $.extend({}, hirePagination.data, hirePagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        document.write(resp);
+                        if (winOpen == null) {
+                            winOpen = window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
                         return;
                     }
 
@@ -426,11 +409,6 @@
                     var row = "";
                     if (resp.totalCount > 0) {
                         $(resp.list).each(function (i) {
-                            var btn = '';
-                            if (this.status == undefined || this.status == "" || this.status == 0) {
-                                btn = '<a href="javascript:;" class="btn" data-toggle="modal" data-target="#relieveApply">同意聘用</a><a href="javascript:;" class="btn" data-toggle="modal" data-target="#relieveApply">拒绝聘用</a>';
-                            }
-
                             row += '<p class="meet fr"></p>'
                                     + '<div class="p-left fl">'
                                     + '<dl class="tit"><dt data-id="' + this.id + '"><h3>' + this.name + '</h3></dt><dd><p>' + this.beginCycle + '到' + this.endCycle + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + (undefined == this.statusText ? "" : this.statusText) + '</p></dd></dl>'
@@ -442,7 +420,7 @@
                                     + '<div class="p-right fr">'
                                     + '<div class="clearfix"></div>'
                                     + '<div class="btn-box">'
-                                    + btn
+                                    + '<a href="javascript:;" class="btn hireInfoBtn" data-toggle="modal" data-target="#hireDialog" data-demandId="' + this.id + '" data-status="' + this.status + '">合约信息</a>'
                                     + '</div>'
                                     + '</div>'
                                     + '<div class="clearfix"></div>';
@@ -471,6 +449,13 @@
 
         //点击约见信息按钮，异步查询约见信息并填充到弹窗
         $(document).on("click", ".meetInfoBtn", function () {
+            if ($(this).data("status") != undefined && $(this).data("status") != "") {
+                $("#meetDialog .meetDisposeBtn").hide();
+            } else {
+                $("#meetDialog .meetDisposeBtn").attr("data-demandId", $(this).attr("data-demandId"));
+                $("#meetDialog .meetDisposeBtn").show();
+            }
+
             var _this = this;
             $.ajax({
                 url: "/supplierSide/demand/demandMeetInfo/" + $(_this).attr("data-demandId"),
@@ -496,11 +481,49 @@
             })
         });
 
+        //点击合同信息按钮，异步查询聘用合同信息并填充到弹窗
+        $(document).on("click", ".hireInfoBtn", function () {
+            if ($(this).data("status") != undefined && $(this).data("status") != "") {
+                $("#hireDialog .hireDisposeBtn").hide();
+            } else {
+                $("#hireDialog .hireDisposeBtn").attr("data-demandId", $(this).attr("data-demandId"));
+                $("#hireDialog .hireDisposeBtn").show();
+            }
+
+            var _this = this;
+            $.ajax({
+                url: "/supplierSide/demand/demandContractInfo/" + $(_this).attr("data-demandId"),
+                type: "GET",
+                success: function (resp) {
+                    $("#hireDialog td[name='contractPeriod']").html(resp.contractComesIntoEffectTime + "<br> " + resp.contractExpiresTime);
+                    $("#hireDialog td[name='remuneration']").text(resp.remuneration);
+                    $("#hireDialog td[name='work']").text(resp.workText);
+                }
+            })
+        });
+
         //约见处理按钮点击事件
         $(document).on("click", ".meetDisposeBtn", function () {
             var _this = this;
             $.ajax({
                 url: "/supplierSide/demand/demandMeetDispose/" + $(_this).attr("data-demandId"),
+                data: {"status": $(_this).data("status")},
+                type: "POST",
+                success: function (resp) {
+                    if (resp.code != "200") {
+                        $("#errorMsgDialog").modal('show').find(".errorMsg").text(resp.message);
+                    } else {
+                        document.location.reload();
+                    }
+                }
+            })
+        });
+
+        //聘用处理按钮点击事件
+        $(document).on("click", ".hireDisposeBtn", function () {
+            var _this = this;
+            $.ajax({
+                url: "/supplierSide/demand/demandHireDispose/" + $(_this).attr("data-demandId"),
                 data: {"status": $(_this).data("status")},
                 type: "POST",
                 success: function (resp) {

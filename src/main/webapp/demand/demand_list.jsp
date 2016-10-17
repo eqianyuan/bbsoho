@@ -331,6 +331,10 @@
                     if (response.totalCount > 0) {
                         var row = "";
                         $(response.list).each(function () {
+                            var btn = '';
+                            if ("${demandUserByLogin}" == "") {
+                                btn = '<dd><a href="javascript:;" class="btn-buy signUp" data-id="' + this.id + '" data-work="' + this.work + '">报名</a></dd>';
+                            }
                             row += '<div class="row">'
                                     + '<dl><dt><a href="/demand/demand_info.jsp?menuNavigation=demandHall&demandId=' + this.id + '" class="tit">' + this.name + '</a><!--<span class="grade">综合评分：<span class="orange">85分</span></span>--></dt></dl>'
                                     + '<dl>'
@@ -339,7 +343,7 @@
                                     + '<dd><p class="pd8">薪资</p><p><span class="orange large">' + this.remuneration + '</span><span class="gray">元</span></p></dd>'
                                     + '<dd><p class="pd8">用人量</p><p class="ageLimit"><span class="gray">' + this.personsAmount + '</span></p></dd>'
                                     + '<dd><p>周期开始：<span class="gray">' + this.beginCycle + '</span>周期结束：<span class="gray">' + this.endCycle + '</span></p><p>工作地点：<span class="gray">' + this.countyName + '</span></p></dd>'
-                                    + '<dd><a href="javascript:;" class="btn-buy signUp" data-id="' + this.id + '" data-work="' + this.work + '">报名</a></dd>'
+                                    + btn
                                     + '</dl>'
                                     + '</div>';
                         });
@@ -414,7 +418,9 @@
                 url: "/supplierSide/demand/signUp/" + $(this).data("id") + "/" + $(this).data("work"),
                 success: function (resp) {
                     if (resp.code == null) {
-                        document.write(resp);
+                        var w = window.open('about:blank');
+                        w.document.write(resp);
+                        w.document.close();
                         return;
                     }
 

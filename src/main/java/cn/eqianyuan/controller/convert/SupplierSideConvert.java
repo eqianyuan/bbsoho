@@ -923,4 +923,35 @@ public class SupplierSideConvert {
 
         return demandMeetInfoVO;
     }
+
+    /**
+     * 将供应商需求聘用合同PO对象转为VO对象
+     *
+     * @param hirePO
+     * @return
+     * @throws EqianyuanException
+     */
+    public SupplierContractInfoVO demandContractInfo(HirePO hirePO) throws EqianyuanException {
+        SupplierContractInfoVO supplierContractInfoVO = new SupplierContractInfoVO();
+        BeanUtils.copyProperties(hirePO, supplierContractInfoVO);
+        supplierContractInfoVO.setContractComesIntoEffectTime(CalendarUtil.secondsTimeToDateTimeString(hirePO.getContractComesIntoEffectTime(), CalendarUtil.Format_DateMinute));
+        supplierContractInfoVO.setContractExpiresTime(CalendarUtil.secondsTimeToDateTimeString(hirePO.getContractExpiresTime(), CalendarUtil.Format_DateMinute));
+
+        //从数据字典缓存中获取工种集合
+        List<DataDictionaryPO> workDictionary = InitialData.dataDictionaryMap.get(DataDictionaryConf.WORK.toString());
+        if (CollectionUtils.isEmpty(workDictionary)) {
+            logger.warn("demandContractInfo fail , because group key [" + DataDictionaryConf.WORK.toString() + "] data not exists data dictionary");
+            throw new EqianyuanException(ExceptionMsgConstant.SYSTEM_RUNTIME_EXCEPTION);
+        }
+
+        //转换报名岗位工种数据
+        for (DataDictionaryPO work : workDictionary) {
+            if (StringUtils.equals(hirePO.getWork(), work.getGroupValKey())) {
+                supplierContractInfoVO.setWorkText(work.getGroupValVal());
+                break;
+            }
+        }
+
+        return supplierContractInfoVO;
+    }
 }

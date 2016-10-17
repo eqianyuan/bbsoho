@@ -330,7 +330,9 @@
             type: "GET",
             success: function (resp) {
                 if (resp.code == null) {
-                    document.write(resp);
+                    var w=window.open('about:blank');
+                    w.document.write(resp);
+                    w.document.close();
                     return;
                 }
 
@@ -455,6 +457,10 @@
                 data: $.extend({_method: "put"}, formDataJson),
                 type: "post",
                 success: function (resp) {
+                    if (resp.code == "200") {
+                        document.location.href = "/demandSide/demandEdit.jsp?menuNavigation=demandHall&demandId&isPublish=true";
+                    }
+
                     $(".warn-error").show().find("label").text(resp.message);
                     _this.removeAttr("disabled");
                 }

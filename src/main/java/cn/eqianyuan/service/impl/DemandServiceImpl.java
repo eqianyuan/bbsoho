@@ -5,6 +5,7 @@ import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.po.*;
+import cn.eqianyuan.bean.request.SupplierHireRequest;
 import cn.eqianyuan.bean.request.SupplierMeetRequest;
 import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
@@ -52,9 +53,6 @@ public class DemandServiceImpl implements IDemandService {
 
     @Autowired
     private IDemandDao demandDao;
-
-    @Autowired
-    private ISupplierSideDao supplierSideDao;
 
     @Autowired
     private ISignUpDao signUpDao;
@@ -425,9 +423,9 @@ public class DemandServiceImpl implements IDemandService {
      * @return
      * @throws EqianyuanException
      */
-    public PageResponse demandListByMine(Page page, String isEnd) throws EqianyuanException {
+    public PageResponse demandListByMine(Page page, String isEnd, String demandSideId) throws EqianyuanException {
         //根据条件查询数据条数
-        Integer rowCount = demandDao.countByMinePagination(isEnd);
+        Integer rowCount = demandDao.countByMinePagination(isEnd, demandSideId);
 
         page.setTotalRow(rowCount);
         if (ObjectUtils.isEmpty(rowCount) || rowCount == 0) {
@@ -435,7 +433,7 @@ public class DemandServiceImpl implements IDemandService {
             return new PageResponse(page, null);
         }
 
-        List<DemandPOBySearchList> demandPOBySearchLists = demandDao.selectByMinePagination(page, isEnd);
+        List<DemandPOBySearchList> demandPOBySearchLists = demandDao.selectByMinePagination(page, isEnd, demandSideId);
         if (CollectionUtils.isEmpty(demandPOBySearchLists)) {
             logger.info("pageNo [" + page.getPageNo() + "], pageSize [" + page.getPageSize() + "], get list is null");
             return new PageResponse(page, null);
@@ -724,6 +722,112 @@ public class DemandServiceImpl implements IDemandService {
 
         //删除报名数据
         signUpDao.deleteByPrimaryKey(signUpPO.getId());
+    }
+
+    /**
+     * 聘用供应商
+     *
+     * @param supplierHireRequest
+     * @throws EqianyuanException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void hire(SupplierHireRequest supplierHireRequest) throws EqianyuanException {
+        if (StringUtils.isEmpty(supplierHireRequest.getDemandId())) {
+            logger.warn("hire fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+        }
+
+        if (StringUtils.isEmpty(supplierHireRequest.getSupplierSideId())) {
+            logger.warn("hire fail , because supplier side id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+        }
+
+        //根据供应商编号查询供应商约见数据
+        SignUpMeetPO signUpMeetPO = signUpMeetDao.selectMeetInfo(supplierHireRequest.getDemandId(), supplierHireRequest.getSupplierSideId());
+        if (ObjectUtils.isEmpty(signUpMeetPO) ||
+                ObjectUtils.isEmpty(signUpMeetPO.getId())) {
+            logger.warn("hire fail , because demand id [" + supplierHireRequest.getDemandId() + "], supplier side id [" + supplierHireRequest.getSupplierSideId() + "] query data by table [sign_up_meet] is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+        }
+
+        //判断聘用状态是否有值，没有值，则认为是聘用操作
+        if(StringUtils.isEmpty(supplierHireRequest.getStatus())){
+            //检查合同生效时间是否为空
+            if (StringUtils.isEmpty(supplierHireRequest.getContractComesIntoEffectTime())) {
+                logger.warn("hire fail , because user input contract comes into effect time , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_CONTRACT_COMES_INTO_EFFECT_TIME_IS_EMPTY);
+            }
+
+            //检查合同失效时间是否为空
+            if (StringUtils.isEmpty(supplierHireRequest.getContractExpiresTime())) {
+                logger.warn("hire fail , because user input contract expires time , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_CONTRACT_EXPIRES_TIME_IS_EMPTY);
+            }
+
+            //检查合同生效时间是否为yyyy-MM-dd HH:mm:ss格式字符串
+            try {
+                supplierHireRequest.setContractComesIntoEffectTime(String.valueOf(CalendarUtil.parseDate(supplierHireRequest.getContractComesIntoEffectTime(), CalendarUtil.Format_DateTime).getTime() / 1000));
+            } catch (Exception e) {
+                logger.warn("hire fail , because user input contract comes into effect time , value is not dateTime format");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+            }
+
+            //检查合同生效时间是否为yyyy-MM-dd HH:mm:ss格式字符串
+            try {
+                supplierHireRequest.setContractExpiresTime(String.valueOf(CalendarUtil.parseDate(supplierHireRequest.getContractExpiresTime(), CalendarUtil.Format_DateTime).getTime() / 1000));
+            } catch (Exception e) {
+                logger.warn("hire fail , because user input contract expires time , value is not dateTime format");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+            }
+
+            //检查薪资报酬是否为空
+            if (ObjectUtils.isEmpty(supplierHireRequest.getRemuneration())) {
+                logger.warn("hire fail , because user input remuneration , value is empty");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_REMUNERATION_IS_EMPTY);
+            }
+
+            //检查薪资报酬是否为正确数字
+            if (!RegexUtils.isDigital(supplierHireRequest.getRemuneration())) {
+                logger.warn("hire fail , because user input remuneration , value is not right number");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_MEET_REMUNERATION_IS_NOT_MONEY);
+            }
+
+            //根据需求编号查询需求数据
+            DemandPO demandPO = demandDao.selectByPrimaryKey(supplierHireRequest.getDemandId());
+            if (ObjectUtils.isEmpty(demandPO) ||
+                    ObjectUtils.isEmpty(demandPO.getId())) {
+                logger.warn("hire fail , because demand id [" + supplierHireRequest.getDemandId() + "] query data is null");
+                throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+            }
+
+            //构建供应商聘用数据对象
+            HirePO hirePO = new HirePO();
+            hirePO.setDemandId(supplierHireRequest.getDemandId());
+            hirePO.setSupplierSideId(supplierHireRequest.getSupplierSideId());
+            hirePO.setWork(signUpMeetPO.getWork());
+            hirePO.setContractComesIntoEffectTime(Integer.parseInt(supplierHireRequest.getContractComesIntoEffectTime()));
+            hirePO.setContractExpiresTime(Integer.parseInt(supplierHireRequest.getContractExpiresTime()));
+            hirePO.setRemuneration(Integer.parseInt(supplierHireRequest.getRemuneration()));
+            hirePO.setCreateTime(CalendarUtil.getSystemSeconds());
+            //添加新聘用数据
+            hireDao.insertSelective(hirePO);
+
+            //将约见数据复制到约见历史表中
+            signUpMeetDao.copyInsertHistory(signUpMeetPO);
+
+            //删除约见数据
+            signUpMeetDao.deleteByPrimaryKey(signUpMeetPO.getId());
+        }else{
+            //修改约见数据状态为不聘用：3
+            signUpMeetPO.setStatus(3);
+            signUpMeetDao.updateByPrimaryKeySelective(signUpMeetPO);
+
+            //将约见数据复制到约见历史表中
+            signUpMeetDao.copyInsertHistory(signUpMeetPO);
+
+            //删除约见数据
+            signUpMeetDao.deleteByPrimaryKey(signUpMeetPO.getId());
+        }
     }
 
 }

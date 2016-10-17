@@ -5,7 +5,9 @@ package cn.eqianyuan.bean.po;
  * Created by jason on 2016-09-27.
  */
 public class DemandSignUpMeetSupplierPO {
-    private String id;
+    private String supplierSideId;
+
+    private String demandId;
 
     //供应商昵称
     private String nickName;
@@ -28,12 +30,20 @@ public class DemandSignUpMeetSupplierPO {
     //约见状态
     private Integer status;
 
-    public String getId() {
-        return id;
+    public String getSupplierSideId() {
+        return supplierSideId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setSupplierSideId(String supplierSideId) {
+        this.supplierSideId = supplierSideId;
+    }
+
+    public String getDemandId() {
+        return demandId;
+    }
+
+    public void setDemandId(String demandId) {
+        this.demandId = demandId;
     }
 
     public String getNickName() {

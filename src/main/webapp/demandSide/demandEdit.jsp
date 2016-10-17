@@ -166,6 +166,8 @@
 <!-- /footer -->
 </body>
 <script>
+    //新窗口打开对象
+    var winOpen = null;
     //获取工作餐字典数据
     var workingLunch = function (selectedVal) {
         $.ajax({
@@ -554,7 +556,11 @@
             data: {"id": $("input[name='id']").val()},
             success: function (resp) {
                 if (resp.code == null) {
-                    document.write(resp);
+                    if(winOpen == null){
+                        winOpen =window.open('about:blank');
+                        winOpen.document.write(resp);
+                        winOpen.document.close();
+                    }
                     return;
                 }
 
@@ -702,7 +708,11 @@
                 contentType: "application/json",
                 success: function (resp) {
                     if (resp.code == null) {
-                        document.write(resp);
+                        if(winOpen == null){
+                            winOpen =window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
                         return;
                     }
 

@@ -40,13 +40,13 @@ public interface IDemandDao {
      *
      * @return
      */
-    Integer countByMinePagination(@Param("isEnd") String isEnd);
+    Integer countByMinePagination(@Param("isEnd") String isEnd, @Param("demandSideId") String demandSideId);
 
     /**
      * 根据对象及分页条件获取分页数据集合
      *
      * @return
      */
-    List<DemandPOBySearchList> selectByMinePagination(@Param("page") Page page, @Param("isEnd") String isEnd);
+    List<DemandPOBySearchList> selectByMinePagination(@Param("page") Page page, @Param("isEnd") String isEnd, @Param("demandSideId") String demandSideId);
 
 }

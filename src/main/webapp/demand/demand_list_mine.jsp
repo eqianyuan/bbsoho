@@ -193,7 +193,9 @@
                 data: $.extend({}, pagination.data, pagination.page),
                 success: function (response) {
                     if (response.pageNo == null) {
-                        document.write(response);
+                        var w=window.open('about:blank');
+                        w.document.write(response);
+                        w.document.close();
                         return;
                     }
 

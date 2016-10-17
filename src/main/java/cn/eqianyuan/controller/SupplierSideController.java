@@ -6,10 +6,7 @@ import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
-import cn.eqianyuan.bean.vo.DemandMeetInfoVO;
-import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
-import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
-import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
+import cn.eqianyuan.bean.vo.*;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
 import cn.eqianyuan.service.ISupplierSideService;
@@ -270,5 +267,36 @@ public class SupplierSideController extends BaseController {
         SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
         supplierSideService.demandMeetDispose(demandId, supplierSideVOByLogin.getId(), status);
         return new ServerResponse();
+    }
+
+    /**
+     * 需求聘用处理（同意聘用、拒绝聘用）
+     *
+     * @param demandId 需求编号
+     * @param status   处理状态
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/demandHireDispose/{demandId}", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse demandHireDispose(@PathVariable("demandId") String demandId,
+                                            Integer status) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        supplierSideService.demandHireDispose(demandId, supplierSideVOByLogin.getId(), status);
+        return new ServerResponse();
+    }
+
+    /**
+     * 需求聘用合同信息查询
+     *
+     * @param demandId 需求编号
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/demand/demandContractInfo/{demandId}", method = RequestMethod.GET)
+    @ResponseBody
+    public SupplierContractInfoVO demandContractInfo(@PathVariable("demandId") String demandId) throws EqianyuanException {
+        SupplierSideVOByLogin supplierSideVOByLogin = UserUtils.getSupplierSideUserBySession();
+        return supplierSideService.demandContractInfo(demandId, supplierSideVOByLogin.getId());
     }
 }

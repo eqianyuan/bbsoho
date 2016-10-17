@@ -232,5 +232,17 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_MEET_BY_ADDRESS_TO_LONG = "2003019";
     //需求操作，约见信息查询失败
     public static final String DEMAND_MEET_BY_QUERY_FAIL = "2003020";
+    //需求操作，聘用失败
+    public static final String DEMAND_HIRE_FAIL = "2003021";
+    //需求操作，聘用表单-合同生效时间为空
+    public static final String DEMAND_HIRE_CONTRACT_COMES_INTO_EFFECT_TIME_IS_EMPTY = "2003022";
+    //需求操作，聘用表单-合同失效时间为空
+    public static final String DEMAND_MEET_CONTRACT_EXPIRES_TIME_IS_EMPTY = "2003023";
+    //需求操作，聘用表单-薪资报酬为空
+    public static final String DEMAND_MEET_REMUNERATION_IS_EMPTY = "2003024";
+    //需求操作，聘用表单-薪资报酬不是正确金额
+    public static final String DEMAND_MEET_REMUNERATION_IS_NOT_MONEY = "2003025";
+    //需求操作，聘用信息查询失败
+    public static final String DEMAND_HIRE_BY_QUERY_FAIL = "2003026";
 /********** 客户端系统异常配置 **********/
 }

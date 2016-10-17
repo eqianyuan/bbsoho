@@ -149,6 +149,46 @@
     </div>
 </div>
 <!-- meet -->
+
+<!-- meet 约见信息-->
+<div class="modal fade" id="meetInfoDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body editApply-dialog">
+                <!-- editApply-form -->
+                <form class="personal editApply-form">
+                    <table>
+                        <tr>
+                            <th>约见时间：</th>
+                            <td style="vertical-align: middle;" name="meetTime"></td>
+                        </tr>
+                        <tr>
+                            <th>约见地址：</th>
+                            <td style="vertical-align: middle;" name="address"></td>
+                        </tr>
+                        <tr>
+                            <th>联系人：</th>
+                            <td style="vertical-align: middle;" name="contact"></td>
+                        </tr>
+                        <tr>
+                            <th>联系电话：</th>
+                            <td style="vertical-align: middle;" name="mobileNumber"></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <td style="vertical-align: middle;" name="telephoneNumber"></td>
+                        </tr>
+                    </table>
+                    <button type="button" class="ipt-submit btn-cancel">确定</button>
+                </form>
+                <!-- /editApply-form -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- meet 约见信息-->
+
 <!-- hire -->
 <div class="modal fade" id="hireDialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -161,6 +201,27 @@
                 </div>
                 <!-- editApply-form -->
                 <form class="personal editApply-form">
+                    <table>
+                        <input type="hidden" name="demandId"/><input type="hidden" name="supplierSideId"/>
+                        <tr>
+                            <th>合同生效日期：</th>
+                            <td><p class="ipt-txt wd300 fl"><input type="text" id="beginTime" name="contractComesIntoEffectTime"
+                                                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', maxDate:'#F{$dp.$D(\'endTime\')}'})"
+                                                                   readonly/></p><i class="warn-star fl">*</i></td>
+                        </tr>
+                        <tr>
+                            <th>合同到期日期：</th>
+                            <td><p class="ipt-txt wd300 fl"><input type="text" id="endTime" name="contractExpiresTime"
+                                                                   onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', minDate:'#F{$dp.$D(\'beginTime\')}'})"
+                                                                   readonly/></p><i class="warn-star fl">*</i></td>
+                        </tr>
+                        <tr>
+                            <th>薪酬（月）：</th>
+                            <td><p class="ipt-txt wd300 fl"><input type="text" name="remuneration"/></p><i
+                                    class="warn-star fl">*</i></td>
+                        </tr>
+                    </table>
+                    <button type="button" class="ipt-submit submit">确定</button>
                 </form>
                 <!-- /editApply-form -->
             </div>
@@ -191,6 +252,8 @@
 </div>
 <!-- /relieveDeal -->
 <script type="text/javascript">
+    //新窗口打开对象
+    var winOpen = null;
     //获取需求信息并填充数据
     var getDemand = function () {
         $.ajax({
@@ -282,7 +345,12 @@
                 data: $.extend({}, signUpPagination.data, signUpPagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        document.write(resp);
+                        if(winOpen == null){
+                            winOpen =window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
+
                         return;
                     }
 
@@ -358,7 +426,11 @@
                 data: $.extend({}, signUpMeetPagination.data, signUpMeetPagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        document.write(resp);
+                        if(winOpen == null){
+                            winOpen =window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
                         return;
                     }
 
@@ -377,14 +449,14 @@
 
                             var btn = '';
                             if (this.status == 1) {
-                                btn = '<a href="javascript:;" class="btn hireBtn" data-status="1">聘用</a>&nbsp;&nbsp;<a href="javascript:;" class="btn hireBtn" data-status="2" data-toggle="modal" data-target="#hireDialog">不聘用</a>';
+                                btn = '<a href="javascript:;" class="btn hireBtn" data-toggle="modal" data-target="#hireDialog" data-demandId="' + this.demandId + '" data-supplierId="' + this.supplierSideId + '">聘用</a>&nbsp;&nbsp;<a href="javascript:;" class="btn hireBtn" data-status="3" data-demandId="' + this.demandId + '" data-supplierId="' + this.supplierSideId + '">不聘用</a>';
                             }
 
                             row += '<tr>'
-                                    + '<th colspan="3"><a href="javascript:;" class="tit" data-id="' + this.id + '">' + this.nickName + "&nbsp;&nbsp;" + this.signUpWork + "&nbsp;&nbsp;" + this.meetTime + "&nbsp;&nbsp;" + (undefined != this.statusText ? this.statusText : "") + '</a></th>'
+                                    + '<th colspan="3"><a href="javascript:;" class="tit">' + this.nickName + "&nbsp;&nbsp;" + this.signUpWork + "&nbsp;&nbsp;" + this.meetTime + "&nbsp;&nbsp;" + (undefined != this.statusText ? this.statusText : "") + '</a></th>'
                                     + '<th rowspan="2">'
                                     + '<div class="btn-box">'
-                                    + btn
+                                    + '<a href="javascript:;" class="btn meetInfoBtn" data-toggle="modal" data-target="#meetInfoDialog" data-demandId="' + this.demandId + '" data-supplierSideId="' + this.supplierSideId + '">约见信息</a>&nbsp;&nbsp;' + btn
                                     + '</div>'
                                     + '</th>'
                                     + '</tr>'
@@ -418,7 +490,7 @@
         },
         init: function () {
             //初始化分页
-            $(".signUpMeetPaging").createPage({
+            $(".hirePaging").createPage({
                 pageCount: hirePagination.page.pageCount,
                 current: hirePagination.page.pageNo,
                 initStatus: hirePagination.initStatus,
@@ -439,7 +511,11 @@
                 data: $.extend({}, hirePagination.data, hirePagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        document.write(resp);
+                        if(winOpen == null){
+                            winOpen =window.open('about:blank');
+                            winOpen.document.write(resp);
+                            winOpen.document.close();
+                        }
                         return;
                     }
 
@@ -462,7 +538,7 @@
                             }
 
                             row += '<tr>'
-                                    + '<th colspan="4"><a href="javascript:;" class="tit" data-id="' + this.id + '">' + this.nickName + "&nbsp;&nbsp;" + this.work + "&nbsp;&nbsp;" + (undefined != this.statusText ? this.statusText : "") + '</a></th>'
+                                    + '<th colspan="5"><a href="javascript:;" class="tit" data-id="' + this.id + '">' + this.nickName + "&nbsp;&nbsp;" + this.work + "&nbsp;&nbsp;" + (undefined != this.statusText ? this.statusText : "") + '</a></th>'
                                     + '<th rowspan="2">'
                                     + '<div class="btn-box">'
                                     + btn
@@ -482,6 +558,11 @@
                                     + '<td class="wd200">'
                                     + '<p>合约薪水</p><br />'
                                     + '<p><span class="price">' + this.remuneration + '</span>元</p>'
+                                    + '</td>'
+                                    + '<td class="wd200">'
+                                    + '<p>合约期限</p><br />'
+                                    + '<p>' + this.contractComesIntoEffectTime + '</p>'
+                                    + '<p>' + this.contractExpiresTime + '</p>'
                                     + '</td>'
                                     + '</tr>';
                         });
@@ -550,24 +631,104 @@
                 data: formDataJson,
                 type: "post",
                 success: function (resp) {
-                    $(".warn-error").show().find("label").text(resp.message);
+                    $("#meetDialog .warn-error").show().find("label").text(resp.message);
                     _this.removeAttr("disabled");
 
-                    if(resp.code == "200"){
+                    if (resp.code == "200") {
                         document.location.reload();
                     }
                 }
             })
         });
 
-        //取消
-        $(document).on('click', '.meetCancel', function () {
+        //弹窗关闭
+        $(document).on('click', '.modal .btn-cancel', function () {
             $(this).parents(".modal").modal('hide');
         });
 
         //聘用、不聘用操作按钮点击事件
-        $(document).on("click", ".hireBtn", function(){
+        $(document).on("click", ".hireBtn", function () {
+            if ($(this).data("status") != undefined) {
+                var _this = $(this);
+                _this.attr('disabled', "true")
 
+                var postData = {
+                    "status": $(this).data("status"),
+                    "supplierSideId": $(this).attr("data-supplierId"),
+                    "demandId": $(this).attr("data-demandId")
+                };
+                //异步调用不聘用处理
+                $.ajax({
+                    url: "/demandSide/hire",
+                    data: postData,
+                    type: "post",
+                    success: function (resp) {
+                        _this.removeAttr("disabled");
+
+                        if (resp.code == "200") {
+                            document.location.reload();
+                        }
+                    }
+                })
+            } else {
+                $("#hireDialog input[name='supplierSideId']").val($(this).attr("data-supplierId"));
+                $("#hireDialog input[name='demandId']").val($(this).attr("data-demandId"));
+            }
+        });
+
+        //聘用弹窗确定提交事件
+        $(document).on("click", "#hireDialog .submit", function () {
+            var _this = $(this);
+            _this.attr('disabled', "true")
+
+            var formDataJson = {};
+            var formData = _this.parents("form").serializeArray();
+
+            $(formData).each(function () {
+                formDataJson[this.name] = this.value;
+            });
+
+            //异步提交表单
+            $.ajax({
+                url: "/demandSide/hire",
+                data: formDataJson,
+                type: "post",
+                success: function (resp) {
+                    $("#hireDialog .warn-error").show().find("label").text(resp.message);
+                    _this.removeAttr("disabled");
+
+                    if (resp.code == "200") {
+                        document.location.reload();
+                    }
+                }
+            })
+        });
+
+        //点击约见信息按钮，异步查询约见信息并填充到弹窗
+        $(document).on("click", ".meetInfoBtn", function () {
+            var _this = this;
+            $.ajax({
+                url: "/demandSide/meetInfo/" + $(_this).attr("data-demandId") + "/" + $(_this).attr("data-supplierSideId"),
+                type: "GET",
+                success: function (resp) {
+                    $("#meetInfoDialog td[name='meetTime']").text(resp.meetTime);
+                    $("#meetInfoDialog td[name='address']").text(resp.address);
+                    $("#meetInfoDialog td[name='contact']").text(resp.contact + resp.respectfulName);
+                    $("#meetInfoDialog td[name='mobileNumber']").text(resp.mobileNumber);
+
+                    var telephoneNumber = '';
+                    if (resp.phoneAreaCode != undefined) {
+                        telephoneNumber += resp.phoneAreaCode;
+                    }
+                    if (resp.telephoneNumber != undefined) {
+                        telephoneNumber += " " + resp.telephoneNumber;
+                    }
+                    if (resp.extensionNumber != undefined) {
+                        telephoneNumber += " " + resp.extensionNumber;
+                    }
+                    $("#meetInfoDialog td[name='telephoneNumber']").text(telephoneNumber);
+                }
+            })
         });
 
         //解除协议校验

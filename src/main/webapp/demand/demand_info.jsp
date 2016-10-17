@@ -25,7 +25,9 @@
                 <!-- job-detail -->
                 <table class="job-detail bd-line">
                     <thead>
-                    <th colspan="2"><h3>需求详情</h3></th>
+                    <th colspan="2">
+                        <h3>需求详情</h3>
+                    </th>
                     </thead>
                     <tbody style="float: left;">
                     <tr>
@@ -61,105 +63,16 @@
                         <td class="address"></td>
                     </tr>
                     </tbody>
-                    <thead>
-                    <th colspan="2"><h3>需求用工</h3></th>
-                    </thead>
-                    <tbody style="float: left;" class="demandEmployPersons">
-                    </tbody>
                 </table>
-                <!-- /job-detail -->
-                <!-- job-detail -->
-                <%--<table class="job-detail project mt30">--%>
-                <%--<thead>--%>
-                <%--<th colspan="5"><h3>用工信息</h3></th>--%>
-                <%--</thead>--%>
-                <%--<tbody>--%>
-                <%--<tr>--%>
-                <%--<th colspan="3"><a href="javascript:;" class="tit">王百百 Unity</a></th>--%>
-                <%--<th rowspan="2">--%>
-                <%--<div class="score">--%>
-                <%--<p>个人平均评分</p>--%>
-                <%--<p class="star star_04">80分</p>--%>
-                <%--</div>--%>
-                <%--<div class="btn-box">--%>
-                <%--<a href="javascript:;" class="btn">发放薪水</a>--%>
-                <%--<a href="javascript:;" class="btn">联系方式</a>--%>
-                <%--<a href="javascript:;" class="btn" data-toggle="modal"--%>
-                <%--data-target="#relieveDeal">协议解除</a>--%>
-                <%--</div>--%>
-                <%--</th>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td class="wd130"><a href="javascript:;" class="img"><img src="images/personal/logo.png"--%>
-                <%--alt="1"/></a></td>--%>
-                <%--<td class="wd130">--%>
-                <%--<p>薪资总和</p><br/>--%>
-                <%--<p><span class="price">27,000</span>元</p>--%>
-                <%--</td>--%>
-                <%--<td class="wd130">--%>
-                <%--<p>周薪</p><br/>--%>
-                <%--<p><span class="price">2,250</span>元</p>--%>
-                <%--</td>--%>
-                <%--</tr>--%>
-
-                <%--<tr>--%>
-                <%--<th colspan="3"><a href="javascript:;" class="tit">王百百 Unity</a></th>--%>
-                <%--<th rowspan="2">--%>
-                <%--<div class="score">--%>
-                <%--<p>个人平均评分</p>--%>
-                <%--<p class="star star_04">80分</p>--%>
-                <%--</div>--%>
-                <%--<div class="btn-box">--%>
-                <%--<a href="javascript:;" class="btn">发放薪水</a>--%>
-                <%--<a href="javascript:;" class="btn">联系方式</a>--%>
-                <%--<a href="javascript:;" class="btn" data-toggle="modal"--%>
-                <%--data-target="#relieveDeal">协议解除</a>--%>
-                <%--</div>--%>
-                <%--</th>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td class="wd130"><a href="javascript:;" class="img"><img src="images/personal/logo.png"--%>
-                <%--alt="1"/></a></td>--%>
-                <%--<td class="wd130">--%>
-                <%--<p>薪资总和</p><br/>--%>
-                <%--<p><span class="price">27,000</span>元</p>--%>
-                <%--</td>--%>
-                <%--<td class="wd130">--%>
-                <%--<p>周薪</p><br/>--%>
-                <%--<p><span class="price">2,250</span>元</p>--%>
-                <%--</td>--%>
-                <%--</tr>--%>
-
-                <%--<tr>--%>
-                <%--<th colspan="3"><a href="javascript:;" class="tit">王百百 Unity</a></th>--%>
-                <%--<th rowspan="2">--%>
-                <%--<div class="score">--%>
-                <%--<p>个人平均评分</p>--%>
-                <%--<p class="star star_04">80分</p>--%>
-                <%--</div>--%>
-                <%--<div class="btn-box">--%>
-                <%--<a href="javascript:;" class="btn">发放薪水</a>--%>
-                <%--<a href="javascript:;" class="btn">联系方式</a>--%>
-                <%--<a href="javascript:;" class="btn" data-toggle="modal"--%>
-                <%--data-target="#relieveDeal">协议解除</a>--%>
-                <%--</div>--%>
-                <%--</th>--%>
-                <%--</tr>--%>
-                <%--<tr>--%>
-                <%--<td class="wd130"><a href="javascript:;" class="img"><img src="images/personal/logo.png"--%>
-                <%--alt="1"/></a></td>--%>
-                <%--<td class="wd130">--%>
-                <%--<p>薪资总和</p><br/>--%>
-                <%--<p><span class="price">27,000</span>元</p>--%>
-                <%--</td>--%>
-                <%--<td class="wd130">--%>
-                <%--<p>周薪</p><br/>--%>
-                <%--<p><span class="price">2,250</span>元</p>--%>
-                <%--</td>--%>
-                <%--</tr>--%>
-                <%--</tbody>--%>
-                <%--</table>--%>
-                <!-- /job-detail -->
+                <div class="close-apply-list">
+                    <table class="job-detail">
+                        <thead>
+                        <th colspan="5"><h3>需求用工</h3></th>
+                        </thead>
+                        <tbody class="demandEmployPersons">
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- 需求信息 END -->
         </div>
@@ -170,21 +83,19 @@
 <!-- footer -->
 <c:import url="../footer.jsp"/>
 <!-- /footer -->
-<!-- -->
-<!-- relieveDeal -->
-<div class="modal fade" id="relieveDeal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="signUpTip" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog wd380">
         <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body" style="padding-bottom:10px;">
                 <!-- relieveDeal -->
-                <form action="#" method="post" class="relieveDeal">
-                    <h3>协议解除</h3>
-                    <textarea class="tta" name="message" placeholder="请填写协议解除原因，并与您的自由员工联系。"></textarea>
-                    <div class="error"></div>
+                <form action="#" method="post" class="relieveApply">
+                    <div>
+                        <h3>
+                        </h3>
+                    </div>
+                    <br>
                     <div class="btn-box">
-                        <button type="button" class="btn">联系我们</button>
-                        <button type="submit" class="btn">确定</button>
-                        <button type="button" class="btn btn-cancel">取消</button>
+                        <button type="button" class="btn btn-cancel">关闭</button>
                     </div>
                 </form>
                 <!-- /relieveDeal -->
@@ -192,7 +103,7 @@
         </div>
     </div>
 </div>
-<!-- /relieveDeal -->
+<!-- -->
 <script type="text/javascript">
     //获取需求信息并填充数据
     var getDemand = function () {
@@ -219,10 +130,19 @@
 
                 if (resp.demandEmployPersonsList.length > 0) {
                     $(resp.demandEmployPersonsList).each(function () {
-                        var demandEmployPersonsHtml = '<tr><th>用人数：</th><td>' + this.personsAmount + '</td>'
-                                + '<th>工种：</th><td>' + this.workText + '</td>'
-                                + '<th>工作经验：</th><td>' + this.workingYears + '</td>'
-                                + '<th>薪酬：</th><td>' + this.remuneration + '</td></tr>';
+                        var btn = '';
+                        if ("${demandUserByLogin}" == "") {
+                            btn = '<td><a href="javascript:;" class="btn-close-apply signUp" data-work="' + this.work + '">报名</a></td>';
+                        }
+
+                        var demandEmployPersonsHtml = '<tr>'
+                                + '<td>' + this.workText + '</td>'
+                                + '<td>经验：' + this.workingYears + '</td>'
+                                + '<td>月薪酬：' + this.remuneration + '</td>'
+                                + '<td>用人：' + this.personsAmount + '</td>'
+                                + btn
+                                + '</tr>';
+
 
                         $(".demandEmployPersons").append(demandEmployPersonsHtml);
                     });
@@ -234,27 +154,34 @@
     $(function () {
         getDemand();
 
-        //取消
-//        $(document).on('click', 'form.relieveDeal button.btn-cancel', function(){
-//            $('#relieveDeal').modal('hide');
-//        });
+        //报名按钮点击事件
+        $(document).on("click", ".signUp", function () {
+            $.ajax({
+                type: "POST",
+                url: "/supplierSide/demand/signUp/${param.demandId}/" + $(this).data("work"),
+                success: function (resp) {
+                    if (resp.code == null) {
+                        var w = window.open('about:blank');
+                        w.document.write(resp);
+                        w.document.close();
+                        return;
+                    }
 
-        //解除协议校验
-//        $('form.relieveDeal').validate({
-//            errorLabelContainer: $("form.company-form div.error"),
-//            wrapper: "p",
-//            ignore: ".ignore",
-//            submitHandler:function(form){
-//                alert("注册提交事件!");
-//                form.submit();
-//            },
-//            rules : {
-//                "message" : { required : true }
-//            },
-//            messages : {
-//                "message" : { required : "请输入原因" }
-//            }
-//        });
+                    if (resp.code == "200") {
+                        $('#signUpTip').modal('show').find("h3").text("报名成功");
+                    } else {
+                        $('#signUpTip').modal('show').find("h3").text(resp.message);
+                    }
+                }
+            });
+        });
+
+        /**
+         * 弹窗关闭
+         */
+        $(document).on('click', 'button.btn-cancel', function () {
+            $('#signUpTip').modal('hide');
+        });
     });
 </script>
 <!--[if lt IE 9]>

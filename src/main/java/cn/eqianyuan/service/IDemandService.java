@@ -4,6 +4,7 @@ import cn.eqianyuan.bean.PageResponse;
 import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.request.SupplierHireRequest;
 import cn.eqianyuan.bean.request.SupplierMeetRequest;
 import cn.eqianyuan.bean.vo.DemandVOByInfo;
 import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
@@ -56,7 +57,7 @@ public interface IDemandService {
      * @param isEnd
      * @return
      */
-    PageResponse demandListByMine(Page page, String isEnd) throws EqianyuanException;
+    PageResponse demandListByMine(Page page, String isEnd, String demandSideId) throws EqianyuanException;
 
     /**
      * 查询需求中已报名的人员信息
@@ -98,4 +99,12 @@ public interface IDemandService {
      * @throws EqianyuanException
      */
     void signUpMeet(SupplierMeetRequest supplierMeetRequest) throws EqianyuanException;
+
+    /**
+     * 聘用供应商
+     *
+     * @param supplierHireRequest
+     * @throws EqianyuanException
+     */
+    void hire(SupplierHireRequest supplierHireRequest) throws EqianyuanException;
 }

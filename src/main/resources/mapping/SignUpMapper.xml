@@ -123,11 +123,19 @@
     </select>
 
     <select id="countBySigup" resultType="java.lang.Integer">
+    select sum(cnt) from(
     select
-    count(1)
+    count(1) cnt
     from sign_up
     where supplier_side_id = #{supplierId}
     and demand_id = #{demandId}
+    union
+    select
+    count(1) cnt
+    from sign_up_history
+    where supplier_side_id = #{supplierId}
+    and demand_id = #{demandId}
+    ) cnt
   </select>
 
     <select id="countBySupplierId" resultType="java.lang.Integer">

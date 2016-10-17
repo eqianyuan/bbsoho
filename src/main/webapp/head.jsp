@@ -18,11 +18,11 @@
                                 <dd>
                                     <a href="javascript:;">${supplierUserByLogin.nickName}</a>
                                     <ul class="top-menu">
-                                        <li><a href="supplierSide/work_list.jsp?menuNavigation=talentPool&tabWidget=work">我的工作</a></li>
-                                        <li><a href="supplierSide/basicInformation.jsp?menuNavigation=talentPool&tabWidget=basicInformation">个人信息</a></li>
-                                        <li><a href="supplierSide/resume.jsp?menuNavigation=talentPool&tabWidget=basicInformation">个人简历</a></li>
-                                        <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
-                                        <li><a href="javascript:;" class="exit supplierLogout">退出</a></li>
+                                        <li onclick="document.location.href='supplierSide/work_list.jsp?menuNavigation=talentPool&tabWidget=work'"><a href="javascript:;">我的工作</a></li>
+                                        <li onclick="document.location.href='supplierSide/basicInformation.jsp?menuNavigation=talentPool&tabWidget=basicInformation'"><a href="javascript:;">个人信息</a></li>
+                                        <li onclick="document.location.href='supplierSide/resume.jsp?menuNavigation=talentPool&tabWidget=basicInformation'"><a href="javascript:;">个人简历</a></li>
+                                        <%--<li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>--%>
+                                        <li class="supplierLogout"><a href="javascript:;" class="exit">退出</a></li>
                                     </ul>
                                 </dd>
                             </dl>
@@ -35,11 +35,11 @@
                                 <dd>
                                     <a href="javascript:;">${demandUserByLogin.companyName}</a>
                                     <ul class="top-menu">
-                                        <li><a href="demand/demand_list_mine.jsp?menuNavigation=demandHall&demandId&tabWidget=mineDemand">我的需求</a></li>
-                                        <li><a href="demandSide/basicInformation.jsp?menuNavigation=demandHall&demandId&tabWidget=basicInformation">企业信息</a></li>
-                                        <li><a href="demandSide/demandEdit.jsp?menuNavigation=demandHall&demandId&isPublish=true">发布需求</a></li>
-                                        <li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>
-                                        <li><a href="javascript:;" class="exit demandLogout">退出</a></li>
+                                        <li onclick="document.location.href='demand/demand_list_mine.jsp?menuNavigation=demandHall&demandId&tabWidget=mineDemand'"><a href="javascript:;">我的需求</a></li>
+                                        <li onclick="document.location.href='demandSide/basicInformation.jsp?menuNavigation=demandHall&demandId&tabWidget=basicInformation'"><a href="javascript:;">企业信息</a></li>
+                                        <li onclick="document.location.href='demandSide/demandEdit.jsp?menuNavigation=demandHall&demandId&isPublish=true'"><a href="javascript:;">发布需求</a></li>
+                                        <%--<li><a href="javascript:;" data-toggle="modal" data-target="#systemMsg">系统消息</a></li>--%>
+                                        <li class="demandLogout"><a href="javascript:;" class="exit">退出</a></li>
                                     </ul>
                                 </dd>
                             </dl>

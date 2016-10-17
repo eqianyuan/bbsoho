@@ -17,6 +17,15 @@ public interface IHireDao {
 
     HirePO selectByPrimaryKey(String id);
 
+    /**
+     * 根据需求及供应商信息查询聘用信息
+     *
+     * @param demandId
+     * @param supplierSideId
+     * @return
+     */
+    HirePO selectHireInfo(@Param("demandId") String demandId, @Param("supplierSideId") String supplierSideId);
+
     int updateByPrimaryKeySelective(HirePO record);
 
     int updateByPrimaryKey(HirePO record);
@@ -56,4 +65,13 @@ public interface IHireDao {
      * @return
      */
     List<DemandHireSupplierPO> selectByDemandPagination(@Param("demandSideId") String demandSideId, @Param("demandId") String demandId, @Param("page") Page page);
+
+    /**
+     * 根据需求及供应商信息查询聘用合同信息
+     *
+     * @param demandId
+     * @param supplierSideId
+     * @return
+     */
+    HirePO selectContractInfo(@Param("demandId") String demandId, @Param("supplierSideId") String supplierSideId);
 }

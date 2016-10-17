@@ -1,11 +1,13 @@
 package cn.eqianyuan.bean.po;
 
-public class HirePO {
+public class HireHistoryPO {
     private String id;
 
     private String supplierSideId;
 
     private String demandId;
+
+    private Integer status;
 
     private Integer remuneration;
 
@@ -39,6 +41,14 @@ public class HirePO {
 
     public void setDemandId(String demandId) {
         this.demandId = demandId == null ? null : demandId.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getRemuneration() {

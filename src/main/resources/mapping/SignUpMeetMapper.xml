@@ -29,7 +29,8 @@
         <result column="status" property="status" jdbcType="INTEGER"/>
     </resultMap>
     <resultMap id="BaseResultMapByDemandSignUpMeet" type="cn.eqianyuan.bean.po.DemandSignUpMeetSupplierPO">
-        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <id column="supplier_side_id" property="supplierSideId" jdbcType="VARCHAR"/>
+        <id column="demand_id" property="demandId" jdbcType="VARCHAR"/>
         <id column="nick_name" property="nickName" jdbcType="VARCHAR"/>
         <result column="head_portrait" property="headPortrait" jdbcType="VARCHAR"/>
         <result column="working_years" property="workingYears" jdbcType="INTEGER"/>
@@ -240,7 +241,7 @@
     demand.id = dep.demand_id
     and
     sum.supplier_side_id = #{supplierId}
-    group by dep.work
+    group by sum.work
     union
     select
     demand.id, demand.name, demand.begin_cycle, demand.end_cycle, demand.demand_discribe, sumh.`work` sign_up_work, GROUP_CONCAT(dep.work) work, sum(dep.persons_amount) persons_amount, sumh.meet_time, sumh.status
@@ -251,7 +252,7 @@
     demand.id = dep.demand_id
     and
     sumh.supplier_side_id = #{supplierId}
-    group by dep.work
+    group by sumh.work
     ) unionTB
     order by meet_time desc
     limit ${page.start}, ${page.pageSize}
@@ -266,9 +267,9 @@
   </select>
 
     <select id="selectByDemandPagination" resultMap="BaseResultMapByDemandSignUpMeet">
-    select id, sign_up_work, meet_time, nick_name, head_portrait, working_years, expect_pay, status from (
+    select supplier_side_id, demand_id, sign_up_work, meet_time, nick_name, head_portrait, working_years, expect_pay, status from (
     select
-        demand.id,sum.`work` sign_up_work, sum.meet_time meet_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,sum.status
+        sum.supplier_side_id, sum.demand_id,sum.`work` sign_up_work, sum.meet_time meet_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,sum.status
         from sign_up_meet sum, demand, supplier_side ss, resume
         where
         sum.supplier_side_id = ss.id
@@ -282,7 +283,7 @@
         ss.id = resume.supplier_side_id
     union
     select
-        demand.id,sums.`work` sign_up_work, sums.meet_time meet_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,sums.status
+        sums.supplier_side_id, sums.demand_id,sums.`work` sign_up_work, sums.meet_time meet_time, ss.nick_name, ss.head_portrait, ss.working_years, resume.expect_pay,sums.status
         from sign_up_meet_history sums, demand, supplier_side ss, resume
         where
         sums.supplier_side_id = ss.id

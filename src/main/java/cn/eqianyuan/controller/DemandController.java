@@ -5,12 +5,12 @@ import cn.eqianyuan.bean.ServerResponse;
 import cn.eqianyuan.bean.dto.DemandByListSearchDTO;
 import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
+import cn.eqianyuan.bean.request.SupplierHireRequest;
 import cn.eqianyuan.bean.request.SupplierMeetRequest;
-import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
-import cn.eqianyuan.bean.vo.DemandVOByInfo;
-import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
+import cn.eqianyuan.bean.vo.*;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.service.IDemandService;
+import cn.eqianyuan.service.ISupplierSideService;
 import cn.eqianyuan.util.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +27,9 @@ public class DemandController extends BaseController {
 
     @Autowired
     private IDemandService demandService;
+
+    @Autowired
+    private ISupplierSideService supplierSideService;
 
     /**
      * 需求编辑
@@ -99,7 +102,8 @@ public class DemandController extends BaseController {
     @ResponseBody
     public PageResponse mineDemandList(String isEnd,
                                        Page page) throws EqianyuanException {
-        return demandService.demandListByMine(page, isEnd);
+        DemandSideVOByLogin demandSideVOByLogin = UserUtils.getDemandSideUserBySession();
+        return demandService.demandListByMine(page, isEnd, demandSideVOByLogin.getId());
     }
 
     /**
@@ -154,14 +158,28 @@ public class DemandController extends BaseController {
     }
 
     /**
+     * 查询需求商需求约见信息
+     *
+     * @param demandId 需求编号
+     * @return
+     * @throws EqianyuanException
+     */
+    @RequestMapping(value = "/meetInfo/{demandId}/{supplierSideId}", method = RequestMethod.GET)
+    @ResponseBody
+    public DemandMeetInfoVO demandMeetInfo(@PathVariable("demandId") String demandId,
+                                           @PathVariable("supplierSideId") String supplierSideId) throws EqianyuanException {
+        return supplierSideService.demandMeetInfo(demandId, supplierSideId);
+    }
+
+    /**
      * 需求报名人员聘用
      *
      * @return
      */
     @RequestMapping(value = "/hire", method = RequestMethod.POST)
     @ResponseBody
-    public ServerResponse hire(SupplierMeetRequest supplierMeetRequest) throws EqianyuanException {
-        demandService.signUpMeet(supplierMeetRequest);
+    public ServerResponse hire(SupplierHireRequest supplierHireRequest) throws EqianyuanException {
+        demandService.hire(supplierHireRequest);
         return new ServerResponse();
     }
 }

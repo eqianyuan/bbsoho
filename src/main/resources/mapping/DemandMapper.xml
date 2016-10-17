@@ -309,6 +309,7 @@
     select demand.id from
     demand, demand_employ_persons dep
     where demand.id = dep.demand_id
+    and demand.demand_side_id = #{demandSideId}
     <if test="isEnd != null and isEnd != ''">
       and demand.end_time is not null
     </if>
@@ -321,6 +322,7 @@
     GROUP_CONCAT(dep.work) work, sum(dep.persons_amount) persons_amount
     from demand, demand_employ_persons dep
     where demand.id = dep.demand_id
+    and demand.demand_side_id = #{demandSideId}
     <if test="isEnd != null and isEnd != ''">
       and demand.end_time is not null
     </if>

@@ -7,10 +7,7 @@ import cn.eqianyuan.bean.dto.SupplierSideBasicInfoDTO;
 import cn.eqianyuan.bean.dto.SupplierSideResumeDTO;
 import cn.eqianyuan.bean.po.*;
 import cn.eqianyuan.bean.request.SupplierSearchListByRequest;
-import cn.eqianyuan.bean.vo.DemandMeetInfoVO;
-import cn.eqianyuan.bean.vo.SupplierSideVOByBasicInfo;
-import cn.eqianyuan.bean.vo.SupplierSideVOByLogin;
-import cn.eqianyuan.bean.vo.SupplierSideVOByResume;
+import cn.eqianyuan.bean.vo.*;
 import cn.eqianyuan.controller.convert.SupplierSideConvert;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.core.exception.ExceptionMsgConstant;
@@ -75,6 +72,12 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
 
     @Autowired
     private IHireDao hireDao;
+
+    @Autowired
+    private IHireHistoryDao hireHistoryDao;
+
+    @Autowired
+    private IWorkingDao workingDao;
 
     //真实姓名DB许可字节长度
     private static final int REAL_NAME_MAX_BYTES_BY_DB = 20;
@@ -1274,6 +1277,23 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             }
         }
 
+        /**
+         * 检查用户是否可以对需求进行报名，要满足个人用户可以在满足条件（个人拒绝约见、商家不聘用、个人拒绝聘用、用工顺利结束）的情况下重复报名
+         *
+         * 业务场景及场景会涉及数据的表：
+         *  场景一：个人用户主动报名商家需求，商家约见个人，个人同意或拒绝约见，商家聘用或不聘用个人，个人同意被聘用或拒绝
+         *      数据表：sign_up(报名表)，sign_up_history(报名信息记录表），sign_up_meet（报名约见表），sign_up_meet_history（报名约见信息记录表）
+         *              hire（聘用表），hire_history（聘用信息记录表）,working（工作表）
+         *
+         *  场景二：商家用户主动约见个人（不存在报名数据，直接录入约见数据），个人同意或拒绝约见，商家聘用或不聘用个人，个人同意被聘用或拒绝
+         *      数据表：sign_up_meet（报名约见表），sign_up_meet_history（报名约见信息记录表）
+         *              hire（聘用表），hire_history（聘用信息记录表）,working（工作表）
+         *
+         * 查询条件：
+         *  查询报名表及报名记录表中，该用户的数据，是否存在，如果存在，该数据的状态是否为个人拒绝状态
+         *  查询约见表及约见记录表中，该用户的数据，是否存在，如果存在，该数据的状态是否为商家不聘用状态、个人拒绝聘用状态
+         */
+
         //先根据用户编号和需求编号查询数据，如已存在报名信息，则提示已经报过名
         int signUpCnt = signUpDao.countBySigup(demandId, supplierId);
 
@@ -1389,6 +1409,11 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
         }
 
+        if (StringUtils.isEmpty(supplierSideId)) {
+            logger.warn("demandMeetInfo fail , because supplier side id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
         SignUpMeetPO signUpMeetPO = signUpMeetDao.selectMeetInfo(demandId, supplierSideId);
         if (ObjectUtils.isEmpty(signUpMeetPO) ||
                 StringUtils.isEmpty(signUpMeetPO.getId())) {
@@ -1415,6 +1440,11 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
             throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
         }
 
+        if (StringUtils.isEmpty(supplierSideId)) {
+            logger.warn("demandMeetDispose fail , because supplier side id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_IS_EMPTY);
+        }
+
         //根据需求编号和供应商编号查询约见数据
         SignUpMeetPO signUpMeetPO = signUpMeetDao.selectMeetInfo(demandId, supplierSideId);
 
@@ -1430,12 +1460,91 @@ public class SupplierSideServiceImpl implements ISupplierSideService {
         signUpMeetDao.updateByPrimaryKeySelective(signUpMeetPO);
 
         //判断状态是否为拒绝约见
-        if(status.equals(2)){
+        if (status.equals(2)) {
             //将约见数据复制到约见历史表中
             signUpMeetDao.copyInsertHistory(signUpMeetPO);
 
             //删除约见数据
             signUpMeetDao.deleteByPrimaryKey(signUpMeetPO.getId());
         }
+    }
+
+    /**
+     * 需求聘用处理（同意聘用、拒绝聘用）
+     *
+     * @param demandId       需求编号
+     * @param supplierSideId 供应商编号
+     * @param status         处理状态
+     * @throws EqianyuanException
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void demandHireDispose(String demandId, String supplierSideId, Integer status) throws EqianyuanException {
+        if (StringUtils.isEmpty(demandId)) {
+            logger.warn("demandHireDispose fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+        }
+
+        if (StringUtils.isEmpty(supplierSideId)) {
+            logger.warn("demandHireDispose fail , because supplier side id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+        }
+
+        //根据需求编号和供应商编号查询聘用数据
+        HirePO hirePO = hireDao.selectHireInfo(demandId, supplierSideId);
+
+        if (ObjectUtils.isEmpty(hirePO) ||
+                StringUtils.isEmpty(hirePO.getId())) {
+            logger.warn("demandHireDispose fail , because query data by demandId [" + demandId + "], supplierSideId [" + supplierSideId + "] not exists");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_FAIL);
+        }
+
+        //将聘用数据复制到聘用历史表中
+        hireHistoryDao.copyInsertHistory(hirePO);
+        //修改聘用数据状态
+        HireHistoryPO hireHistoryPO = new HireHistoryPO();
+        hireHistoryPO.setId(hirePO.getId());
+        hireHistoryPO.setStatus(status);
+        hireHistoryDao.updateByPrimaryKeySelective(hireHistoryPO);
+
+        //判断状态是否为同意聘用
+        if (status.equals(1)) {
+            //将聘用数据复制到工作表中
+            workingDao.copyInsertHistory(hirePO);
+        }
+
+        //删除聘用数据
+        hireDao.deleteByPrimaryKey(hirePO.getId());
+    }
+
+    /**
+     * 需求聘用合同信息查询
+     *
+     * @param demandId       需求编号
+     * @param supplierSideId 供应商编号
+     * @return
+     * @throws EqianyuanException
+     */
+    public SupplierContractInfoVO demandContractInfo(String demandId, String supplierSideId) throws EqianyuanException {
+        if (StringUtils.isEmpty(demandId)) {
+            logger.warn("demandContractInfo fail , because demand id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_BY_QUERY_FAIL);
+        }
+
+        if (StringUtils.isEmpty(supplierSideId)) {
+            logger.warn("demandContractInfo fail , because supplier side id is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_BY_QUERY_FAIL);
+        }
+
+        //根据需求编号和供应商编号查询聘用合同数据
+        HirePO hirePO = hireDao.selectContractInfo(demandId, supplierSideId);
+
+        if (ObjectUtils.isEmpty(hirePO) ||
+                StringUtils.isEmpty(hirePO.getWork())) {
+            logger.warn("demandContractInfo fail , because query data by demandId [" + demandId + "], supplierSideId [" + supplierSideId + "] not exists");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_HIRE_BY_QUERY_FAIL);
+        }
+
+        //将PO转为VO
+        return supplierConvert.demandContractInfo(hirePO);
     }
 }

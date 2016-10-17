@@ -558,7 +558,9 @@
             type: "GET",
             success: function (resp) {
                 if (resp.code == null) {
-                    document.write(resp);
+                    var w=window.open('about:blank');
+                    w.document.write(resp);
+                    w.document.close();
                     return;
                 }
 

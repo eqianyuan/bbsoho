@@ -276,6 +276,12 @@
                                     _discribe = _discribe.substring(0, 30) + " ...";
                                 }
                             }
+
+                            var btn = '';
+                            if ("${supplierUserByLogin}" == "") {
+                                btn = '<dd><a href="javascript:;" class="btn-buy">约见</a></dd>';
+                            }
+
                             row += '<div class="row">'
                                     + '<dl>'
                                     + '<dt>'
@@ -307,7 +313,7 @@
                                     + '<p>工作地点：<span class="gray">' + this.countyName + '</span></p>'
                                     + '<p>工作时间：<span class="gray">' + this.expectWorkTime + '</span></p>'
                                     + '</dd>'
-                                    + '<dd><a href="javascript:;" class="btn-buy">预定</a></dd>'
+                                    + btn
                                     + '</dl>'
                                     + '</div>';
                         });
