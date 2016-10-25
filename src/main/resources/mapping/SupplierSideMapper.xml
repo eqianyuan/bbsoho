@@ -78,6 +78,9 @@
         #{createTime,jdbcType=INTEGER})
     </insert>
     <insert id="insertSelective" parameterType="cn.eqianyuan.bean.po.SupplierSidePO" >
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select replace(uuid(),'-','') from dual
+        </selectKey>
         insert into supplier_side
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
