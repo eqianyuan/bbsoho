@@ -150,7 +150,7 @@
         <if test="demandEmployPersonsPOList != null">
             insert into demand_employ_persons
             (
-            industry, work_type,work, persons_amount, working_years,remuneration, demand_id, channel_whether_close
+            industry, work_type,work, persons_amount, working_years,remuneration, demand_id
             )
             values
             <foreach item="demandEmployPersons" collection="demandEmployPersonsPOList" open="" separator="," close="">

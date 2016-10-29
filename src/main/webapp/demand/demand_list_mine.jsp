@@ -193,7 +193,7 @@
                 data: $.extend({}, pagination.data, pagination.page),
                 success: function (response) {
                     if (response.pageNo == null) {
-                        var w=window.open('about:blank');
+                        var w = window.open('about:blank');
                         w.document.write(response);
                         w.document.close();
                         return;
@@ -209,7 +209,7 @@
                         $(response.list).each(function (i) {
 
                             row += '<dl class="tit"><dt data-id="' + this.id + '"><h3>' + this.name + '</h3></dt><dd>' + this.beginCycle + '到' + this.endCycle + '</dd></dl>'
-                                    + '<div class="btn-box"><!--<a href="javascript:;" class="btn" data-toggle="modal" data-target="#payWrap">待支付</a><a href="javascript:;" class="btn">详情</a>--></div>'
+                                    + '<div class="btn-box"><!--<a href="javascript:;" class="btn" data-toggle="modal" data-target="#payWrap">待支付</a>--><a href="javascript:;" class="btn demandEdit" data-id="' + this.id + '">编辑</a></div>'
                                     + '<dl class="rDesc"><dt>招聘岗位：</dt><dd>' + this.workText + '</dd></dl>'
                                     + '<dl class="rDesc"><dt>招聘人数：</dt><dd>' + this.personsAmount + '人</dd></dl>';
 
@@ -248,6 +248,11 @@
                 pagination.list($("#complete"), $(".completePaging"));
             }
         });
+
+        //点击编辑进入需求修改页面
+        $(document).on("click", ".demandEdit", function () {
+            document.location.href = 'demandSide/demandEdit.jsp?menuNavigation=demandHall&demandId=' + $(this).data("id");
+        })
 
         //点击标题前往详情
         $(document).on("click", ".tit dt[data-id]", function () {
