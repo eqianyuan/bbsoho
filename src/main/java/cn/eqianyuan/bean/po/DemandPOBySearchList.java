@@ -23,6 +23,8 @@ public class DemandPOBySearchList {
 
     private String countyName;
 
+    private Integer channelWhetherClose;
+
     public String getId() {
         return id;
     }
@@ -109,5 +111,13 @@ public class DemandPOBySearchList {
 
     public void setCountyName(String countyName) {
         this.countyName = countyName;
+    }
+
+    public Integer getChannelWhetherClose() {
+        return channelWhetherClose;
+    }
+
+    public void setChannelWhetherClose(Integer channelWhetherClose) {
+        this.channelWhetherClose = channelWhetherClose;
     }
 }

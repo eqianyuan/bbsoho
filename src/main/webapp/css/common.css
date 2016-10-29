@@ -110,9 +110,10 @@ div.btn-area a{ color:#4c4c54;  line-height:32px; }
 
 /*首页*/
 div.index-top{ width:100%; padding: 0 15px; position: absolute; top: 35%; margin-top: -130px; left: 0; }
-div.index-top h2{ font-size:32px; color:#FFF; padding:15px 0; }
+div.index-top h2{ font-size:28px; color:#FFF; padding:8px 0; }
+div.index-top h3{     font-size: 20px;color: #FFF;padding: 36px 0 0 0; }
+div.index-top p.special{ color: #603712; line-height: 42px; font-size: 18px; text-shadow: 1px 0px 0px #603712; }
 div.index-top .search-box{ width: 80%; margin:50px auto 30px; }
-div.index-top .search-box p{ color: #FFF; line-height: 42px; font-size: 18px; text-shadow: 1px 1px 1px #666; }
 div.index-top form.search-form{ display:block; background-color:#FFF; width:100%; position:relative;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -369,7 +370,8 @@ form.relieveDeal label.error{ color: #F00; padding-bottom: 10px; }
 div.close-apply-list{ position: relative; border-bottom:1px solid #e0e4e9; }
 div.close-apply-list table{ width:100%; font-size:14px; margin:10px 0; }
 div.close-apply-list td{ padding:15px; text-align:center; border-bottom:1px solid #f6f8fb; }
-div.close-apply-list a.btn-close-apply{ background-color:#7335b0; color:#FFF; padding:8px 20px; }
+.close-apply-list a.btn-close-apply{ background-color:#7335b0; color:#FFF; padding:8px 20px; }
+
 
 div.close-apply-list a#btn-toggle-apply{ display: block; width: 27px; height: 33px; background: url('../images/personal/up.png') no-repeat left; position: absolute; right: 0; bottom: 15px; }
 div.close-apply-list a#btn-toggle-apply.showDown{ background-image: url('../images/personal/down.png'); }

@@ -751,7 +751,7 @@ public class DemandServiceImpl implements IDemandService {
         }
 
         //判断聘用状态是否有值，没有值，则认为是聘用操作
-        if(StringUtils.isEmpty(supplierHireRequest.getStatus())){
+        if (StringUtils.isEmpty(supplierHireRequest.getStatus())) {
             //检查合同生效时间是否为空
             if (StringUtils.isEmpty(supplierHireRequest.getContractComesIntoEffectTime())) {
                 logger.warn("hire fail , because user input contract comes into effect time , value is empty");
@@ -817,7 +817,7 @@ public class DemandServiceImpl implements IDemandService {
 
             //删除约见数据
             signUpMeetDao.deleteByPrimaryKey(signUpMeetPO.getId());
-        }else{
+        } else {
             //修改约见数据状态为不聘用：3
             signUpMeetPO.setStatus(3);
             signUpMeetDao.updateByPrimaryKeySelective(signUpMeetPO);
@@ -828,6 +828,32 @@ public class DemandServiceImpl implements IDemandService {
             //删除约见数据
             signUpMeetDao.deleteByPrimaryKey(signUpMeetPO.getId());
         }
+    }
+
+    /**
+     * 需求岗位报名通道关闭或开启
+     *
+     * @param channelId 通道编号
+     * @param operator  1：开启、2：关闭
+     * @throws EqianyuanException
+     */
+    public void demandSignUpChannel(String channelId, String operator) throws EqianyuanException {
+        if (StringUtils.isEmpty(channelId)) {
+            logger.warn("closeSignUp fail , because channelId is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_SIGN_UP_BY_WORK_CLOSE_FAIL);
+        }
+
+        //根据需求用人岗位编号查询数据
+        DemandEmployPersonsPO demandEmployPersonsPO = demandEmployPersonsDao.selectByPrimaryKey(Integer.parseInt(channelId));
+        if (ObjectUtils.isEmpty(demandEmployPersonsPO) ||
+                ObjectUtils.isEmpty(demandEmployPersonsPO.getId())) {
+            logger.warn("closeSignUp fail , because channelId [" + channelId + "] query data by table [demand_employ_persons] is null");
+            throw new EqianyuanException(ExceptionMsgConstant.DEMAND_SIGN_UP_BY_WORK_CLOSE_FAIL);
+        }
+
+        //关闭报名数据：更改是否关闭报名字段数据
+        demandEmployPersonsPO.setChannelWhetherClose(Integer.parseInt(operator));
+        demandEmployPersonsDao.updateByPrimaryKeySelective(demandEmployPersonsPO);
     }
 
 }

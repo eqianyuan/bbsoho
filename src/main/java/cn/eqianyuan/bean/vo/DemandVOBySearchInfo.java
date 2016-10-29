@@ -50,6 +50,8 @@ public class DemandVOBySearchInfo {
 
     public class DemandEmployPersons{
 
+        private Integer id;
+
         private String industry;
 
         private String workType;
@@ -63,6 +65,16 @@ public class DemandVOBySearchInfo {
         private String workingYears;
 
         private String remuneration;
+
+        private Integer channelWhetherClose;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public String getIndustry() {
             return industry;
@@ -118,6 +130,14 @@ public class DemandVOBySearchInfo {
 
         public void setRemuneration(String remuneration) {
             this.remuneration = remuneration;
+        }
+
+        public Integer getChannelWhetherClose() {
+            return channelWhetherClose;
+        }
+
+        public void setChannelWhetherClose(Integer channelWhetherClose) {
+            this.channelWhetherClose = channelWhetherClose;
         }
     }
 

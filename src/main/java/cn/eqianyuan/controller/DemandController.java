@@ -7,7 +7,10 @@ import cn.eqianyuan.bean.dto.DemandDTO;
 import cn.eqianyuan.bean.dto.Page;
 import cn.eqianyuan.bean.request.SupplierHireRequest;
 import cn.eqianyuan.bean.request.SupplierMeetRequest;
-import cn.eqianyuan.bean.vo.*;
+import cn.eqianyuan.bean.vo.DemandMeetInfoVO;
+import cn.eqianyuan.bean.vo.DemandSideVOByLogin;
+import cn.eqianyuan.bean.vo.DemandVOByInfo;
+import cn.eqianyuan.bean.vo.DemandVOBySearchInfo;
 import cn.eqianyuan.core.exception.EqianyuanException;
 import cn.eqianyuan.service.IDemandService;
 import cn.eqianyuan.service.ISupplierSideService;
@@ -180,6 +183,21 @@ public class DemandController extends BaseController {
     @ResponseBody
     public ServerResponse hire(SupplierHireRequest supplierHireRequest) throws EqianyuanException {
         demandService.hire(supplierHireRequest);
+        return new ServerResponse();
+    }
+
+    /**
+     * 关闭需求岗位报名通道
+     *
+     * @param channelId 用人通道编号
+     * @param operator  1：开启报名、2：关闭报名
+     * @return
+     */
+    @RequestMapping(value = "/demandSignUpChannel/{channelId}/{operator}", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerResponse demandSignUpChannel(@PathVariable("channelId") String channelId,
+                                              @PathVariable("operator") String operator) throws EqianyuanException {
+        demandService.demandSignUpChannel(channelId, operator);
         return new ServerResponse();
     }
 }

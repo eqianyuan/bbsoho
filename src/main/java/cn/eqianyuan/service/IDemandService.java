@@ -107,4 +107,12 @@ public interface IDemandService {
      * @throws EqianyuanException
      */
     void hire(SupplierHireRequest supplierHireRequest) throws EqianyuanException;
+
+    /**
+     * 关闭需求岗位报名通道
+     *
+     * @param channelId
+     * @throws EqianyuanException
+     */
+    void demandSignUpChannel(String channelId, String operator) throws EqianyuanException;
 }

@@ -244,5 +244,7 @@ public class ExceptionMsgConstant {
     public static final String DEMAND_MEET_REMUNERATION_IS_NOT_MONEY = "2003025";
     //需求操作，聘用信息查询失败
     public static final String DEMAND_HIRE_BY_QUERY_FAIL = "2003026";
+    //需求操作，关闭报名通道失败
+    public static final String DEMAND_SIGN_UP_BY_WORK_CLOSE_FAIL = "2003027";
 /********** 客户端系统异常配置 **********/
 }

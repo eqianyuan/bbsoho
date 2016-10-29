@@ -37,6 +37,8 @@ public class DemandByListSearchDTO {
 
     private String countyName;
 
+    private Integer channelWhetherClose;
+
     public String getCityId() {
         return cityId;
     }
@@ -139,5 +141,13 @@ public class DemandByListSearchDTO {
 
     public void setCountyName(String countyName) {
         this.countyName = countyName;
+    }
+
+    public Integer getChannelWhetherClose() {
+        return channelWhetherClose;
+    }
+
+    public void setChannelWhetherClose(Integer channelWhetherClose) {
+        this.channelWhetherClose = channelWhetherClose;
     }
 }

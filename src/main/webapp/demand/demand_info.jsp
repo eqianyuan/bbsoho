@@ -131,7 +131,7 @@
                 if (resp.demandEmployPersonsList.length > 0) {
                     $(resp.demandEmployPersonsList).each(function () {
                         var btn = '';
-                        if ("${demandUserByLogin}" == "") {
+                        if ("${demandUserByLogin}" == "" && (this.channelWhetherClose == 1)) {
                             btn = '<td><a href="javascript:;" class="btn-close-apply signUp" data-work="' + this.work + '">报名</a></td>';
                         }
 

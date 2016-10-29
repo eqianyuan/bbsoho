@@ -17,7 +17,7 @@
 <!-- /header -->
 <!-- lr-wrapper -->
 <div class="lr-wrapper">
-    <div class="lr-img"><img src="images/index/banner.png" alt="background-image"/></div>
+    <div class=""><img src="images/demand/banner.png" alt="background-image"/></div>
 </div>
 <!-- /lr-wrapper -->
 <!-- mainer -->
@@ -332,7 +332,7 @@
                         var row = "";
                         $(response.list).each(function () {
                             var btn = '';
-                            if ("${demandUserByLogin}" == "") {
+                            if ("${demandUserByLogin}" == "" && (this.channelWhetherClose == 1)) {
                                 btn = '<dd><a href="javascript:;" class="btn-buy signUp" data-id="' + this.id + '" data-work="' + this.work + '">报名</a></dd>';
                             }
                             row += '<div class="row">'

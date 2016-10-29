@@ -17,6 +17,8 @@ public class DemandEmployPersonsPO {
 
     private String demandId;
 
+    private Integer channelWhetherClose;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class DemandEmployPersonsPO {
 
     public void setDemandId(String demandId) {
         this.demandId = demandId;
+    }
+
+    public Integer getChannelWhetherClose() {
+        return channelWhetherClose;
+    }
+
+    public void setChannelWhetherClose(Integer channelWhetherClose) {
+        this.channelWhetherClose = channelWhetherClose;
     }
 }

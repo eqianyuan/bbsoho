@@ -66,7 +66,7 @@
                     <thead>
                     <th colspan="2"><h3>需求用工</h3></th>
                     </thead>
-                    <tbody style="float: left;" class="demandEmployPersons">
+                    <tbody style="float: left;" class="demandEmployPersons close-apply-list">
                     </tbody>
                 </table>
                 <!-- /job-detail -->
@@ -205,7 +205,8 @@
                         <input type="hidden" name="demandId"/><input type="hidden" name="supplierSideId"/>
                         <tr>
                             <th>合同生效日期：</th>
-                            <td><p class="ipt-txt wd300 fl"><input type="text" id="beginTime" name="contractComesIntoEffectTime"
+                            <td><p class="ipt-txt wd300 fl"><input type="text" id="beginTime"
+                                                                   name="contractComesIntoEffectTime"
                                                                    onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss', maxDate:'#F{$dp.$D(\'endTime\')}'})"
                                                                    readonly/></p><i class="warn-star fl">*</i></td>
                         </tr>
@@ -279,10 +280,20 @@
 
                 if (resp.demandEmployPersonsList.length > 0) {
                     $(resp.demandEmployPersonsList).each(function () {
+                        var btn = '';
+                        if ("${demandUserByLogin}" != "") {
+                            if (this.channelWhetherClose == 1) {
+                                btn = '<th></th><td><a href="javascript:;" class="btn-close-apply channelOperator" data-value="2" data-id="' + this.id + '">关闭报名</a></td></tr>';
+                            } else {
+                                btn = '<th></th><td><a href="javascript:;" class="btn-close-apply channelOperator" data-value="1" data-id="' + this.id + '">开启报名</a></td></tr>';
+                            }
+                        }
+
                         var demandEmployPersonsHtml = '<tr><th>用人数：</th><td>' + this.personsAmount + '</td>'
                                 + '<th>工种：</th><td>' + this.workText + '</td>'
                                 + '<th>工作经验：</th><td>' + this.workingYears + '</td>'
-                                + '<th>薪酬：</th><td>' + this.remuneration + '</td></tr>';
+                                + '<th>薪酬：</th><td>' + this.remuneration + '</td>'
+                                + btn;
 
                         $(".demandEmployPersons").append(demandEmployPersonsHtml);
                     });
@@ -345,8 +356,8 @@
                 data: $.extend({}, signUpPagination.data, signUpPagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        if(winOpen == null){
-                            winOpen =window.open('about:blank');
+                        if (winOpen == null) {
+                            winOpen = window.open('about:blank');
                             winOpen.document.write(resp);
                             winOpen.document.close();
                         }
@@ -426,8 +437,8 @@
                 data: $.extend({}, signUpMeetPagination.data, signUpMeetPagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        if(winOpen == null){
-                            winOpen =window.open('about:blank');
+                        if (winOpen == null) {
+                            winOpen = window.open('about:blank');
                             winOpen.document.write(resp);
                             winOpen.document.close();
                         }
@@ -511,8 +522,8 @@
                 data: $.extend({}, hirePagination.data, hirePagination.page),
                 success: function (resp) {
                     if (resp.pageNo == null) {
-                        if(winOpen == null){
-                            winOpen =window.open('about:blank');
+                        if (winOpen == null) {
+                            winOpen = window.open('about:blank');
                             winOpen.document.write(resp);
                             winOpen.document.close();
                         }
@@ -534,7 +545,7 @@
 
                             var btn = '';
                             if (this.status == 1) {
-                                btn = '<a href="javascript:;" class="btn">支付薪水</a>';
+                                //btn = '<a href="javascript:;" class="btn">支付薪水</a>';
                             }
 
                             row += '<tr>'
@@ -589,6 +600,22 @@
 
         //获取联系人尊称数据
         getRespectfulName();
+
+
+        //报名通道关闭、开启
+        $(document).on("click", ".channelOperator", function () {
+            $.ajax({
+                url: "/demandSide/demandSignUpChannel/" + $(this).data("id") + "/" + $(this).data("value"),
+                type: "post",
+                success: function (resp) {
+                    if (resp.code == "200") {
+                        document.location.reload();
+                    }else{
+                        $("#meetDialog .warn-error").show().find("label").text(resp.message);
+                    }
+                }
+            })
+        });
 
         //约见按钮点击事件
         $(document).on("click", ".meetBtn", function () {

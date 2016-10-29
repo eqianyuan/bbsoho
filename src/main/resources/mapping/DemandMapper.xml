@@ -34,6 +34,7 @@
     <result column="working_years" property="workingYears" jdbcType="INTEGER"/>
     <result column="remuneration" property="remuneration" jdbcType="INTEGER"/>
     <result column="county_name" property="countyName" jdbcType="VARCHAR" />
+    <result column="channel_whether_close" property="channelWhetherClose" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, working_lunch, contact, respectful_name, phone_area_code, telephone_number, 
@@ -271,7 +272,7 @@
   <select id="selectByPagination" resultMap="BaseResultMapBySearchList">
     select
     demand.id, demand.name, demand.working_lunch,demand.begin_cycle, demand.end_cycle, demand.publish_time,
-    dep.working_years, dep.remuneration, dep.work, dep.persons_amount,
+    dep.working_years, dep.remuneration, dep.work, dep.persons_amount,dep.channel_whether_close,
     county.county_name
     from demand LEFT JOIN county on (demand.county_id = county.county_id),demand_employ_persons dep
     where demand.id = dep.demand_id

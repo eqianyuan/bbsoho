@@ -17,7 +17,7 @@
 <!-- /header -->
 <!-- lr-wrapper -->
 <div class="lr-wrapper">
-    <div class="lr-img"><img src="images/index/banner.png" alt="background-image"/></div>
+    <div class=""><img src="images/supplier/banner.png" alt="background-image"/></div>
 </div>
 <!-- /lr-wrapper -->
 <!-- mainer -->

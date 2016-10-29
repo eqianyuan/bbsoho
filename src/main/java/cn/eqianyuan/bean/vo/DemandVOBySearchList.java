@@ -17,6 +17,7 @@ public class DemandVOBySearchList {
     private String workingLunch;
     private String personsAmount;
     private String countyName;
+    private Integer channelWhetherClose;
 
     public String getId() {
         return id;
@@ -112,5 +113,13 @@ public class DemandVOBySearchList {
 
     public void setCountyName(String countyName) {
         this.countyName = countyName;
+    }
+
+    public Integer getChannelWhetherClose() {
+        return channelWhetherClose;
+    }
+
+    public void setChannelWhetherClose(Integer channelWhetherClose) {
+        this.channelWhetherClose = channelWhetherClose;
     }
 }

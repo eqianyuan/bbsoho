@@ -18,18 +18,20 @@
 <!-- /header -->
 <!-- lr-wrapper -->
 <div class="lr-wrapper">
-    <div class="lr-img"><img src="images/index/banner.png" alt="background-image"/></div>
+    <div class=""><img src="images/index/banner.png" alt="background-image"/></div>
     <div class="container">
         <!-- index-top -->
         <div class="index-top">
             <h2>陌生的城市 - 奇妙的邂逅 - 源源不断的收入</h2>
             <h2>一场说走就走的旅行</h2>
+            <h2><p class="special">——</p></h2>
+            <p class="special">玩味生活，边工作，边旅行，边恋爱，我在另一个城市期待与你的不期而遇...</p>
+            <h3>↓点击开启旅程</h3>
             <div class="search-box">
                 <form class="search-form">
                     <input type="text" name="searchValue" class="ipt-txt" placeholder="搜索人才"/>
                     <button type="button" class="ipt-submit">搜索</button>
                 </form>
-                <p>玩味生活，边工作，边旅行，边恋爱，我在另一个城市期待与你的不期而遇...</p>
             </div>
         </div>
         <!-- /index-top -->
@@ -101,7 +103,7 @@
 <!-- /mainer -->
 <!-- lr-wrapper -->
 <div class="lr-wrapper">
-    <div class="lr-img"><img src="images/index/banner2.png" alt="background-image"/></div>
+    <div class=""><img src="images/index/banner2.png" alt="background-image"/></div>
 </div>
 <!-- /lr-wrapper -->
 <!-- mainer -->
